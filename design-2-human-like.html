@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"="width=device-width, initial-scale=1.0">
-    <title>ReceptAI - Your Patients Can't Tell She's AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Sofia - 24/7 Receptionist</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -91,6 +94,12 @@
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             font-size: 1.1rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        .phone-input input::placeholder {
+            color: #999;
+            font-weight: 400;
         }
         
         .btn-demo {
@@ -566,6 +575,14 @@
                 callButton.style.opacity = '1';
             }
         }
+        
+        // Initialize phone number on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('phoneInput');
+            if (phoneInput && !phoneInput.value) {
+                phoneInput.value = '+306977204233';
+            }
+        });
         
         document.getElementById('phoneInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') callSofia();

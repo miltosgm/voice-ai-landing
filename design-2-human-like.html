@@ -560,27 +560,27 @@
                     })
                 });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const data = await response.json();
                 
-                if (data.success) {
-                    statusMessage.innerHTML = `
-                        <span style="color: #66bb6a;">
-                        ✅ Call initiated! 📞 Sofia is on her way...
-                        </span>
-                    `;
-                    // Clear input
-                    phoneInput.value = '';
-                    // Re-enable button after 5 seconds
-                    setTimeout(() => {
-                        callButton.disabled = false;
-                        callButton.style.opacity = '1';
-                        statusMessage.innerHTML = '';
-                    }, 5000);
-                } else {
-                    statusMessage.innerHTML = `<span style="color: #ef5350;">❌ Error: ${data.error || 'Failed to initiate call'}</span>`;
+                // Success!
+                statusMessage.innerHTML = `
+                    <span style="color: #66bb6a; font-weight: 600;">
+                    ✅ Sofia is calling you now! 📞 Pick up your phone!
+                    </span>
+                `;
+                // Clear input
+                phoneInput.value = '';
+                // Re-enable button after 5 seconds
+                setTimeout(() => {
                     callButton.disabled = false;
                     callButton.style.opacity = '1';
-                }
+                    statusMessage.innerHTML = '';
+                }, 5000);
+                
             } catch (error) {
                 statusMessage.innerHTML = `<span style="color: #ef5350;">❌ Error: ${error.message}</span>`;
                 callButton.disabled = false;

@@ -613,8 +613,13 @@
                     </div>
                     <button class="play-btn" onclick="document.getElementById('sofiaAudio').play()">▶ Hear Sofia Introduce Herself</button>
                     <audio id="sofiaAudio" style="display: none;">
-                        <source src="https://raw.githubusercontent.com/miltosgm/voice-ai-landing/main/audio/sofia-intro.mp3" type="audio/mpeg">
+                        <source src="https://raw.githubusercontent.com/miltosgm/voice-ai-landing/main/audio/sofia-intro-v2.mp3" type="audio/mpeg">
                     </audio>
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="changeSofiaVersion('v1')" style="padding: 8px 15px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; border-radius: 8px; font-size: 0.9rem; cursor: pointer;">Version 1</button>
+                        <button onclick="changeSofiaVersion('v2')" style="padding: 8px 15px; background: rgba(255,255,255,0.4); color: white; border: 1px solid white; border-radius: 8px; font-size: 0.9rem; cursor: pointer; font-weight: 600;">Version 2 ✓</button>
+                        <button onclick="changeSofiaVersion('v3')" style="padding: 8px 15px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; border-radius: 8px; font-size: 0.9rem; cursor: pointer;">Version 3</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -777,6 +782,12 @@
         document.getElementById('phoneInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') callSofia();
         });
+        
+        function changeSofiaVersion(version) {
+            const audio = document.getElementById('sofiaAudio');
+            audio.src = `https://raw.githubusercontent.com/miltosgm/voice-ai-landing/main/audio/sofia-intro-${version}.mp3`;
+            audio.play();
+        }
     </script>
 </body>
 </html>

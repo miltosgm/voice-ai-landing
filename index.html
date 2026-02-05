@@ -1,418 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice AI Agent - Homepage Design Mockups</title>
+    <title>Sofia Demo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #f5f5f5;
-            padding: 40px 20px;
-            color: #1a1a1a;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .doc-link {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-        
-        .designs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .design-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .design-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-        
-        .design-preview {
-            height: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: white;
+            min-height: 100vh;
+            padding: 20px;
         }
-        
-        .design-preview.roi { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .design-preview.human { background: #fafafa; color: #667eea; }
-        .design-preview.dental { background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); }
-        .design-preview.competitive { background: white; color: #10b981; }
-        .design-preview.premium { background: #1a1a1a; color: white; }
-        
-        .design-content {
-            padding: 30px;
-        }
-        
-        .design-badge {
-            display: inline-block;
-            padding: 6px 12px;
+        .container {
+            background: white;
+            padding: 50px;
             border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
         }
-        
-        .badge-roi { background: #e8f5e9; color: #2e7d32; }
-        .badge-trust { background: #e3f2fd; color: #1565c0; }
-        .badge-industry { background: #fff3e0; color: #e65100; }
-        .badge-competitive { background: #f3e5f5; color: #6a1b9a; }
-        .badge-premium { background: #fce4ec; color: #c2185b; }
-        
-        .design-content h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+        h1 { 
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #1a1a1a;
         }
-        
-        .design-content .tagline {
+        p {
             font-size: 1.1rem;
             color: #666;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-        
-        .design-content p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .features-list {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-        
-        .features-list li {
-            padding: 8px 0;
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        .features-list li:before {
-            content: "✓ ";
-            color: #22c55e;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .design-footer {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .btn-view {
-            flex: 1;
-            background: #1a1a1a;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .btn-view:hover {
-            background: #333;
-        }
-        
-        .recommendation {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin-top: 40px;
-            border-left: 4px solid #22c55e;
-        }
-        
-        .recommendation h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #22c55e;
-        }
-        
-        .comparison-table {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin-top: 40px;
-        }
-        
-        .comparison-table h3 {
-            font-size: 1.8rem;
             margin-bottom: 30px;
         }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .phone-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        
-        th, td {
+        input {
+            flex: 1;
             padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
         }
-        
-        th {
-            background: #fafafa;
+        button {
+            padding: 15px 40px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
         }
+        button:hover { background: #333; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        .check-yes { color: #22c55e; font-weight: bold; }
-        .check-no { color: #ef4444; }
-        
-        @media (max-width: 768px) {
-            .designs-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
+        .message {
+            margin-top: 20px;
+            font-weight: 600;
+            min-height: 24px;
         }
+        .success { color: #66bb6a; }
+        .error { color: #ef5350; }
+        .loading { color: #667eea; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🎙️ Voice AI Agent - Homepage Mockups</h1>
-            <p class="subtitle">5 different design directions based on competitive research</p>
-            <a href="COMPETITIVE-RESEARCH.md" class="doc-link" target="_blank">📄 Read Full Competitive Research</a>
-        </header>
+        <h1>📞 Call Sofia</h1>
+        <p>Experience our AI receptionist. She'll call you in seconds.</p>
         
-        <div class="designs-grid">
-            <!-- Design 1: ROI Focused -->
-            <div class="design-card">
-                <div class="design-preview roi">💰</div>
-                <div class="design-content">
-                    <span class="design-badge badge-roi">ROI FOCUSED</span>
-                    <h2>Design #1: ROI Calculator</h2>
-                    <p class="tagline">"Stop Losing $15,000/Month to No-Shows"</p>
-                    <p>Lead with hard numbers and money saved. Interactive ROI calculator front and center.</p>
-                    
-                    <ul class="features-list">
-                        <li>Interactive savings calculator</li>
-                        <li>Concrete revenue impact metrics</li>
-                        <li>60-day money-back guarantee</li>
-                        <li>Stats-driven messaging</li>
-                    </ul>
-                    
-                    <p><strong>Best For:</strong> Dental practices, medical clinics (high no-show costs)</p>
-                    
-                    <div class="design-footer">
-                        <a href="design-1-roi-focused.html" target="_blank" class="btn-view">View Design</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Design 2: Human-Like -->
-            <div class="design-card">
-                <div class="design-preview human">🎙️</div>
-                <div class="design-content">
-                    <span class="design-badge badge-trust">TRUST & QUALITY</span>
-                    <h2>Design #2: Human-Like AI</h2>
-                    <p class="tagline">"Your Patients Can't Tell She's AI"</p>
-                    <p>Emphasize naturalness and trust. Interactive demo with audio waveform visual.</p>
-                    
-                    <ul class="features-list">
-                        <li>"Call Sofia now" instant demo</li>
-                        <li>Real conversation examples</li>
-                        <li>Traditional vs AI comparison</li>
-                        <li>98% human satisfaction claim</li>
-                    </ul>
-                    
-                    <p><strong>Best For:</strong> Beauty, consulting, healthcare (trust-sensitive)</p>
-                    
-                    <div class="design-footer">
-                        <a href="design-2-human-like.html" target="_blank" class="btn-view">View Design</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Design 3: Dental Specific -->
-            <div class="design-card">
-                <div class="design-preview dental">🦷</div>
-                <div class="design-content">
-                    <span class="design-badge badge-industry">INDUSTRY SPECIFIC</span>
-                    <h2>Design #3: Dental-Specific</h2>
-                    <p class="tagline">"Built Exclusively for Dental Practices"</p>
-                    <p>Vertical SaaS approach. Dental terminology, integrations, and case study throughout.</p>
-                    
-                    <ul class="features-list">
-                        <li>Dental PMS integrations (Dentrix, Eaglesoft)</li>
-                        <li>Insurance verification feature</li>
-                        <li>Emergency triage capability</li>
-                        <li>Dental practice case study</li>
-                    </ul>
-                    
-                    <p><strong>Best For:</strong> Deep vertical focus (dental-only launch)</p>
-                    
-                    <div class="design-footer">
-                        <a href="design-3-dental-specific.html" target="_blank" class="btn-view">View Design</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Design 4: Competitive -->
-            <div class="design-card">
-                <div class="design-preview competitive">⚔️</div>
-                <div class="design-content">
-                    <span class="design-badge badge-competitive">COMPETITIVE</span>
-                    <h2>Design #4: vs Competitors</h2>
-                    <p class="tagline">"Why Practices Are Switching From VAPI, Bland & Air.AI"</p>
-                    <p>Direct comparison with VAPI, Bland AI, and Air.AI. Feature-by-feature breakdown.</p>
-                    
-                    <ul class="features-list">
-                        <li>Full comparison table</li>
-                        <li>Competitor pain points addressed</li>
-                        <li>Honest pricing comparison</li>
-                        <li>Free migration offer</li>
-                    </ul>
-                    
-                    <p><strong>Best For:</strong> Retargeting competitor customers</p>
-                    
-                    <div class="design-footer">
-                        <a href="design-4-competitive-comparison.html" target="_blank" class="btn-view">View Design</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Design 5: Premium -->
-            <div class="design-card">
-                <div class="design-preview premium">✨</div>
-                <div class="design-content">
-                    <span class="design-badge badge-premium">PREMIUM</span>
-                    <h2>Design #5: Minimalist Premium</h2>
-                    <p class="tagline">"The voice agent that never sleeps"</p>
-                    <p>Apple-style minimal design. Premium positioning with elegant, spacious layout.</p>
-                    
-                    <ul class="features-list">
-                        <li>Ultra-clean typography</li>
-                        <li>Lots of white space</li>
-                        <li>"Aria" premium branding</li>
-                        <li>Higher price point (€399-699)</li>
-                    </ul>
-                    
-                    <p><strong>Best For:</strong> Aesthetic clinics, luxury real estate, premium services</p>
-                    
-                    <div class="design-footer">
-                        <a href="design-5-minimalist-premium.html" target="_blank" class="btn-view">View Design</a>
-                    </div>
-                </div>
-            </div>
+        <div class="phone-input">
+            <input type="tel" id="phone" placeholder="+306977204233" value="+306977204233" />
+            <button id="btn" onclick="callSofia()">Call Me</button>
         </div>
         
-        <!-- Recommendation -->
-        <div class="recommendation">
-            <h3>💡 Recommended Starting Point</h3>
-            <p><strong>Design #1 (ROI-Focused)</strong> for dental vertical launch</p>
-            <p style="margin-top: 15px;">
-                <strong>Why:</strong> Clearest value proposition, addresses biggest pain point (no-shows = lost revenue), 
-                easy to measure success, interactive ROI calculator is shareable, money-back guarantee reduces risk.
-            </p>
-            <p style="margin-top: 15px;">
-                <strong>Secondary:</strong> Design #4 (Competitive Comparison) as retargeting landing page for 
-                people researching VAPI, Bland AI, or Air.AI.
-            </p>
-        </div>
-        
-        <!-- Quick Comparison -->
-        <div class="comparison-table">
-            <h3>Design Quick Comparison</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Design</th>
-                        <th>Core Message</th>
-                        <th>Best Use Case</th>
-                        <th>Competitive Angle</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>#1 ROI</strong></td>
-                        <td>Stop losing money to no-shows</td>
-                        <td>Dental, medical (high no-show cost)</td>
-                        <td>Features → Revenue impact</td>
-                    </tr>
-                    <tr>
-                        <td><strong>#2 Human-Like</strong></td>
-                        <td>Sounds 98% human</td>
-                        <td>Beauty, consulting (trust-sensitive)</td>
-                        <td>Robotic AI → Natural conversation</td>
-                    </tr>
-                    <tr>
-                        <td><strong>#3 Dental</strong></td>
-                        <td>Built for dental practices</td>
-                        <td>Dental vertical launch</td>
-                        <td>Generic platform → Industry-specific</td>
-                    </tr>
-                    <tr>
-                        <td><strong>#4 Competitive</strong></td>
-                        <td>Better than VAPI/Bland/Air.AI</td>
-                        <td>Competitor switchers</td>
-                        <td>Expensive/complex → Simple/affordable</td>
-                    </tr>
-                    <tr>
-                        <td><strong>#5 Premium</strong></td>
-                        <td>Never sleeps</td>
-                        <td>Luxury/aesthetic services</td>
-                        <td>Mass market → Premium boutique</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Competitive Research Link -->
-        <div style="text-align: center; margin-top: 60px; padding: 40px;">
-            <h3 style="margin-bottom: 20px;">📊 Full Competitive Analysis</h3>
-            <p style="color: #666; margin-bottom: 30px;">
-                Detailed breakdown of VAPI, Bland AI, Air.AI, and Voice.ai:<br>
-                Strengths, weaknesses, pricing, messaging, and competitive gaps
-            </p>
-            <a href="COMPETITIVE-RESEARCH.md" class="doc-link" target="_blank">Read Competitive Research Document</a>
-        </div>
+        <div id="msg" class="message"></div>
     </div>
+
+    <script>
+        async function callSofia() {
+            const phone = document.getElementById('phone').value.trim();
+            const btn = document.getElementById('btn');
+            const msg = document.getElementById('msg');
+            
+            if (!phone || phone.length < 10) {
+                msg.textContent = '❌ Enter valid phone number';
+                msg.className = 'message error';
+                return;
+            }
+            
+            btn.disabled = true;
+            msg.textContent = '📞 Calling Sofia...';
+            msg.className = 'message loading';
+            
+            try {
+                const response = await fetch('https://sofia-demo.loca.lt/api/call-sofia', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'cors',
+                    body: JSON.stringify({ phone_number: phone, name: 'Demo' })
+                });
+                
+                msg.textContent = '✅ Sofia is calling! Pick up! 📞';
+                msg.className = 'message success';
+                document.getElementById('phone').value = '';
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    msg.textContent = '';
+                }, 3000);
+                
+            } catch (error) {
+                msg.textContent = '❌ Error: ' + error.message;
+                msg.className = 'message error';
+                btn.disabled = false;
+            }
+        }
+        
+        document.getElementById('phone').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') callSofia();
+        });
+    </script>
 </body>
 </html>

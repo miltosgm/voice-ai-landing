@@ -592,7 +592,7 @@
                 <p>Experience it yourself. She'll answer instantly.</p>
                 
                 <div class="phone-input">
-                    <input type="tel" id="phoneInput" placeholder="Enter your phone number" value="+306977204233" />
+                    <input type="tel" id="phoneInput" placeholder="+1 (555) 123-4567" />
                     <button class="btn-demo" id="callButton" onclick="callSofia()">Call Me</button>
                 </div>
                 <div id="statusMessage" style="margin-top: 15px; text-align: center; min-height: 24px;"></div>
@@ -770,14 +770,6 @@
                 callButton.style.opacity = '1';
             }
         }
-        
-        // Initialize phone number on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const phoneInput = document.getElementById('phoneInput');
-            if (phoneInput && !phoneInput.value) {
-                phoneInput.value = '+306977204233';
-            }
-        });
         
         document.getElementById('phoneInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') callSofia();

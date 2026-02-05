@@ -383,9 +383,10 @@
                 <p>Experience it yourself. She'll answer instantly.</p>
                 
                 <div class="phone-input">
-                    <input type="tel" placeholder="Enter your phone number" />
-                    <button class="btn-demo">Call Me</button>
+                    <input type="tel" id="phoneInput" placeholder="Enter your phone number" />
+                    <button class="btn-demo" id="callButton" onclick="callSofia()">Call Me</button>
                 </div>
+                <div id="statusMessage" style="margin-top: 15px; text-align: center; min-height: 24px;"></div>
                 
                 <p class="demo-note">Or listen to a real call recording below</p>
                 
@@ -519,5 +520,77 @@
         <p>See why 98% of callers think Sofia is human</p>
         <a href="#" class="btn-primary">Try It Free for 14 Days</a>
     </section>
+
+    <script>
+        async function callSofia() {
+            const phoneInput = document.getElementById('phoneInput');
+            const callButton = document.getElementById('callButton');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            const phoneNumber = phoneInput.value.trim();
+            
+            // Validation
+            if (!phoneNumber) {
+                statusMessage.innerHTML = '<span style="color: #ef5350;">Please enter a phone number</span>';
+                return;
+            }
+            
+            if (phoneNumber.length < 10) {
+                statusMessage.innerHTML = '<span style="color: #ef5350;">Please enter a valid phone number</span>';
+                return;
+            }
+            
+            // Disable button & show loading
+            callButton.disabled = true;
+            callButton.style.opacity = '0.6';
+            statusMessage.innerHTML = '<span style="color: #667eea;">📞 Calling Sofia... Your phone should ring in 10 seconds...</span>';
+            
+            try {
+                const response = await fetch('https://moody-cats-poke.loca.lt/api/call-sofia', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        phone_number: phoneNumber,
+                        name: 'Demo User'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusMessage.innerHTML = `
+                        <span style="color: #66bb6a;">
+                        ✅ Call initiated! 📞 Sofia is on her way...
+                        </span>
+                    `;
+                    // Clear input
+                    phoneInput.value = '';
+                    // Re-enable button after 5 seconds
+                    setTimeout(() => {
+                        callButton.disabled = false;
+                        callButton.style.opacity = '1';
+                        statusMessage.innerHTML = '';
+                    }, 5000);
+                } else {
+                    statusMessage.innerHTML = `<span style="color: #ef5350;">❌ Error: ${data.error || 'Failed to initiate call'}</span>`;
+                    callButton.disabled = false;
+                    callButton.style.opacity = '1';
+                }
+            } catch (error) {
+                statusMessage.innerHTML = `<span style="color: #ef5350;">❌ Error: ${error.message}</span>`;
+                callButton.disabled = false;
+                callButton.style.opacity = '1';
+            }
+        }
+        
+        // Allow Enter key to trigger call
+        document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                callSofia();
+            }
+        });
+    </script>
 </body>
 </html>

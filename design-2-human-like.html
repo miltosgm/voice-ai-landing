@@ -118,6 +118,10 @@
             background: #333;
         }
         
+        .btn-demo:active {
+            transform: scale(0.98);
+        }
+        
         .demo-note {
             font-size: 0.9rem;
             color: #999;
@@ -361,14 +365,205 @@
         @media (max-width: 968px) {
             .hero-content {
                 grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+            
+            .hero-text .subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 30px;
+            }
+            
+            .demo-box {
+                padding: 30px;
             }
             
             .comparison-grid {
                 grid-template-columns: 1fr;
             }
             
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                min-height: auto;
+                padding: 20px 15px;
+            }
+            
+            .hero-content {
+                gap: 30px;
+                max-width: 100%;
+            }
+            
             .hero-text h1 {
+                font-size: 1.8rem;
+                line-height: 1.2;
+                margin-bottom: 15px;
+            }
+            
+            .hero-text .subtitle {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+            
+            .trust-badge {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .demo-box {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            .demo-box h3 {
+                font-size: 1.4rem;
+            }
+            
+            .demo-box p {
+                font-size: 0.95rem;
+            }
+            
+            .phone-input {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .phone-input input,
+            .btn-demo {
+                width: 100%;
+                padding: 14px;
+                font-size: 1rem;
+            }
+            
+            .btn-demo {
+                margin-bottom: 0;
+            }
+            
+            .demo-note {
+                font-size: 0.85rem;
+            }
+            
+            .audio-demo {
+                padding: 20px;
+                margin-top: 20px;
+            }
+            
+            .waveform {
+                height: 50px;
+                margin-bottom: 15px;
+            }
+            
+            .play-btn {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+            
+            .comparison {
+                padding: 40px 15px;
+            }
+            
+            .comparison h2 {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .comparison-card {
+                padding: 20px;
+            }
+            
+            .comparison-card h3 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+            
+            .comparison-card li {
+                padding: 10px 0;
+                font-size: 0.95rem;
+            }
+            
+            .features {
+                padding: 40px 15px;
+            }
+            
+            .features h2 {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .feature-item {
+                padding: 15px;
+            }
+            
+            .feature-icon {
                 font-size: 2.5rem;
+                margin-bottom: 15px;
+            }
+            
+            .feature-item h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .feature-item p {
+                font-size: 0.9rem;
+            }
+            
+            .testimonials {
+                padding: 40px 15px;
+            }
+            
+            .testimonials h2 {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .testimonial {
+                padding: 20px;
+            }
+            
+            .testimonial-text {
+                font-size: 0.95rem;
+                margin-bottom: 15px;
+            }
+            
+            .testimonial-author {
+                font-size: 0.9rem;
+            }
+            
+            .testimonial-role {
+                font-size: 0.85rem;
+            }
+            
+            .final-cta {
+                padding: 40px 15px;
+            }
+            
+            .final-cta h2 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .final-cta p {
+                font-size: 1.1rem;
+                margin-bottom: 25px;
+            }
+            
+            .btn-primary {
+                padding: 16px 30px;
+                font-size: 1.1rem;
             }
         }
     </style>

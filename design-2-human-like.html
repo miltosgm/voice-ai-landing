@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
+    <title>ReceptAI - Your Patients Can't Tell She's AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+        }
+        
+        /* Hero - Minimalist, Trust-Focused */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+        
+        .hero-text .subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #e8f5e9;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+        
+        /* Call Demo Box */
+        .demo-box {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .demo-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .demo-box p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .phone-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .phone-input input {
+            flex: 1;
+            padding: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .btn-demo {
+            background: #1a1a1a;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .btn-demo:hover {
+            background: #333;
+        }
+        
+        .demo-note {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 15px;
+        }
+        
+        /* Audio Player Visual */
+        .audio-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+        
+        .waveform {
+            display: flex;
+            gap: 4px;
+            height: 60px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .bar {
+            width: 4px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 4px;
+            animation: wave 1s ease-in-out infinite;
+        }
+        
+        .bar:nth-child(1) { height: 20%; animation-delay: 0s; }
+        .bar:nth-child(2) { height: 40%; animation-delay: 0.1s; }
+        .bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+        .bar:nth-child(4) { height: 80%; animation-delay: 0.3s; }
+        .bar:nth-child(5) { height: 100%; animation-delay: 0.4s; }
+        .bar:nth-child(6) { height: 80%; animation-delay: 0.5s; }
+        .bar:nth-child(7) { height: 60%; animation-delay: 0.6s; }
+        .bar:nth-child(8) { height: 40%; animation-delay: 0.7s; }
+        .bar:nth-child(9) { height: 20%; animation-delay: 0.8s; }
+        
+        @keyframes wave {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+        
+        .play-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        /* Comparison Section */
+        .comparison {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .comparison h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .comparison-card {
+            padding: 40px;
+            border-radius: 20px;
+        }
+        
+        .comparison-card.bad {
+            background: #ffebee;
+            border: 2px solid #ef5350;
+        }
+        
+        .comparison-card.good {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+        }
+        
+        .comparison-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+        
+        .comparison-card ul {
+            list-style: none;
+        }
+        
+        .comparison-card li {
+            padding: 15px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .comparison-card.bad li:before {
+            content: "❌ ";
+            margin-right: 10px;
+        }
+        
+        .comparison-card.good li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+        
+        /* Features Grid */
+        .features {
+            background: #1a1a1a;
+            color: white;
+            padding: 100px 20px;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-item p {
+            color: #aaa;
+            line-height: 1.8;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 20px;
+            background: #fafafa;
+        }
+        
+        .testimonials h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #333;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .testimonial-role {
+            color: #999;
+            font-size: 0.95rem;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            padding: 22px 50px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="trust-badge">
+                    ✨ 98% of callers think she's human
+                </div>
+                <h1>Your Patients Can't Tell She's AI</h1>
+                <p class="subtitle">
+                    Meet Sofia — your AI receptionist who answers calls, books appointments, 
+                    and confirms visits with a warm, natural voice that builds trust.
+                </p>
+                <p style="color: #999; font-size: 1.1rem;">
+                    No robotic voices. No awkward pauses. Just natural conversations 
+                    that turn calls into bookings.
+                </p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>📞 Call Sofia Right Now</h3>
+                <p>Experience it yourself. She'll answer instantly.</p>
+                
+                <div class="phone-input">
+                    <input type="tel" placeholder="Enter your phone number" />
+                    <button class="btn-demo">Call Me</button>
+                </div>
+                
+                <p class="demo-note">Or listen to a real call recording below</p>
+                
+                <div class="audio-demo">
+                    <div class="waveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <button class="play-btn">▶ Play Real Call Recording</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <h2>Why Patients Prefer AI</h2>
+        
+        <div class="comparison-grid">
+            <div class="comparison-card bad">
+                <h3>Traditional Reception</h3>
+                <ul>
+                    <li>Wait on hold for 5+ minutes</li>
+                    <li>Voicemail during lunch/evenings</li>
+                    <li>Grumpy when overwhelmed</li>
+                    <li>Forgets to send reminders</li>
+                    <li>Can only handle one call at a time</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-card good">
+                <h3>ReceptAI (Sofia)</h3>
+                <ul>
+                    <li>Answers instantly, every time</li>
+                    <li>24/7 availability, never busy</li>
+                    <li>Always warm and professional</li>
+                    <li>Automatic reminders & follow-ups</li>
+                    <li>Handles unlimited calls simultaneously</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section class="features">
+        <h2>Human-Like AI, Not Robotic IVR</h2>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">🎙️</div>
+                <h3>Natural Voice</h3>
+                <p>Warm, conversational tone with natural pauses and intonation. Sounds like your best receptionist.</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">🧠</div>
+                <h3>Contextual Intelligence</h3>
+                <p>Understands context, handles interruptions, and adapts to each conversation naturally.</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">💬</div>
+                <h3>Real Conversations</h3>
+                <p>No "press 1 for..." menus. Just natural back-and-forth dialogue that feels human.</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">🌍</div>
+                <h3>Greek & English</h3>
+                <p>Seamlessly switches between languages mid-conversation based on caller preference.</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">😊</div>
+                <h3>Empathy & Warmth</h3>
+                <p>Trained to show empathy, handle complaints gracefully, and build rapport with callers.</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <h3>Zero Latency</h3>
+                <p>Responds instantly without awkward delays. Conversations flow naturally.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>What Our Clients Say</h2>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "I had a patient call me directly to compliment our 'new receptionist'. 
+                    She had no idea it was AI. That's when I knew this was a game-changer."
+                </p>
+                <div class="testimonial-author">Dr. Nikos Papadopoulos</div>
+                <div class="testimonial-role">Dental Practice, Thessaloniki</div>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "The voice is so natural and warm. Our elderly patients love her. 
+                    She's patient, never rushes them, and always confirms everything clearly."
+                </p>
+                <div class="testimonial-author">Elena Stavrou</div>
+                <div class="testimonial-role">Clinic Manager, Athens</div>
+            </div>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "We tested 4 different AI systems. ReceptAI was the only one that 
+                    actually sounded human. Our booking rate went up 40% in month one."
+                </p>
+                <div class="testimonial-author">Maria Georgiou</div>
+                <div class="testimonial-role">Beauty Clinic Owner, Glyfada</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Experience The Difference</h2>
+        <p>See why 98% of callers think Sofia is human</p>
+        <a href="#" class="btn-primary">Try It Free for 14 Days</a>
+    </section>
+</body>
+</html>

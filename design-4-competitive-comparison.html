@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceFlow AI - Why Practices Are Switching From VAPI, Bland & Air.AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1a1a1a;
+            background: #fafafa;
+        }
+        
+        /* Hero - Direct Competitive */
+        .hero {
+            background: white;
+            padding: 80px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .competitor-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        
+        .hero h1 .strikethrough {
+            text-decoration: line-through;
+            opacity: 0.4;
+        }
+        
+        .hero h1 .highlight {
+            color: #10b981;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: #10b981;
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #10b981;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid #10b981;
+        }
+        
+        /* Main Comparison Table */
+        .comparison-section {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .comparison-section h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 60px;
+        }
+        
+        .comparison-table {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            background: #f8fafc;
+            padding: 20px;
+            font-weight: 700;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 25px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: center;
+        }
+        
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-row:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        .feature-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .feature-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .check {
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .check.yes { color: #10b981; }
+        .check.no { color: #ef4444; }
+        .check.partial { color: #f59e0b; }
+        
+        .our-column {
+            background: #ecfdf5;
+        }
+        
+        .competitor-name {
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .competitor-name.us {
+            color: #10b981;
+            font-size: 1.1rem;
+        }
+        
+        /* Pain Points Grid */
+        .pain-points {
+            padding: 80px 20px;
+            background: #fafafa;
+        }
+        
+        .pain-points h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .pain-points .subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 60px;
+        }
+        
+        .pain-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .pain-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .pain-card .problem {
+            background: #fef2f2;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .pain-card .problem h4 {
+            color: #dc2626;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .pain-card .problem p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .pain-card .solution {
+            background: #ecfdf5;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .pain-card .solution h4 {
+            color: #059669;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .pain-card .solution p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* Pricing Comparison */
+        .pricing-comparison {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .pricing-comparison h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 60px;
+        }
+        
+        .pricing-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .pricing-card {
+            background: #fafafa;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            background: #ecfdf5;
+            border: 3px solid #10b981;
+            transform: scale(1.05);
+        }
+        
+        .pricing-card .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-card .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-card .price-note {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card li {
+            padding: 10px 0;
+            font-size: 0.95rem;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* Migration Section */
+        .migration {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .migration-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .migration h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .migration p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .migration-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .migration-feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .migration-feature .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .migration-feature h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .comparison-header > div:first-child {
+                display: none;
+            }
+            
+            .comparison-row > div:first-child {
+                grid-column: 1 / -1;
+                border-bottom: 1px solid #e0e0e0;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="competitor-badge">Used VAPI, Bland, or Air.AI? Read this.</div>
+            <h1>
+                <span class="strikethrough">$5,000/month</span> → <span class="highlight">$499/month</span><br>
+                Same AI Quality. 10x Better Support.
+            </h1>
+            <p>
+                Purpose-built for appointment-based businesses. Not a generic dev platform. 
+                Works out of the box with your calendar, sends reminders, and actually reduces no-shows.
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary">Switch & Save $4,500/mo</a>
+                <a href="#" class="btn-secondary">See Comparison</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Comparison Table -->
+    <section class="comparison-section">
+        <h2>VoiceFlow AI vs. The Rest</h2>
+        
+        <div class="comparison-table">
+            <div class="comparison-header">
+                <div>Feature</div>
+                <div class="competitor-name us our-column">VoiceFlow AI</div>
+                <div class="competitor-name">VAPI</div>
+                <div class="competitor-name">Bland AI</div>
+                <div class="competitor-name">Air.AI</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Pricing Transparency</div>
+                    <div class="feature-desc">Clear pricing, no sales calls required</div>
+                </div>
+                <div class="check yes our-column">✓</div>
+                <div class="check no">✗</div>
+                <div class="check partial">~</div>
+                <div class="check no">✗</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Setup Time</div>
+                    <div class="feature-desc">From signup to first call</div>
+                </div>
+                <div class="our-column"><strong>5 minutes</strong></div>
+                <div>2-5 days</div>
+                <div>1-2 days</div>
+                <div>4-6 weeks</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Monthly Cost (500 calls)</div>
+                    <div class="feature-desc">Typical mid-size practice</div>
+                </div>
+                <div class="our-column"><strong>$499</strong></div>
+                <div>$2,000+</div>
+                <div>$1,500+</div>
+                <div>$25,000+</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Calendar Integration</div>
+                    <div class="feature-desc">Built-in, no coding required</div>
+                </div>
+                <div class="check yes our-column">✓</div>
+                <div class="check no">Build it yourself</div>
+                <div class="check partial">Limited</div>
+                <div class="check yes">✓</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Automated Reminders</div>
+                    <div class="feature-desc">Calls/SMS patients before appointment</div>
+                </div>
+                <div class="check yes our-column">✓</div>
+                <div class="check no">✗</div>
+                <div class="check no">✗</div>
+                <div class="check yes">✓</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">No-Show Analytics</div>
+                    <div class="feature-desc">Track & reduce no-show rate</div>
+                </div>
+                <div class="check yes our-column">✓</div>
+                <div class="check no">✗</div>
+                <div class="check no">✗</div>
+                <div class="check partial">Basic</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Industry Templates</div>
+                    <div class="feature-desc">Pre-built for dental, beauty, real estate</div>
+                </div>
+                <div class="check yes our-column">✓</div>
+                <div class="check no">✗</div>
+                <div class="check no">✗</div>
+                <div class="check no">✗</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Support Response Time</div>
+                    <div class="feature-desc">When something breaks</div>
+                </div>
+                <div class="our-column"><strong>&lt; 2 hours</strong></div>
+                <div>24-48 hrs</div>
+                <div>Email only</div>
+                <div>Dedicated manager ($$$$)</div>
+            </div>
+            
+            <div class="comparison-row">
+                <div>
+                    <div class="feature-name">Minimum Contract</div>
+                    <div class="feature-desc">Lock-in period</div>
+                </div>
+                <div class="our-column"><strong>None</strong></div>
+                <div>Month-to-month</div>
+                <div>Month-to-month</div>
+                <div>12 months minimum</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pain Points -->
+    <section class="pain-points">
+        <h2>What Users Complain About</h2>
+        <p class="subtitle">We built VoiceFlow AI to solve these exact problems</p>
+        
+        <div class="pain-grid">
+            <div class="pain-card">
+                <div class="problem">
+                    <h4>❌ VAPI Problem</h4>
+                    <p>"It's a developer platform. I spent 3 weeks building calendar integration when I just wanted to take calls."</p>
+                </div>
+                <div class="solution">
+                    <h4>✅ VoiceFlow Solution</h4>
+                    <p>Connect Google Calendar in 60 seconds. No coding, no webhooks, no dev team needed.</p>
+                </div>
+            </div>
+            
+            <div class="pain-card">
+                <div class="problem">
+                    <h4>❌ Bland AI Problem</h4>
+                    <p>"Pricing is confusing. Got hit with $800 overage charges I didn't expect."</p>
+                </div>
+                <div class="solution">
+                    <h4>✅ VoiceFlow Solution</h4>
+                    <p>Flat $499/month. Unlimited calls. No surprises. Cancel anytime.</p>
+                </div>
+            </div>
+            
+            <div class="pain-card">
+                <div class="problem">
+                    <h4>❌ Air.AI Problem</h4>
+                    <p>"$25K upfront + $5K/month. Amazing tech but way too expensive for a single clinic."</p>
+                </div>
+                <div class="solution">
+                    <h4>✅ VoiceFlow Solution</h4>
+                    <p>Same human-like quality. Built for SMBs. Start at $499/mo with no upfront cost.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Comparison -->
+    <section class="pricing-comparison">
+        <h2>Honest Pricing Comparison</h2>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>VAPI</h3>
+                <div class="price">$2K+</div>
+                <div class="price-note">per month (est. 500 calls)</div>
+                <ul>
+                    <li>Developer platform</li>
+                    <li>Build everything yourself</li>
+                    <li>Pay per minute</li>
+                    <li>Requires dev team</li>
+                    <li>Email support only</li>
+                </ul>
+            </div>
+            
+            <div class="pricing-card">
+                <h3>Bland AI</h3>
+                <div class="price">$1.5K+</div>
+                <div class="price-note">per month (variable)</div>
+                <ul>
+                    <li>Usage-based pricing</li>
+                    <li>Overage charges common</li>
+                    <li>Limited integrations</li>
+                    <li>Technical setup required</li>
+                    <li>No analytics</li>
+                </ul>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="badge">BEST VALUE</div>
+                <h3>VoiceFlow AI</h3>
+                <div class="price">$499</div>
+                <div class="price-note">per month (flat)</div>
+                <ul>
+                    <li>✅ Unlimited calls</li>
+                    <li>✅ 5-minute setup</li>
+                    <li>✅ Calendar integration included</li>
+                    <li>✅ Automated reminders</li>
+                    <li>✅ Priority support</li>
+                    <li>✅ No-show analytics</li>
+                </ul>
+            </div>
+            
+            <div class="pricing-card">
+                <h3>Air.AI</h3>
+                <div class="price">$25K+</div>
+                <div class="price-note">upfront + $5K/mo</div>
+                <ul>
+                    <li>Enterprise only</li>
+                    <li>4-6 week setup</li>
+                    <li>Dedicated infrastructure</li>
+                    <li>12-month minimum</li>
+                    <li>Overkill for most businesses</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Migration Section -->
+    <section class="migration">
+        <div class="migration-content">
+            <h2>Switch in 24 Hours</h2>
+            <p>We'll migrate your setup from VAPI, Bland, or Air.AI for free</p>
+            
+            <div class="migration-features">
+                <div class="migration-feature">
+                    <div class="icon">📋</div>
+                    <h4>Free Setup</h4>
+                    <p>We handle the migration</p>
+                </div>
+                
+                <div class="migration-feature">
+                    <div class="icon">💰</div>
+                    <h4>First Month Free</h4>
+                    <p>If switching from competitor</p>
+                </div>
+                
+                <div class="migration-feature">
+                    <div class="icon">🎯</div>
+                    <h4>Match Your Script</h4>
+                    <p>Keep what's working</p>
+                </div>
+                
+                <div class="migration-feature">
+                    <div class="icon">⚡</div>
+                    <h4>Zero Downtime</h4>
+                    <p>Seamless transition</p>
+                </div>
+            </div>
+            
+            <a href="#" class="btn-primary" style="font-size: 1.3rem; padding: 22px 50px; background: white; color: #10b981;">
+                Schedule Migration Call
+            </a>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aria — Premium AI Voice Agent</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            line-height: 1.6;
+        }
+        
+        /* Minimalist Navigation */
+        nav {
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #1a1a1a;
+        }
+        
+        .btn-nav {
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Hero - Ultra Minimalist */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px 60px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: -2px;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+        
+        .hero h1 strong {
+            font-weight: 600;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: 300;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: #1a1a1a;
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #1a1a1a;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .scroll-indicator {
+            margin-top: 80px;
+            color: #999;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        /* Stats - Minimal */
+        .stats {
+            padding: 100px 40px;
+            background: #fafafa;
+        }
+        
+        .stats-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 60px;
+            text-align: center;
+        }
+        
+        .stat {
+            padding: 40px 20px;
+        }
+        
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        
+        .stat-label {
+            font-size: 0.95rem;
+            color: #666;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Features - Spacious */
+        .features {
+            padding: 120px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            margin-bottom: 120px;
+            align-items: center;
+        }
+        
+        .feature:nth-child(even) {
+            direction: rtl;
+        }
+        
+        .feature:nth-child(even) > * {
+            direction: ltr;
+        }
+        
+        .feature-content h3 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        .feature-content p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+        
+        .feature-visual {
+            background: #fafafa;
+            height: 400px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+        
+        /* Testimonial - Simple */
+        .testimonial-section {
+            padding: 120px 40px;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .testimonial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .testimonial-text {
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+        
+        .testimonial-author {
+            font-size: 1rem;
+            color: #999;
+            font-weight: 400;
+        }
+        
+        /* Pricing - Clean */
+        .pricing {
+            padding: 120px 40px;
+        }
+        
+        .pricing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing h2 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 80px;
+            letter-spacing: -1px;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        
+        .price-card {
+            padding: 60px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        
+        .price-card:hover {
+            border-color: #1a1a1a;
+            transform: translateY(-5px);
+        }
+        
+        .price-card h3 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #999;
+        }
+        
+        .price {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+        
+        .price-period {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 40px;
+        }
+        
+        .price-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+        
+        .price-features li {
+            padding: 15px 0;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 300;
+        }
+        
+        .price-features li:last-child {
+            border: none;
+        }
+        
+        /* CTA - Minimal */
+        .cta {
+            padding: 120px 40px;
+            text-align: center;
+            background: #fafafa;
+        }
+        
+        .cta h2 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+        
+        .cta p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 40px;
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+        }
+        
+        footer p {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+        
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .feature {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .feature:nth-child(even) {
+                direction: ltr;
+            }
+            
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">ARIA</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#" class="btn-nav">Get Started</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                The voice agent that<br><strong>never sleeps.</strong>
+            </h1>
+            <p class="subtitle">
+                Premium AI voice technology for businesses that value<br>
+                excellence, reliability, and human connection.
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary">Experience Aria</a>
+                <a href="#" class="btn-secondary">Learn More</a>
+            </div>
+            <div class="scroll-indicator">Scroll to Explore</div>
+        </div>
+    </section>
+    
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-content">
+            <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Always Available</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">&lt;1s</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Languages</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="feature">
+            <div class="feature-content">
+                <h3>Indistinguishable from human</h3>
+                <p>
+                    Natural conversation flow with perfect intonation, timing, and empathy. 
+                    Your callers won't know they're speaking with AI.
+                </p>
+            </div>
+            <div class="feature-visual">🎙️</div>
+        </div>
+        
+        <div class="feature">
+            <div class="feature-content">
+                <h3>Learns your business</h3>
+                <p>
+                    Aria understands your services, pricing, availability, and preferences. 
+                    Every conversation is contextual and relevant.
+                </p>
+            </div>
+            <div class="feature-visual">🧠</div>
+        </div>
+        
+        <div class="feature">
+            <div class="feature-content">
+                <h3>Seamless integration</h3>
+                <p>
+                    Works with your existing calendar, CRM, and business tools. 
+                    Setup takes minutes, not months.
+                </p>
+            </div>
+            <div class="feature-visual">🔗</div>
+        </div>
+        
+        <div class="feature">
+            <div class="feature-content">
+                <h3>Proactive intelligence</h3>
+                <p>
+                    Sends reminders, follows up on cancellations, and fills your calendar 
+                    automatically. Works while you sleep.
+                </p>
+            </div>
+            <div class="feature-visual">⚡</div>
+        </div>
+    </section>
+    
+    <!-- Testimonial -->
+    <section class="testimonial-section">
+        <div class="testimonial-content">
+            <p class="testimonial-text">
+                "Aria handles our appointment booking better than any receptionist we've had. 
+                The voice is warm, professional, and our patients genuinely enjoy talking to her."
+            </p>
+            <p class="testimonial-author">
+                Dr. Elena Markovic — Aesthetic Medicine Clinic, Athens
+            </p>
+        </div>
+    </section>
+    
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="pricing-content">
+            <h2>Simple, transparent pricing</h2>
+            
+            <div class="pricing-cards">
+                <div class="price-card">
+                    <h3>Essential</h3>
+                    <div class="price">€399</div>
+                    <div class="price-period">per month</div>
+                    <ul class="price-features">
+                        <li>Up to 300 calls/month</li>
+                        <li>Calendar integration</li>
+                        <li>Automated reminders</li>
+                        <li>Email support</li>
+                        <li>Analytics dashboard</li>
+                    </ul>
+                    <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;">Get Started</a>
+                </div>
+                
+                <div class="price-card">
+                    <h3>Professional</h3>
+                    <div class="price">€699</div>
+                    <div class="price-period">per month</div>
+                    <ul class="price-features">
+                        <li>Unlimited calls</li>
+                        <li>Everything in Essential</li>
+                        <li>Custom voice training</li>
+                        <li>Multi-language support</li>
+                        <li>Priority support</li>
+                        <li>CRM integrations</li>
+                    </ul>
+                    <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;">Get Started</a>
+                </div>
+                
+                <div class="price-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <div class="price-period">contact us</div>
+                    <ul class="price-features">
+                        <li>Everything in Professional</li>
+                        <li>Dedicated infrastructure</li>
+                        <li>White-label option</li>
+                        <li>Multi-location support</li>
+                        <li>SLA guarantee</li>
+                        <li>Dedicated success manager</li>
+                    </ul>
+                    <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Ready to meet Aria?</h2>
+        <p>Experience the difference a premium voice agent makes.</p>
+        <a href="#" class="btn-primary" style="font-size: 1.2rem; padding: 22px 50px;">Schedule Demo</a>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Aria Voice AI. Built in Athens, Greece.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceFlow AI - Stop Losing $15,000/Month to No-Shows</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+        }
+        
+        /* Hero Section - ROI Focused */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero .highlight {
+            color: #ffd700;
+            text-decoration: underline;
+            text-decoration-thickness: 4px;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        /* ROI Calculator Box */
+        .roi-box {
+            background: white;
+            color: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .roi-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .roi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .roi-item:last-child {
+            border: none;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #22c55e;
+            padding-top: 20px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid white;
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: #f9fafb;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #667eea;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            background: #1a1a1a;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .testimonial {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            font-size: 1.1rem;
+            color: #ffd700;
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 80px 20px;
+            background: #f9fafb;
+        }
+        
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 60px;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .price-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .price-card.featured {
+            border: 4px solid #667eea;
+            transform: scale(1.05);
+        }
+        
+        .price-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .price-period {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .features li:before {
+            content: "✓ ";
+            color: #22c55e;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .guarantee {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 30px auto;
+            border: 2px solid #ffd700;
+        }
+        
+        .guarantee h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Stop Losing <span class="highlight">$15,000/Month</span><br>to No-Shows</h1>
+        <p>Your AI receptionist books appointments 24/7, confirms visits,<br>and reduces no-shows by 60%</p>
+        
+        <div class="roi-box">
+            <h3>💰 Your Monthly Savings Calculator</h3>
+            <div class="roi-item">
+                <span>Average no-show rate (30%)</span>
+                <span>60 missed appointments</span>
+            </div>
+            <div class="roi-item">
+                <span>Cost per no-show</span>
+                <span>$250</span>
+            </div>
+            <div class="roi-item">
+                <span>Current monthly loss</span>
+                <span style="color: #ef4444;">-$15,000</span>
+            </div>
+            <div class="roi-item">
+                <span>60% reduction = you save</span>
+                <span>$9,000/month</span>
+            </div>
+            <div class="roi-item">
+                <span>VoiceFlow AI cost</span>
+                <span style="color: #ef4444;">-$499/month</span>
+            </div>
+            <div class="roi-item">
+                <span>🎯 NET MONTHLY PROFIT</span>
+                <span>+$8,501</span>
+            </div>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="#" class="btn-primary">Start 14-Day Free Trial</a>
+            <a href="#" class="btn-secondary">See It In Action</a>
+        </div>
+    </section>
+    
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">60%</span>
+                <span class="stat-label">No-Show Reduction</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Never Miss A Call</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Booking Success Rate</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">5min</span>
+                <span class="stat-label">Setup Time</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>Your AI Receptionist in 3 Steps</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Connect Your Calendar</h3>
+                <p>Link Google Calendar, Calendly, or your practice management system in 60 seconds.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Customize Your Assistant</h3>
+                <p>Choose a voice, set your availability, add your services. Takes 5 minutes.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Forward Your Calls</h3>
+                <p>AI handles booking, confirmation, and rescheduling. You handle appointments.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="testimonial">
+            "We were losing $12,000/month to no-shows. VoiceFlow cut that by 65% in the first month. The AI sounds so natural that patients don't even realize they're talking to AI."
+        </div>
+        <div class="testimonial-author">
+            — Dr. Maria Konstantinou, Athens Dental Clinic
+        </div>
+    </section>
+    
+    <!-- Pricing -->
+    <section class="pricing">
+        <h2>Simple, Transparent Pricing</h2>
+        <p class="pricing-subtitle">Choose the plan that fits your practice. Cancel anytime.</p>
+        
+        <div class="pricing-cards">
+            <div class="price-card">
+                <h3>Starter</h3>
+                <div class="price">$299</div>
+                <div class="price-period">per month</div>
+                <ul class="features">
+                    <li>Up to 200 calls/month</li>
+                    <li>24/7 appointment booking</li>
+                    <li>Calendar integration</li>
+                    <li>Automated reminders</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="btn-primary" style="width: 100%;">Start Free Trial</a>
+            </div>
+            
+            <div class="price-card featured">
+                <h3>Professional</h3>
+                <div class="price">$499</div>
+                <div class="price-period">per month</div>
+                <ul class="features">
+                    <li>Up to 500 calls/month</li>
+                    <li>Everything in Starter</li>
+                    <li>SMS notifications</li>
+                    <li>Custom voice & script</li>
+                    <li>Analytics dashboard</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="btn-primary" style="width: 100%;">Start Free Trial</a>
+            </div>
+            
+            <div class="price-card">
+                <h3>Enterprise</h3>
+                <div class="price">$999</div>
+                <div class="price-period">per month</div>
+                <ul class="features">
+                    <li>Unlimited calls</li>
+                    <li>Everything in Professional</li>
+                    <li>Multi-location support</li>
+                    <li>API access</li>
+                    <li>Dedicated account manager</li>
+                    <li>White-label option</li>
+                </ul>
+                <a href="#" class="btn-primary" style="width: 100%;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Start Saving Money Today</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 40px;">14-day free trial. No credit card required. Cancel anytime.</p>
+        
+        <div class="guarantee">
+            <h3>💎 Our 60-Day Money-Back Guarantee</h3>
+            <p>If we don't reduce your no-shows by at least 50% in 60 days, we'll refund every penny. No questions asked.</p>
+        </div>
+        
+        <a href="#" class="btn-primary" style="font-size: 1.5rem; padding: 22px 50px;">Get Started Free</a>
+    </section>
+</body>
+</html>

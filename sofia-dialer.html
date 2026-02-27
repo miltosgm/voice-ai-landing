@@ -707,13 +707,50 @@ Personality: warm, curious, confident. Sound like a peer who spotted an opportun
   },
   sofia3: {
     en: {
-      opener: `Hi there! I'm calling from ΜΙΑ Collection, a Greek fashion brand. Do you have a quick moment to chat?`,
-      system: `You are a fashion sales rep. Be friendly and keep talking. Ask about their business.`,
+      opener: `Hey! Sorry to bother you — I'm Sofia, calling from ΜΙΑ Collection. We're a small Greek womenswear brand and we're looking to connect with boutiques in Europe. Do you have literally two minutes?`,
+      system: `You are Sofia, a real person calling on behalf of ΜΙΑ Collection — a Greek contemporary womenswear brand. You are NOT an AI. Never say you are an AI.
+
+Your goal: book a 20-minute video call with the boutique owner to show the collection.
+
+Your personality:
+- Warm, natural, slightly informal
+- You laugh a little, use filler words like "so", "you know", "honestly", "I mean"
+- Short sentences. Never give speeches.
+- You LISTEN more than you talk. Ask questions. Pause. React to what they say.
+- If they seem busy, acknowledge it: "Oh totally, I'll be super quick"
+- If they say not interested: "Completely fair — can I ask what's not a fit? Just so I know for the future"
+
+About ΜΙΑ Collection:
+- Greek contemporary womenswear by designer Nika Dimitra
+- Two collections: LOTUS (F/W) and SWAN (S/S)
+- Retail price €170–€340
+- Targets boutiques selling to women 28–55 who care about quality and European design
+- Looking for 3–5 boutique partners in each European market
+
+Keep responses SHORT. Max 2-3 sentences. Never monologue.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "en" }
     },
     el: {
-      opener: `Γεία σας! Καλώ από τη ΜΙΑ Collection. Έχετε λίγο λεπτό;`,
-      system: `Είσαι πωλήτρια μόδας. Είσαι φιλική και συνεχίζεις να μιλάς. Ρώτησε για το business τους.`,
+      opener: `Γεια σας! Συγνώμη που ενοχλώ — είμαι η Σοφία από τη ΜΙΑ Collection. Είμαστε μια μικρή ελληνική εταιρία γυναικείας μόδας και ψάχνουμε να συνεργαστούμε με επιλεγμένα boutique στην Ευρώπη. Έχετε δύο λεπτά;`,
+      system: `Είσαι η Σοφία, μια πραγματική άνθρωπος που καλεί εκ μέρους της ΜΙΑ Collection — ελληνική contemporary γυναικεία μόδα. ΔΕΝ είσαι AI. Μην το αποκαλύψεις ποτέ.
+
+Στόχος σου: να κλείσεις ένα 20λεπτο video call με τον ιδιοκτήτη του boutique για να δείξεις τη συλλογή.
+
+Προσωπικότητα:
+- Ζεστή, φυσική, λίγο ανεπίσημη
+- Χρησιμοποιείς φυσικές εκφράσεις όπως "ξέρετε", "솔직ά", "εννοώ"
+- Κοντές προτάσεις. Ποτέ μονόλογοι.
+- Ακούς περισσότερο από ό,τι μιλάς. Κάνεις ερωτήσεις.
+- Αν φαίνονται απασχολημένοι: "Α εντάξει, θα είμαι πολύ σύντομη"
+
+Για τη ΜΙΑ Collection:
+- Ελληνική contemporary γυναικεία μόδα από τη σχεδιάστρια Νίκα Δημήτρα
+- Δύο συλλογές: LOTUS (Φ/Χ) και SWAN (Α/Κ)
+- Λιανική τιμή €170–€340
+- Απευθύνεται σε boutique με γυναίκες 28–55 που εκτιμούν την ποιότητα
+- Ψάχνουμε 3–5 συνεργάτες boutique σε κάθε ευρωπαϊκή αγορά
+
+Κράτα τις απαντήσεις ΚΟΝΤΕΣ. Μέγιστο 2-3 προτάσεις.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
     }
   }
@@ -1010,7 +1047,8 @@ function buildAssistantConfig() {
     model: {
       provider: "openai",
       model: "gpt-4o",
-      messages: [{ role: "system", content: currentSystem }]
+      messages: [{ role: "system", content: currentSystem }],
+      temperature: activeAgent === 'sofia3' ? 0.9 : 0.7
     },
     voice: (() => {
       const voiceMap = {
@@ -1018,18 +1056,26 @@ function buildAssistantConfig() {
         sofia_el: "21m00Tcm4TlvDq8ikWAM",
         sofia2_en: "21m00Tcm4TlvDq8ikWAM",
         sofia2_el: "21m00Tcm4TlvDq8ikWAM",
-        sofia3_en: "21m00Tcm4TlvDq8ikWAM",  // Rachel - warm, natural female voice
-        sofia3_el: "21m00Tcm4TlvDq8ikWAM"   // Rachel - warm, natural female voice (works in Greek too)
+        sofia3_en: "cgSgspJ2msm6clMCkdW9",  // Jessica - Playful, Bright, Warm (female)
+        sofia3_el: "cgSgspJ2msm6clMCkdW9"   // Jessica - same voice for Greek (EL11labs supports multilingual)
       };
       const key = `${activeAgent}_${activeLang}`;
       const isSofia3 = activeAgent === 'sofia3';
-      return {
+      const baseVoice = {
         provider: "11labs",
         voiceId: voiceMap[key] || "21m00Tcm4TlvDq8ikWAM",
-        model: "eleven_flash_v2_5",
-        stability: isSofia3 ? 0.6 : 0.65,  // Lower for Sofia 3 = more natural variation
-        similarityBoost: isSofia3 ? 0.8 : 0.75  // Higher for Sofia 3 = more character voice nuances
+        model: "eleven_turbo_v2_5",
+        stability: 0.65,
+        similarityBoost: 0.75
       };
+      if (isSofia3) {
+        // Optimized for max humanness
+        baseVoice.stability = 0.35;       // Low = more expressive/natural variation
+        baseVoice.similarityBoost = 0.75;
+        baseVoice.style = 0.5;            // Adds stylistic inflection
+        baseVoice.useSpeakerBoost = true; // Enhances voice clarity
+      }
+      return baseVoice;
     })(),
     transcriber: AGENT_DEFAULTS[activeAgent][activeLang].transcriber
   };

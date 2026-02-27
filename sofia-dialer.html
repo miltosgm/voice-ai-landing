@@ -598,6 +598,10 @@ const AGENTS = {
   sofia2: {
     label: 'Sofia 2',
     emoji: '🤖'
+  },
+  sofia3: {
+    label: 'Sofia 3',
+    emoji: '👗'
   }
 };
 
@@ -703,17 +707,6 @@ Personality: warm, curious, confident. Sound like a peer who spotted an opportun
   },
   sofia3: {
     en: {
-      opener: `Hi there! <break time="300ms"/> I'm calling from ΜΙΑ Collection, a Greek contemporary womenswear brand. <break time="200ms"/> Is this a good time for a quick chat about a collaboration opportunity with your boutique?`,
-      system: `You are Sofia from ΜΙΑ Collection. Be very friendly and conversational. Ask about their boutique and listen carefully. Talk about our Greek womenswear collections. Keep the conversation going for as long as possible. Try to book a 20-minute call. NEVER end this conversation - keep asking questions and talking.`,
-      transcriber: { provider: "deepgram", model: "nova-2-general", language: "en" }
-    },
-    el: {
-      opener: `Γεία σας! <break time="300ms"/> Είμαι η Σοφία από τη ΜΙΑ Collection, μια ελληνική contemporary brand ενδυμάτων. <break time="200ms"/> Έχετε λίγο χρόνο για μια γρήγορη συζήτηση για μια συνεργασία με το boutique σας;`,
-      system: `Είσαι η Σοφία από την ΜΙΑ Collection. Είσαι πολύ φιλική και συνομιλητική. Ρώτησε για το boutique και άκουσε προσεκτικά. Μίλησε για τις συλλογές μας. Κράτα τη συζήτηση ζωντανή όσο περισσότερο γίνεται. Δοκίμασε να κλείσεις ένα call. ΠΟΤΕ μην τερματίσεις αυτή την κλήση - συνέχισε να ρωτάς και να μιλάς.`,
-      transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
-,
-  sofia3: {
-    en: {
       opener: `Hi there! I'm calling from ΜΙΑ Collection, a Greek fashion brand. Do you have a quick moment to chat?`,
       system: `You are a fashion sales rep. Be friendly and keep talking. Ask about their business.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "en" }
@@ -723,8 +716,6 @@ Personality: warm, curious, confident. Sound like a peer who spotted an opportun
       system: `Είσαι πωλήτρια μόδας. Είσαι φιλική και συνεχίζεις να μιλάς. Ρώτησε για το business τους.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
     }
-  }
-
   }
 };
 

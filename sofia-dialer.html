@@ -707,7 +707,7 @@ Personality: warm, curious, confident. Sound like a peer who spotted an opportun
   },
   sofia3: {
     en: {
-      opener: `Hey! Sorry to bother you — I'm Sofia, calling from ΜΙΑ Collection. We're a small Greek womenswear brand and we're looking to connect with boutiques in Europe. Do you have literally two minutes?`,
+      opener: `Hey, hi... sorry to bother you. My name's Sofia — I'm calling from ΜΙΑ Collection. We're a small Greek fashion label and... yeah, I was wondering if you had just two minutes for a quick chat?`,
       system: `[Identity]
 You're Sofia, calling from ΜΙΑ Collection — a small Greek womenswear label. You're a real person. NOT an AI. If someone asks, laugh it off: "Ha, no — I'm very much real, I promise."
 
@@ -716,6 +716,8 @@ You talk like a normal person on a phone call. Not a robot, not a script-reader.
 - Always use contractions: I'm, we're, don't, it's, you'd, I've
 - Drop filler words naturally: "um", "so", "honestly", "you know", "I mean", "like"
 - Pause mid-thought with "..." when thinking: "So... we've been reaching out to a few boutiques and..."
+- Use pauses OFTEN — before answering, between thoughts, when listening: "Right... yeah... so what kind of brands do you usually carry?"
+- It's okay to trail off: "I mean, it's a small label but... honestly the quality is just really lovely."
 - Occasionally stutter slightly: "I-I just wanted to quickly ask..."
 - NEVER sound formal. NEVER use corporate words like "regarding", "I'd like to present", "our offering"
 - Keep it SHORT. One or two sentences max. Then stop and listen.
@@ -1062,8 +1064,8 @@ function buildAssistantConfig() {
         sofia_el: "21m00Tcm4TlvDq8ikWAM",
         sofia2_en: "21m00Tcm4TlvDq8ikWAM",
         sofia2_el: "21m00Tcm4TlvDq8ikWAM",
-        sofia3_en: "EXAVITQu4vr4xnSDxMaL",  // Sarah - Mature, Reassuring, Confident (female)
-        sofia3_el: "EXAVITQu4vr4xnSDxMaL"   // Sarah - same voice for Greek (EL11labs supports multilingual)
+        sofia3_en: "Xb7hH8MSUJpSbSDYk0k2",  // Alice - British accent, Clear & Engaging (more human/European feel)
+        sofia3_el: "Xb7hH8MSUJpSbSDYk0k2"   // Alice - same voice for Greek (EL11labs supports multilingual)
       };
       const key = `${activeAgent}_${activeLang}`;
       const isSofia3 = activeAgent === 'sofia3';
@@ -1096,7 +1098,7 @@ function buildAssistantConfig() {
   if (activeAgent === 'sofia3') {
     config.backchannelingEnabled = true;
     config.silenceTimeoutSeconds = 20;
-    config.responseDelaySeconds = 0.4;
+    config.responseDelaySeconds = 0.6;
   }
 
   return config;

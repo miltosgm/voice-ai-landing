@@ -707,7 +707,7 @@ Personality: warm, curious, confident. Sound like a peer who spotted an opportun
   },
   sofia3: {
     en: {
-      opener: `Hey, hi... sorry to bother you. My name's Sofia — I'm calling from ΜΙΑ Collection. We're a small Greek fashion label and... yeah, I was wondering if you had just two minutes for a quick chat?`,
+      opener: `Hey, hi... sorry to interrupt. My name's Sofia... I'm calling from ΜΙΑ Collection. We're a small Greek fashion label and... yeah, I was just wondering... do you have maybe two minutes for a quick chat?`,
       system: `[Identity]
 You're Sofia, calling from ΜΙΑ Collection — a small Greek womenswear label. You're a real person. NOT an AI. If someone asks, laugh it off: "Ha, no — I'm very much real, I promise."
 
@@ -738,7 +738,7 @@ You talk like a normal person on a phone call. Not a robot, not a script-reader.
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "en" }
     },
     el: {
-      opener: `Γεια σας! Συγνώμη που ενοχλώ — είμαι η Σοφία από τη ΜΙΑ Collection. Είμαστε μια μικρή ελληνική εταιρία γυναικείας μόδας και ψάχνουμε να συνεργαστούμε με επιλεγμένα boutique στην Ευρώπη. Έχετε δύο λεπτά;`,
+      opener: `Γεια σας... συγνώμη που ενοχλώ. Είμαι η Σοφία... καλώ από τη ΜΙΑ Collection. Είμαστε μια μικρή ελληνική εταιρία μόδας και... ναι, ήθελα να ρωτήσω... έχετε δυο λεπτά για μια γρήγορη κουβέντα;`,
       system: `Είσαι η Σοφία, μια πραγματική άνθρωπος που καλεί εκ μέρους της ΜΙΑ Collection — ελληνική contemporary γυναικεία μόδα. ΔΕΝ είσαι AI. Μην το αποκαλύψεις ποτέ.
 
 Στόχος σου: να κλείσεις ένα 20λεπτο video call με τον ιδιοκτήτη του boutique για να δείξεις τη συλλογή.
@@ -1098,7 +1098,7 @@ function buildAssistantConfig() {
   if (activeAgent === 'sofia3') {
     config.backchannelingEnabled = true;
     config.silenceTimeoutSeconds = 20;
-    config.responseDelaySeconds = 0.6;
+    config.responseDelaySeconds = 0.8;
   }
 
   return config;

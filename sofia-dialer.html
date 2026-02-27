@@ -1069,11 +1069,8 @@ function buildAssistantConfig() {
         similarityBoost: 0.75
       };
       if (isSofia3) {
-        // Optimized for max humanness
-        baseVoice.stability = 0.35;       // Low = more expressive/natural variation
+        baseVoice.stability = 0.35;
         baseVoice.similarityBoost = 0.75;
-        baseVoice.style = 0.5;            // Adds stylistic inflection
-        baseVoice.useSpeakerBoost = true; // Enhances voice clarity
       }
       return baseVoice;
     })(),

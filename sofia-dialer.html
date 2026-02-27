@@ -1056,14 +1056,7 @@ function buildAssistantConfig() {
   const config = {
     name: "Sofia",
     firstMessage: currentOpener,
-    ...(activeAgent === 'sofia3' ? {
-      backchannelingEnabled: true,
-      fillerInjectionEnabled: true,
-      backgroundSound: "off",
-      silenceTimeoutSeconds: 20,
-      responseDelaySeconds: 0.4,
-      llmRequestDelaySeconds: 0.1
-    } : {}),
+
     model: {
       provider: "openai",
       model: "gpt-4o",
@@ -1107,6 +1100,13 @@ function buildAssistantConfig() {
       : ["goodbye", "bye", "not interested", "remove me"];
   }
   
+  if (activeAgent === 'sofia3') {
+    config.backchannelingEnabled = true;
+    config.fillerInjectionEnabled = true;
+    config.silenceTimeoutSeconds = 20;
+    config.responseDelaySeconds = 0.4;
+  }
+
   return config;
 }
 

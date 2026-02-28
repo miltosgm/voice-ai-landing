@@ -1591,9 +1591,13 @@ async function loadRecentCalls() {
     const res = await fetch('https://api.vapi.ai/call?limit=20', {
       headers: { Authorization: 'Bearer ' + PRIVATE_KEY }
     });
-    const data = await res.json();
-    const calls = Array.isArray(data) ? data : (data.results || []);
-    if (!calls.length) { el.innerHTML = '<div class="log-empty">No calls found</div>'; return; }
+    const raw = await res.text();
+    console.log('VAPI calls raw:', raw.substring(0, 300));
+    let data;
+    try { data = JSON.parse(raw); } catch(pe) { el.innerHTML = '<div class="log-empty" style="color:var(--red)">Parse error: ' + pe.message + '<br>' + raw.substring(0,100) + '</div>'; return; }
+    console.log('VAPI calls type:', typeof data, Array.isArray(data), data && data.length);
+    const calls = Array.isArray(data) ? data : (data.results || data.calls || []);
+    if (!calls.length) { el.innerHTML = '<div class="log-empty">No calls found — check console for raw response</div>'; return; }
     el.innerHTML = calls.map((c, i) => {
       const status = c.status || 'unknown';
       const statusClass = status === 'ended' ? 'ended' : status.includes('fail') || status.includes('error') ? 'failed' : 'other';

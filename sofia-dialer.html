@@ -376,7 +376,20 @@
   .call-time { font-size: 11px; color: var(--gray2); }
   .call-audio { width: 100%; height: 32px; border-radius: 8px; outline: none; margin-top: 4px; }
   .call-transcript-btn { font-size: 11px; color: var(--accent2); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
-  .call-transcript { font-size: 12px; color: var(--gray); background: var(--green-dim); border-radius: 8px; padding: 8px 10px; margin-top: 4px; max-height: 120px; overflow-y: auto; display: none; line-height: 1.5; }
+  .call-transcript { font-size: 12px; border-radius: 10px; border: 1px solid var(--border); margin-top: 6px; max-height: 400px; overflow-y: auto; display: none; }
+  .ct-summary { padding: 10px 12px; background: rgba(108,92,231,0.06); border-bottom: 1px solid var(--border); }
+  .ct-summary strong { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent2); }
+  .ct-summary p { margin: 6px 0 0; color: var(--gray); line-height: 1.5; }
+  .ct-convo { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .ct-line { display: flex; flex-direction: column; gap: 2px; max-width: 85%; }
+  .ct-line.ai { align-self: flex-start; }
+  .ct-line.user { align-self: flex-end; }
+  .ct-speaker { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .ct-line.ai .ct-speaker { color: var(--accent2); }
+  .ct-line.user .ct-speaker { color: var(--green); text-align: right; }
+  .ct-bubble { padding: 7px 11px; border-radius: 12px; font-size: 12px; line-height: 1.5; }
+  .ct-line.ai .ct-bubble { background: rgba(108,92,231,0.1); color: var(--white); border-bottom-left-radius: 3px; }
+  .ct-line.user .ct-bubble { background: var(--green-dim); color: var(--white); border-bottom-right-radius: 3px; }
 
   /* TOAST */
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 500; transition: transform 0.3s; z-index: 100; white-space: nowrap; }
@@ -1616,7 +1629,7 @@ async function loadRecentCalls() {
         </div>
         <div class="call-time">${started}</div>
         ${recording ? `<audio class="call-audio" controls src="${recording}"></audio>` : '<div style="font-size:11px;color:var(--gray)">No recording available</div>'}
-        ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">📄 Show transcript</button><div class="call-transcript" id="transcript-${i}">${summary ? '<strong>Summary:</strong> ' + summary + '<br><br>' : ''}${transcript || ''}</div>` : ''}
+        ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">💬 Show conversation</button><div class="call-transcript" id="transcript-${i}">${summary ? '<div class="ct-summary"><strong>📋 Summary</strong><p>' + summary + '</p></div>' : ''}${transcript ? '<div class="ct-convo">' + formatTranscript(transcript) + '</div>' : ''}</div>` : ''}
       </div>`;
     }).join('');
   } catch(e) {
@@ -1625,6 +1638,21 @@ async function loadRecentCalls() {
     btn.textContent = '↻ Refresh';
     btn.disabled = false;
   }
+}
+
+function formatTranscript(text) {
+  // Split on "AI:" or "User:" markers
+  const lines = text.split(/(?=\b(?:AI|User|Sofia|Assistant):\s)/i).filter(l => l.trim());
+  return lines.map(line => {
+    const isAI = /^(AI|Sofia|Assistant):/i.test(line.trim());
+    const speaker = isAI ? 'Sofia' : 'Customer';
+    const content = line.replace(/^(AI|User|Sofia|Assistant):\s*/i, '').trim();
+    if (!content) return '';
+    return `<div class="ct-line ${isAI ? 'ai' : 'user'}">
+      <div class="ct-speaker">${speaker}</div>
+      <div class="ct-bubble">${content}</div>
+    </div>`;
+  }).join('');
 }
 
 function toggleTranscript(i) {

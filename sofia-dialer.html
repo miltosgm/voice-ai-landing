@@ -363,6 +363,21 @@
   .log-item .log-time { color: var(--gray2); font-size: 11px; margin-left: auto; flex-shrink: 0; }
   .log-empty { color: var(--gray); font-size: 13px; text-align: center; padding: 16px 0; }
 
+  /* Recent Calls */
+  .call-item { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .call-item:last-child { border-bottom: none; }
+  .call-row { display: flex; align-items: center; gap: 10px; }
+  .call-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+  .call-status.ended { background: var(--green-dim); color: var(--green); }
+  .call-status.failed { background: var(--red-dim); color: var(--red); }
+  .call-status.other { background: var(--yellow-dim); color: var(--yellow); }
+  .call-number { font-size: 13px; font-weight: 500; flex: 1; }
+  .call-duration { font-size: 11px; color: var(--gray); flex-shrink: 0; }
+  .call-time { font-size: 11px; color: var(--gray2); }
+  .call-audio { width: 100%; height: 32px; border-radius: 8px; outline: none; margin-top: 4px; }
+  .call-transcript-btn { font-size: 11px; color: var(--accent2); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .call-transcript { font-size: 12px; color: var(--gray); background: var(--green-dim); border-radius: 8px; padding: 8px 10px; margin-top: 4px; max-height: 120px; overflow-y: auto; display: none; line-height: 1.5; }
+
   /* TOAST */
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 500; transition: transform 0.3s; z-index: 100; white-space: nowrap; }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -734,6 +749,15 @@
     <div id="log-list" class="log-list">
       <div class="log-empty" id="log-empty">No calls made yet</div>
     </div>
+  </div>
+
+  <!-- RECENT CALLS -->
+  <div class="card" id="recent-calls-card">
+    <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>📞 Recent Calls</span>
+      <button onclick="loadRecentCalls()" id="calls-refresh-btn" style="font-size:11px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">↻ Refresh</button>
+    </div>
+    <div id="calls-list"><div class="log-empty">Press Refresh to load calls</div></div>
   </div>
 
   </div><!-- /inner-page -->
@@ -1535,6 +1559,57 @@ function getSystemWithKnowledge() {
   return currentSystem + '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
 }
 function getSystemWithKF() { return getSystemWithKnowledge(); }
+
+// ════ RECENT CALLS ════
+async function loadRecentCalls() {
+  const el = document.getElementById('calls-list');
+  const btn = document.getElementById('calls-refresh-btn');
+  el.innerHTML = '<div class="log-empty">Loading...</div>';
+  btn.textContent = '⏳';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://api.vapi.ai/call?limit=10&sortOrder=desc', {
+      headers: { Authorization: 'Bearer ' + PRIVATE_KEY }
+    });
+    const data = await res.json();
+    const calls = Array.isArray(data) ? data : (data.results || []);
+    if (!calls.length) { el.innerHTML = '<div class="log-empty">No calls found</div>'; return; }
+    el.innerHTML = calls.map((c, i) => {
+      const status = c.status || 'unknown';
+      const statusClass = status === 'ended' ? 'ended' : status.includes('fail') || status.includes('error') ? 'failed' : 'other';
+      const number = (c.customer && c.customer.number) || (c.type === 'webCall' ? 'Browser call' : 'Unknown');
+      const started = c.startedAt ? new Date(c.startedAt).toLocaleString() : (c.createdAt ? new Date(c.createdAt).toLocaleString() : '—');
+      const secs = (c.startedAt && c.endedAt) ? Math.round((new Date(c.endedAt) - new Date(c.startedAt)) / 1000) : null;
+      const dur = secs != null ? (secs >= 60 ? Math.floor(secs/60) + 'm ' + (secs%60) + 's' : secs + 's') : '—';
+      const recording = c.recordingUrl || (c.artifact && c.artifact.recordingUrl) || null;
+      const transcript = c.transcript || (c.artifact && c.artifact.transcript) || null;
+      const summary = c.summary || (c.artifact && c.artifact.summary) || null;
+      return `<div class="call-item">
+        <div class="call-row">
+          <span class="call-status ${statusClass}">${status}</span>
+          <span class="call-number">${number}</span>
+          <span class="call-duration">${dur}</span>
+        </div>
+        <div class="call-time">${started}</div>
+        ${recording ? `<audio class="call-audio" controls src="${recording}"></audio>` : '<div style="font-size:11px;color:var(--gray)">No recording available</div>'}
+        ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">📄 Show transcript</button><div class="call-transcript" id="transcript-${i}">${summary ? '<strong>Summary:</strong> ' + summary + '<br><br>' : ''}${transcript || ''}</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div class="log-empty" style="color:var(--red)">Error loading calls: ' + e.message + '</div>';
+  } finally {
+    btn.textContent = '↻ Refresh';
+    btn.disabled = false;
+  }
+}
+
+function toggleTranscript(i) {
+  const el = document.getElementById('transcript-' + i);
+  if (!el) return;
+  const visible = el.style.display === 'block';
+  el.style.display = visible ? 'none' : 'block';
+  el.previousElementSibling.textContent = visible ? '📄 Show transcript' : '📄 Hide transcript';
+}
 
 // ════ BEHAVIOUR TOGGLES ════
 const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };

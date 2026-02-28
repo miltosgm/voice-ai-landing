@@ -1588,7 +1588,7 @@ async function loadRecentCalls() {
   btn.textContent = '⏳';
   btn.disabled = true;
   try {
-    const res = await fetch('https://api.vapi.ai/call?limit=10&sortOrder=desc', {
+    const res = await fetch('https://api.vapi.ai/call?limit=20', {
       headers: { Authorization: 'Bearer ' + PRIVATE_KEY }
     });
     const data = await res.json();

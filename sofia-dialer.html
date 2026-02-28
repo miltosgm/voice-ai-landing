@@ -529,11 +529,11 @@
   <div id="sb-agents-wrap">
     <div class="sb-agent active" id="sb-sofia" onclick="setAgent('sofia')">
       <span class="sa-emoji">👩‍💼</span>
-      <div><div class="sa-name">Sofia</div><div class="sa-sub">Growth-onomics</div></div>
+      <div><div class="sa-name">Maria</div><div class="sa-sub">Growth-onomics</div></div>
     </div>
     <div class="sb-agent" id="sb-sofia2" onclick="setAgent('sofia2')">
       <span class="sa-emoji">🤖</span>
-      <div><div class="sa-name">Sofia 2</div><div class="sa-sub">AI Marketing</div></div>
+      <div><div class="sa-name">Elena</div><div class="sa-sub">AI Marketing</div></div>
     </div>
     <div class="sb-agent" id="sb-sofia3" onclick="setAgent('sofia3')">
       <span class="sa-emoji">👗</span>
@@ -578,7 +578,7 @@
   <!-- Agent header -->
   <div class="mp-header" id="mp-header">
     <span class="mp-emoji">👩‍💼</span>
-    <div><div class="mp-name">Sofia</div><div class="mp-sub">Growth-onomics</div></div>
+    <div><div class="mp-name">Maria</div><div class="mp-sub">Growth-onomics</div></div>
   </div>
 
   <!-- Old page content starts here -->
@@ -594,7 +594,7 @@
   <div class="hero">
     <div class="sofia-avatar-sm">👩‍💼</div>
     <div class="sofia-info">
-      <div class="sofia-name">Sofia</div>
+      <div class="sofia-name">Maria</div>
       <div class="sofia-title">AI BizDev Agent · <span>Growth-onomics</span></div>
       <div class="sofia-tags">
         <span class="tag">Fintech Outreach</span>
@@ -610,7 +610,7 @@
     <div class="agent-card active" id="agent-card-sofia" onclick="setAgent('sofia')">
       <div class="agent-card-header">
         <span class="agent-emoji">👩‍💼</span>
-        <span class="agent-card-name" contenteditable="false" data-agent="sofia">Sofia</span>
+        <span class="agent-card-name" contenteditable="false" data-agent="sofia">Maria</span>
         <div class="agent-active-dot"></div>
       </div>
       <div class="agent-card-desc" contenteditable="false" data-agent="sofia">Fintech BizDev · Paid Acquisition, GEO, B2B Demand Gen</div>
@@ -622,7 +622,7 @@
     <div class="agent-card" id="agent-card-sofia2" onclick="setAgent('sofia2')">
       <div class="agent-card-header">
         <span class="agent-emoji">🤖</span>
-        <span class="agent-card-name" contenteditable="false" data-agent="sofia2">Sofia 2</span>
+        <span class="agent-card-name" contenteditable="false" data-agent="sofia2">Elena</span>
         <div class="agent-active-dot"></div>
       </div>
       <div class="agent-card-desc" contenteditable="false" data-agent="sofia2">AI Marketing · Sells AI optimization to any industry</div>
@@ -701,7 +701,7 @@
     <!-- CUSTOMIZE TOGGLE -->
     <button class="customize-toggle" id="customize-toggle" onclick="toggleCustomize()">
       <div class="toggle-left">
-        ✏️ &nbsp;Customize Sofia
+        ✏️ &nbsp;Customize Agent
         <span class="modified-badge" id="modified-badge">Modified</span>
       </div>
       <span class="toggle-arrow" id="toggle-arrow">▼</span>
@@ -794,11 +794,11 @@ const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 
 const AGENTS = {
   sofia: {
-    label: 'Sofia',
+    label: 'Maria',
     emoji: '👩‍💼'
   },
   sofia2: {
-    label: 'Sofia 2',
+    label: 'Elena',
     emoji: '🤖'
   },
   sofia3: {
@@ -819,7 +819,7 @@ const AGENT_DEFAULTS = {
   sofia2: {
     en: {
       opener: `Hi, this is Sofia calling. I work with businesses on AI-powered marketing — helping them generate more clients faster using tools most of their competitors have not adopted yet. Do you have 2 minutes for a quick chat?`,
-      system: `You are Sofia, a business development agent specializing in AI-powered marketing optimization. Your goal is to qualify prospects and book a 20-minute strategy call by uncovering their current AI usage and marketing gaps.
+      system: `You are Maria, a business development agent specializing in AI-powered marketing optimization. Your goal is to qualify prospects and book a 20-minute strategy call by uncovering their current AI usage and marketing gaps.
 
 Your core offer: An AI-powered marketing optimization solution that boosts visibility and increases sales — something most businesses are not yet fully leveraging.
 
@@ -967,8 +967,8 @@ Keep answers short and punchy. Never ramble. Sound like someone who loves this b
 
 const DEFAULTS = {
   en: {
-    opener: `Hi, this is Sofia calling from Growth-onomics. We work exclusively with fintech companies on paid acquisition and AI search visibility. Is this a good time for a quick two-minute chat?`,
-    system: `You are Sofia, a business development representative at Growth-onomics — a fintech growth agency. Your job is to qualify prospects and book them for a 20-minute strategy call with the team.
+    opener: `Hi, this is Maria calling from Growth-onomics. We work exclusively with fintech companies on paid acquisition and AI search visibility. Is this a good time for a quick two-minute chat?`,
+    system: `You are Maria, a business development representative at Growth-onomics — a fintech growth agency. Your job is to qualify prospects and book them for a 20-minute strategy call with the team.
 
 Your personality: warm, confident, sharp. You sound like a real person, not a bot. Never say you are an AI unless directly and explicitly asked.
 
@@ -1230,7 +1230,7 @@ function savePrompt() {
   updateOpenerPreview();
   checkModified();
   toggleCustomize();
-  showToast('Sofia updated ✓', 'success');
+  showToast('Agent updated ✓', 'success');
 }
 function resetDefaults() {
   const d = AGENT_DEFAULTS[activeAgent][activeLang];
@@ -1255,7 +1255,7 @@ function checkModified() {
 function buildAssistantConfig() {
   const isGreek = activeLang === 'el';
   const config = {
-    name: "Sofia",
+    name: "Maria",
     firstMessage: currentOpener,
 
     model: {
@@ -1361,7 +1361,7 @@ async function startBrowserCall() {
     vapiWeb = new window.Vapi(PUBLIC_KEY);
 
     vapiWeb.on('call-start', () => {
-      setBrowserStatus(activeLang === 'el' ? 'Η Σοφία μιλάει...' : 'Sofia is speaking...', true);
+      setBrowserStatus(activeLang === 'el' ? 'Μιλάει...' : 'Speaking...', true);
       btn.style.display = 'none';
       document.getElementById('btn-end-call').classList.add('show');
       document.getElementById('dot').className = 'online-dot busy';
@@ -1371,7 +1371,7 @@ async function startBrowserCall() {
       addLog('Browser call started', 'var(--accent2)');
     });
     vapiWeb.on('speech-start', () => {
-      setBrowserStatus(activeLang === 'el' ? 'Η Σοφία μιλάει...' : 'Sofia is speaking...', true);
+      setBrowserStatus(activeLang === 'el' ? 'Μιλάει...' : 'Speaking...', true);
       setWave(true);
       document.getElementById('avatar').classList.add('speaking');
     });
@@ -1387,7 +1387,7 @@ async function startBrowserCall() {
       document.getElementById('btn-end-call').classList.remove('show');
       btn.style.display = 'flex';
       btn.disabled = false;
-      btn.innerHTML = activeLang === 'el' ? '🔄 &nbsp;Νέα κλήση με τη Σοφία' : '🔄 &nbsp;Talk to Sofia Again';
+      btn.innerHTML = activeLang === 'el' ? '🔄 &nbsp;Νέα κλήση' : '🔄 &nbsp;Call Again';
       document.getElementById('dot').className = 'online-dot';
       setBrowserStatus(activeLang === 'el' ? 'Η κλήση τελείωσε' : 'Call ended');
       setTimeout(() => setBrowserStatus(activeLang === 'el' ? 'Διαθέσιμη' : 'Available now'), 3000);
@@ -1524,7 +1524,7 @@ async function callNow() {
     showToast(e.message, 'error');
     addLog(`Failed → ${name}: ${e.message}`, 'var(--red)');
   }
-  btn.disabled = false; btn.innerHTML = '📞 Call Now with Sofia';
+  btn.disabled = false; btn.innerHTML = '📞 Call Now';
 }
 
 // ── CALL SINGLE ───────────────────────────────────────

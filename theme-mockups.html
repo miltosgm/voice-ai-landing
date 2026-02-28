@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofia Dialer — Light Theme Mockups</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f0f0f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; }
+
+h1 { text-align: center; font-size: 17px; color: #333; margin-bottom: 4px; font-weight: 700; }
+.subtitle { text-align: center; font-size: 12px; color: #999; margin-bottom: 28px; }
+
+.concept { border-radius: 18px; margin-bottom: 36px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+.concept-label { padding: 13px 18px; display: flex; align-items: center; gap: 10px; }
+.badge { font-size: 11px; font-weight: 800; padding: 3px 11px; border-radius: 20px; color: white; }
+.c-title { font-size: 14px; font-weight: 700; }
+.c-desc  { font-size: 11px; margin-top: 1px; }
+
+/* ══════════════════════════════════════
+   THEME 1 — Clean White
+══════════════════════════════════════ */
+.t1 { background: #fff; }
+.t1 .concept-label { background: #f8f8fc; border-bottom: 1px solid #eee; }
+.t1 .badge { background: #6c47ff; }
+.t1 .c-title { color: #1a1a2e; }
+.t1 .c-desc  { color: #999; }
+
+.t1-layout { display: flex; height: 420px; }
+
+.t1-sb { width: 200px; border-right: 1px solid #f0f0f5; padding: 16px 12px; background: #fafafa; overflow-y: auto; }
+.t1-sb-label { font-size: 9px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 1.2px; margin: 12px 0 7px; }
+.t1-sb-label:first-child { margin-top: 0; }
+
+.t1-agent { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; cursor: pointer; margin-bottom: 4px; }
+.t1-agent:hover { background: #f3f0ff; }
+.t1-agent.active { background: #f0ebff; border-color: #d4c5ff; }
+.t1-agent .em { font-size: 18px; }
+.t1-agent .nm { font-size: 12px; font-weight: 600; color: #222; }
+.t1-agent .sb { font-size: 10px; color: #bbb; }
+.t1-new { display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 10px; border: 1.5px dashed #e0e0f0; color: #ccc; font-size: 12px; cursor: pointer; margin-bottom: 4px; }
+
+.t1-hr { border: none; border-top: 1px solid #f0f0f5; margin: 10px 0; }
+
+.t1-kf { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 7px 9px; margin-bottom: 4px; }
+.t1-kf .kf-name { font-size: 11px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+.t1-kf .kf-sz   { font-size: 9px; color: #bbb; }
+.t1-kf .kf-del  { margin-left: auto; color: #ddd; font-size: 12px; }
+.t1-up { border: 1.5px dashed #e8e8f5; border-radius: 9px; padding: 10px; text-align: center; color: #ccc; font-size: 10px; cursor: pointer; }
+
+.t1-tog-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
+.t1-tog-row:last-child { border: none; }
+.t1-tog-lbl { font-size: 10px; color: #888; }
+.t1-tog-lbl small { display: block; font-size: 9px; color: #ccc; }
+.t1-tog { width: 28px; height: 15px; border-radius: 15px; position: relative; flex-shrink: 0; }
+.t1-tog.on { background: #6c47ff; }
+.t1-tog.off { background: #e0e0e0; }
+.t1-tog::after { content: ''; width: 11px; height: 11px; border-radius: 50%; background: white; position: absolute; top: 2px; transition: left 0.15s; }
+.t1-tog.on::after  { left: 15px; }
+.t1-tog.off::after { left: 2px; }
+
+.t1-mp { flex: 1; padding: 18px 16px; overflow-y: auto; }
+.t1-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #f0f0f5; }
+.t1-hdr .em { font-size: 26px; }
+.t1-hdr .nm { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+.t1-hdr .sub { font-size: 11px; color: #bbb; margin-top: 1px; }
+
+.t1-sec-lbl { font-size: 9px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; margin-top: 14px; }
+.t1-sec-lbl:first-child { margin-top: 0; }
+
+.t1-preset { display: flex; align-items: center; gap: 8px; background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 8px 10px; margin-bottom: 4px; cursor: pointer; }
+.t1-preset.active { border-color: #c4b0ff; background: #f5f0ff; }
+.t1-pdot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; }
+.t1-preset.active .t1-pdot { background: #6c47ff; }
+.t1-pname { font-size: 11px; font-weight: 600; color: #333; }
+.t1-pprev { font-size: 10px; color: #bbb; }
+
+.t1-ta { width: 100%; border: 1px solid #eee; border-radius: 9px; padding: 10px 12px; font-size: 11px; color: #333; resize: vertical; font-family: inherit; background: #fafafa; outline: none; }
+.t1-ta:focus { border-color: #c4b0ff; background: #fff; }
+
+.t1-btns { display: flex; gap: 8px; margin-top: 14px; }
+.t1-btn { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+.t1-btn-ghost { background: #f5f5f5; color: #888; border: 1px solid #eee; }
+.t1-btn-main  { background: #6c47ff; color: white; }
+.t1-lang { display: flex; gap: 6px; margin-top: 10px; }
+.t1-lang-btn { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid #eee; background: #fafafa; color: #888; cursor: pointer; }
+.t1-lang-btn.active { background: #6c47ff; color: white; border-color: #6c47ff; }
+
+/* ══════════════════════════════════════
+   THEME 2 — Warm Cream
+══════════════════════════════════════ */
+.t2 { background: #fdf8f3; }
+.t2 .concept-label { background: #faf4ed; border-bottom: 1px solid #ede8e0; }
+.t2 .badge { background: #e07a3a; }
+.t2 .c-title { color: #2c1a0e; }
+.t2 .c-desc  { color: #b09070; }
+
+.t2-layout { display: flex; height: 420px; }
+
+.t2-sb { width: 200px; border-right: 1px solid #ede8e0; padding: 16px 12px; background: #faf5ef; overflow-y: auto; }
+.t2-sb-label { font-size: 9px; font-weight: 700; color: #c8b090; text-transform: uppercase; letter-spacing: 1.2px; margin: 12px 0 7px; }
+.t2-sb-label:first-child { margin-top: 0; }
+
+.t2-agent { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; cursor: pointer; margin-bottom: 4px; }
+.t2-agent:hover { background: #f5ede0; }
+.t2-agent.active { background: #fde8d0; border-color: #f0c090; }
+.t2-agent .nm { font-size: 12px; font-weight: 600; color: #3a2010; }
+.t2-agent .sb { font-size: 10px; color: #c8a070; }
+.t2-agent .em { font-size: 18px; }
+.t2-new { display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 10px; border: 1.5px dashed #e8d8c0; color: #d8c0a0; font-size: 12px; margin-bottom: 4px; }
+.t2-hr { border: none; border-top: 1px solid #ede8e0; margin: 10px 0; }
+
+.t2-kf { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #ede0d0; border-radius: 8px; padding: 7px 9px; margin-bottom: 4px; }
+.t2-kf .kf-name { font-size: 11px; font-weight: 600; color: #5a3a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+.t2-kf .kf-sz   { font-size: 9px; color: #c8a070; }
+.t2-kf .kf-del  { margin-left: auto; color: #e0c8a8; font-size: 12px; }
+.t2-up { border: 1.5px dashed #e8d8c0; border-radius: 9px; padding: 10px; text-align: center; color: #c8b090; font-size: 10px; cursor: pointer; }
+.t2-tog-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f0e8d8; }
+.t2-tog-row:last-child { border: none; }
+.t2-tog-lbl { font-size: 10px; color: #a07050; }
+.t2-tog-lbl small { display: block; font-size: 9px; color: #c8a878; }
+.t2-tog { width: 28px; height: 15px; border-radius: 15px; position: relative; flex-shrink: 0; }
+.t2-tog.on { background: #e07a3a; }
+.t2-tog.off { background: #e0d0c0; }
+.t2-tog::after { content: ''; width: 11px; height: 11px; border-radius: 50%; background: white; position: absolute; top: 2px; }
+.t2-tog.on::after  { left: 15px; }
+.t2-tog.off::after { left: 2px; }
+
+.t2-mp { flex: 1; padding: 18px 16px; overflow-y: auto; background: #fdf8f3; }
+.t2-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #ede8e0; }
+.t2-hdr .nm { font-size: 16px; font-weight: 700; color: #2c1a0e; }
+.t2-hdr .sub { font-size: 11px; color: #c8a070; margin-top: 1px; }
+.t2-hdr .em { font-size: 26px; }
+
+.t2-sec-lbl { font-size: 9px; font-weight: 700; color: #c8a878; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px; }
+.t2-preset { display: flex; align-items: center; gap: 8px; background: #faf5ef; border: 1px solid #ede8e0; border-radius: 8px; padding: 8px 10px; margin-bottom: 4px; cursor: pointer; }
+.t2-preset.active { border-color: #f0a060; background: #fde8d0; }
+.t2-pdot { width: 6px; height: 6px; border-radius: 50%; background: #e0d0c0; flex-shrink: 0; }
+.t2-preset.active .t2-pdot { background: #e07a3a; }
+.t2-pname { font-size: 11px; font-weight: 600; color: #5a3a1a; }
+.t2-pprev { font-size: 10px; color: #c8a070; }
+.t2-ta { width: 100%; border: 1px solid #ede0d0; border-radius: 9px; padding: 10px 12px; font-size: 11px; color: #3a2010; resize: vertical; font-family: inherit; background: #faf5ef; outline: none; }
+.t2-ta:focus { border-color: #f0a060; }
+.t2-btns { display: flex; gap: 8px; margin-top: 14px; }
+.t2-btn { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+.t2-btn-ghost { background: #f5ede0; color: #a07050; border: 1px solid #ede0d0; }
+.t2-btn-main  { background: #e07a3a; color: white; }
+.t2-lang { display: flex; gap: 6px; margin-top: 10px; }
+.t2-lang-btn { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid #ede0d0; background: #faf5ef; color: #a07050; }
+.t2-lang-btn.active { background: #e07a3a; color: white; border-color: #e07a3a; }
+
+/* ══════════════════════════════════════
+   THEME 3 — Soft Grey + Teal
+══════════════════════════════════════ */
+.t3 { background: #f4f6f8; }
+.t3 .concept-label { background: #eef0f4; border-bottom: 1px solid #e0e4ea; }
+.t3 .badge { background: #0d9488; }
+.t3 .c-title { color: #1a2535; }
+.t3 .c-desc  { color: #90a0b0; }
+
+.t3-layout { display: flex; height: 420px; }
+.t3-sb { width: 200px; border-right: 1px solid #e0e4ea; padding: 16px 12px; background: #eef0f4; overflow-y: auto; }
+.t3-sb-label { font-size: 9px; font-weight: 700; color: #a0b0c0; text-transform: uppercase; letter-spacing: 1.2px; margin: 12px 0 7px; }
+.t3-sb-label:first-child { margin-top: 0; }
+.t3-agent { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; cursor: pointer; margin-bottom: 4px; }
+.t3-agent:hover { background: #e4edf0; }
+.t3-agent.active { background: #d0ecea; border-color: #80c8c0; }
+.t3-agent .nm { font-size: 12px; font-weight: 600; color: #1a2535; }
+.t3-agent .sb-t { font-size: 10px; color: #a0b8c8; }
+.t3-agent .em { font-size: 18px; }
+.t3-new { display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 10px; border: 1.5px dashed #d0dce8; color: #b0c8d8; font-size: 12px; margin-bottom: 4px; }
+.t3-hr { border: none; border-top: 1px solid #dde2ea; margin: 10px 0; }
+.t3-kf { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #e0e8f0; border-radius: 8px; padding: 7px 9px; margin-bottom: 4px; }
+.t3-kf .kf-name { font-size: 11px; font-weight: 600; color: #2a3d50; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t3-kf .kf-sz   { font-size: 9px; color: #a0b8c8; }
+.t3-kf .kf-del  { margin-left: auto; color: #c8d8e8; font-size: 12px; }
+.t3-up { border: 1.5px dashed #d0dce8; border-radius: 9px; padding: 10px; text-align: center; color: #b0c0d0; font-size: 10px; cursor: pointer; }
+.t3-tog-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e8edf2; }
+.t3-tog-row:last-child { border: none; }
+.t3-tog-lbl { font-size: 10px; color: #6080a0; }
+.t3-tog-lbl small { display: block; font-size: 9px; color: #a8c0d0; }
+.t3-tog { width: 28px; height: 15px; border-radius: 15px; position: relative; flex-shrink: 0; }
+.t3-tog.on { background: #0d9488; }
+.t3-tog.off { background: #d0dce8; }
+.t3-tog::after { content: ''; width: 11px; height: 11px; border-radius: 50%; background: white; position: absolute; top: 2px; }
+.t3-tog.on::after  { left: 15px; }
+.t3-tog.off::after { left: 2px; }
+.t3-mp { flex: 1; padding: 18px 16px; overflow-y: auto; background: #f4f6f8; }
+.t3-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #e0e8f0; }
+.t3-hdr .nm { font-size: 16px; font-weight: 700; color: #1a2535; }
+.t3-hdr .sub { font-size: 11px; color: #90a8c0; margin-top: 1px; }
+.t3-hdr .em { font-size: 26px; }
+.t3-sec-lbl { font-size: 9px; font-weight: 700; color: #90a8c0; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px; }
+.t3-preset { display: flex; align-items: center; gap: 8px; background: #eef0f4; border: 1px solid #e0e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 4px; cursor: pointer; }
+.t3-preset.active { border-color: #80c8c0; background: #d8f0ee; }
+.t3-pdot { width: 6px; height: 6px; border-radius: 50%; background: #c8d8e8; flex-shrink: 0; }
+.t3-preset.active .t3-pdot { background: #0d9488; }
+.t3-pname { font-size: 11px; font-weight: 600; color: #2a3d50; }
+.t3-pprev { font-size: 10px; color: #90a8c0; }
+.t3-ta { width: 100%; border: 1px solid #d8e4f0; border-radius: 9px; padding: 10px 12px; font-size: 11px; color: #1a2535; resize: vertical; font-family: inherit; background: #eef2f6; outline: none; }
+.t3-ta:focus { border-color: #80c8c0; }
+.t3-btns { display: flex; gap: 8px; margin-top: 14px; }
+.t3-btn { flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+.t3-btn-ghost { background: #e8edf4; color: #6080a0; border: 1px solid #d8e4f0; }
+.t3-btn-main  { background: #0d9488; color: white; }
+.t3-lang { display: flex; gap: 6px; margin-top: 10px; }
+.t3-lang-btn { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid #d8e4f0; background: #eef2f6; color: #6080a0; }
+.t3-lang-btn.active { background: #0d9488; color: white; border-color: #0d9488; }
+</style>
+</head>
+<body>
+
+<h1>Sofia Dialer — Light Theme Concepts</h1>
+<p class="subtitle">Pick one and I'll apply it to the live dialer</p>
+
+<!-- ══════════ THEME 1: Clean White ══════════ -->
+<div class="concept t1">
+  <div class="concept-label">
+    <span class="badge" style="background:#6c47ff">1</span>
+    <div>
+      <div class="c-title">Clean White + Purple</div>
+      <div class="c-desc">Minimal, modern, airy — classic SaaS feel</div>
+    </div>
+  </div>
+  <div class="t1-layout">
+    <div class="t1-sb">
+      <div class="t1-sb-label">Agents</div>
+      <div class="t1-agent active"><span class="em">👩‍💼</span><div><div class="nm">Sofia</div><div class="sb">Growth-onomics</div></div></div>
+      <div class="t1-agent"><span class="em">🤖</span><div><div class="nm">Sofia 2</div><div class="sb">AI Marketing</div></div></div>
+      <div class="t1-agent"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sb">ΜΙΑ Collection</div></div></div>
+      <div class="t1-new">＋ New Agent</div>
+      <div class="t1-hr"></div>
+      <div class="t1-sb-label">📁 Knowledge</div>
+      <div class="t1-kf"><span>📄</span><div><div class="kf-name">brand-info.pdf</div><div class="kf-sz">42 KB</div></div><span class="kf-del">✕</span></div>
+      <div class="t1-up">📎 Add file</div>
+      <div class="t1-hr"></div>
+      <div class="t1-sb-label">🎛 Behaviour</div>
+      <div class="t1-tog-row"><div class="t1-tog-lbl">Backchanneling<small>"yeah", "uh-huh"</small></div><div class="t1-tog on"></div></div>
+      <div class="t1-tog-row"><div class="t1-tog-lbl">Response delay<small>Pause before reply</small></div><div class="t1-tog on"></div></div>
+      <div class="t1-tog-row"><div class="t1-tog-lbl">Never reveal AI<small>Deny if asked</small></div><div class="t1-tog on"></div></div>
+      <div class="t1-tog-row"><div class="t1-tog-lbl">Auto-book call<small>Push for meeting</small></div><div class="t1-tog off"></div></div>
+    </div>
+    <div class="t1-mp">
+      <div class="t1-hdr"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sub">ΜΙΑ Collection</div></div></div>
+      <div class="t1-sec-lbl">Preset Prompts</div>
+      <div class="t1-preset active"><div class="t1-pdot"></div><div><div class="t1-pname">Gentle</div><div class="t1-pprev">Hello... I'm Sofia. How are you?</div></div></div>
+      <div class="t1-preset"><div class="t1-pdot"></div><div><div class="t1-pname">Confident</div><div class="t1-pprev">Hi — do you carry European womenswear?</div></div></div>
+      <div class="t1-preset"><div class="t1-pdot"></div><div><div class="t1-pname">Custom</div><div class="t1-pprev">Your edited prompt</div></div></div>
+      <div class="t1-sec-lbl">Opener</div>
+      <textarea class="t1-ta" rows="2">Hello... I'm Sofia. How are you?</textarea>
+      <div class="t1-sec-lbl">System Prompt</div>
+      <textarea class="t1-ta" rows="4">You are Sofia. Gentle, warm, not pushy. Real person...</textarea>
+      <div class="t1-lang">
+        <div class="t1-lang-btn active">🇬🇧 English</div>
+        <div class="t1-lang-btn">🇬🇷 Ελληνικά</div>
+      </div>
+      <div class="t1-btns">
+        <button class="t1-btn t1-btn-ghost">🎙️ Browser</button>
+        <button class="t1-btn t1-btn-main">📞 Phone Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ THEME 2: Warm Cream ══════════ -->
+<div class="concept t2">
+  <div class="concept-label">
+    <span class="badge" style="background:#e07a3a">2</span>
+    <div>
+      <div class="c-title">Warm Cream + Orange</div>
+      <div class="c-desc">Soft, boutique feel — fits a fashion brand perfectly</div>
+    </div>
+  </div>
+  <div class="t2-layout">
+    <div class="t2-sb">
+      <div class="t2-sb-label">Agents</div>
+      <div class="t2-agent active"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sb">ΜΙΑ Collection</div></div></div>
+      <div class="t2-agent"><span class="em">👩‍💼</span><div><div class="nm">Sofia</div><div class="sb">Growth-onomics</div></div></div>
+      <div class="t2-agent"><span class="em">🤖</span><div><div class="nm">Sofia 2</div><div class="sb">AI Marketing</div></div></div>
+      <div class="t2-new">＋ New Agent</div>
+      <div class="t2-hr"></div>
+      <div class="t2-sb-label">📁 Knowledge</div>
+      <div class="t2-kf"><span>📄</span><div><div class="kf-name">mia-brand.pdf</div><div class="kf-sz">42 KB</div></div><span class="kf-del">✕</span></div>
+      <div class="t2-up">📎 Add file</div>
+      <div class="t2-hr"></div>
+      <div class="t2-sb-label">🎛 Behaviour</div>
+      <div class="t2-tog-row"><div class="t2-tog-lbl">Backchanneling<small>"yeah", "uh-huh"</small></div><div class="t2-tog on"></div></div>
+      <div class="t2-tog-row"><div class="t2-tog-lbl">Response delay<small>Pause before reply</small></div><div class="t2-tog on"></div></div>
+      <div class="t2-tog-row"><div class="t2-tog-lbl">Never reveal AI<small>Deny if asked</small></div><div class="t2-tog on"></div></div>
+      <div class="t2-tog-row"><div class="t2-tog-lbl">Auto-book call<small>Push for meeting</small></div><div class="t2-tog off"></div></div>
+    </div>
+    <div class="t2-mp">
+      <div class="t2-hdr"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sub">ΜΙΑ Collection</div></div></div>
+      <div class="t2-sec-lbl">Preset Prompts</div>
+      <div class="t2-preset active"><div class="t2-pdot"></div><div><div class="t2-pname">Gentle</div><div class="t2-pprev">Hello... I'm Sofia. How are you?</div></div></div>
+      <div class="t2-preset"><div class="t2-pdot"></div><div><div class="t2-pname">Confident</div><div class="t2-pprev">Hi — do you carry European womenswear?</div></div></div>
+      <div class="t2-preset"><div class="t2-pdot"></div><div><div class="t2-pname">Custom</div><div class="t2-pprev">Your edited prompt</div></div></div>
+      <div class="t2-sec-lbl">Opener</div>
+      <textarea class="t2-ta" rows="2">Hello... I'm Sofia. How are you?</textarea>
+      <div class="t2-sec-lbl">System Prompt</div>
+      <textarea class="t2-ta" rows="4">You are Sofia. Gentle, warm, not pushy. Real person...</textarea>
+      <div class="t2-lang">
+        <div class="t2-lang-btn active">🇬🇧 English</div>
+        <div class="t2-lang-btn">🇬🇷 Ελληνικά</div>
+      </div>
+      <div class="t2-btns">
+        <button class="t2-btn t2-btn-ghost">🎙️ Browser</button>
+        <button class="t2-btn t2-btn-main">📞 Phone Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ THEME 3: Soft Grey + Teal ══════════ -->
+<div class="concept t3">
+  <div class="concept-label">
+    <span class="badge" style="background:#0d9488">3</span>
+    <div>
+      <div class="c-title">Soft Grey + Teal</div>
+      <div class="c-desc">Professional, calm, clean — like a modern CRM</div>
+    </div>
+  </div>
+  <div class="t3-layout">
+    <div class="t3-sb">
+      <div class="t3-sb-label">Agents</div>
+      <div class="t3-agent active"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sb-t">ΜΙΑ Collection</div></div></div>
+      <div class="t3-agent"><span class="em">👩‍💼</span><div><div class="nm">Sofia</div><div class="sb-t">Growth-onomics</div></div></div>
+      <div class="t3-agent"><span class="em">🤖</span><div><div class="nm">Sofia 2</div><div class="sb-t">AI Marketing</div></div></div>
+      <div class="t3-new">＋ New Agent</div>
+      <div class="t3-hr"></div>
+      <div class="t3-sb-label">📁 Knowledge</div>
+      <div class="t3-kf"><span>📄</span><div><div class="kf-name">mia-brand.pdf</div><div class="kf-sz">42 KB</div></div><span class="kf-del">✕</span></div>
+      <div class="t3-up">📎 Add file</div>
+      <div class="t3-hr"></div>
+      <div class="t3-sb-label">🎛 Behaviour</div>
+      <div class="t3-tog-row"><div class="t3-tog-lbl">Backchanneling<small>"yeah", "uh-huh"</small></div><div class="t3-tog on"></div></div>
+      <div class="t3-tog-row"><div class="t3-tog-lbl">Response delay<small>Pause before reply</small></div><div class="t3-tog on"></div></div>
+      <div class="t3-tog-row"><div class="t3-tog-lbl">Never reveal AI<small>Deny if asked</small></div><div class="t3-tog on"></div></div>
+      <div class="t3-tog-row"><div class="t3-tog-lbl">Auto-book call<small>Push for meeting</small></div><div class="t3-tog off"></div></div>
+    </div>
+    <div class="t3-mp">
+      <div class="t3-hdr"><span class="em">👗</span><div><div class="nm">Sofia 3</div><div class="sub">ΜΙΑ Collection</div></div></div>
+      <div class="t3-sec-lbl">Preset Prompts</div>
+      <div class="t3-preset active"><div class="t3-pdot"></div><div><div class="t3-pname">Gentle</div><div class="t3-pprev">Hello... I'm Sofia. How are you?</div></div></div>
+      <div class="t3-preset"><div class="t3-pdot"></div><div><div class="t3-pname">Confident</div><div class="t3-pprev">Hi — do you carry European womenswear?</div></div></div>
+      <div class="t3-preset"><div class="t3-pdot"></div><div><div class="t3-pname">Custom</div><div class="t3-pprev">Your edited prompt</div></div></div>
+      <div class="t3-sec-lbl">Opener</div>
+      <textarea class="t3-ta" rows="2">Hello... I'm Sofia. How are you?</textarea>
+      <div class="t3-sec-lbl">System Prompt</div>
+      <textarea class="t3-ta" rows="4">You are Sofia. Gentle, warm, not pushy. Real person...</textarea>
+      <div class="t3-lang">
+        <div class="t3-lang-btn active">🇬🇧 English</div>
+        <div class="t3-lang-btn">🇬🇷 Ελληνικά</div>
+      </div>
+      <div class="t3-btns">
+        <button class="t3-btn t3-btn-ghost">🎙️ Browser</button>
+        <button class="t3-btn t3-btn-main">📞 Phone Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;font-size:12px;color:#aaa;margin-top:8px;padding-bottom:24px">Reply with 1, 2, or 3 — I'll apply it immediately</p>
+</body>
+</html>

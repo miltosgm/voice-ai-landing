@@ -748,10 +748,6 @@
   window.Vapi = Vapi;
   document.dispatchEvent(new Event('vapi-sdk-ready'));
 
-// ── PATCH buildAssistantConfig to inject knowledge ────────
-const _origBuildConfig = buildAssistantConfig;
-// We patch via override after page loads
-
 
 // ── BEHAVIOUR TOGGLES ─────────────────────────────────────
 const BEHAVIOUR_DEFAULTS = {
@@ -782,8 +778,8 @@ function initBehaviourToggles() {
 }
 
 // Patch buildAssistantConfig to honour toggles
-const _origBuildAssistantConfig = buildAssistantConfig;
-buildAssistantConfig = function() {
+const _origBuildAssistantConfig = window.buildAssistantConfig;
+window.buildAssistantConfig = function() {
   const config = _origBuildAssistantConfig();
   const b = loadBehaviour();
 
@@ -938,8 +934,8 @@ function syncSidebar() {
 }
 
 // ── Patch buildAssistantConfig ────────────────────────────
-const _origBAC = buildAssistantConfig;
-buildAssistantConfig = function() {
+const _origBAC = window.buildAssistantConfig;
+window.buildAssistantConfig = function() {
   const cfg = _origBAC();
   const b = loadB();
   if (b.backchannel) cfg.backchannelingEnabled = true;
@@ -956,8 +952,8 @@ buildAssistantConfig = function() {
 };
 
 // Patch getSystemWithKnowledge into buildAssistantConfig
-const _origBAC2 = buildAssistantConfig;
-buildAssistantConfig = function() {
+const _origBAC2 = window.buildAssistantConfig;
+window.buildAssistantConfig = function() {
   const cfg = _origBAC2();
   if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
     const files = loadKF();

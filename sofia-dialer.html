@@ -1729,6 +1729,27 @@ async function callAll() {
   showToast(`Batch complete: ${pending.length} calls sent`, 'success');
   addLog('Batch complete', 'var(--accent2)');
 }
+
+// ── Expose all functions to global scope (required for inline onclick in HTML) ──
+window.setAgent         = setAgent;
+window.setLang          = setLang;
+window.setMode          = setMode;
+window.callNow          = callNow;
+window.callSingle       = callSingle;
+window.callAll          = callAll;
+window.addToQueue       = addToQueue;
+window.removeItem       = removeItem;
+window.startBrowserCall = startBrowserCall;
+window.endBrowserCall   = endBrowserCall;
+window.savePrompt       = savePrompt;
+window.resetDefaults    = resetDefaults;
+window.toggleB          = toggleB;
+window.toggleCustomize  = toggleCustomize;
+window.selectPreset     = selectPreset;
+window.handleFileUpload = handleFileUpload;
+window.deleteKF         = deleteKF;
+window.saveAgentEdit    = saveAgentEdit;
+window.cancelAgentEdit  = cancelAgentEdit;
 </script>
 
 </body>

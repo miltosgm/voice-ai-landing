@@ -746,231 +746,7 @@
 <script type="module">
   import Vapi from 'https://esm.sh/@vapi-ai/web';
   window.Vapi = Vapi;
-  document.dispatchEvent(new Event('vapi-sdk-ready'));
-
-
-// ── BEHAVIOUR TOGGLES ─────────────────────────────────────
-const BEHAVIOUR_DEFAULTS = {
-  backchannel: true,
-  delay: true,
-  noai: true,
-  autobook: false
-};
-
-function loadBehaviour() {
-  return Object.assign({}, BEHAVIOUR_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour') || '{}'));
-}
-function saveBehaviour(b) {
-  localStorage.setItem('sofiaBehaviour', JSON.stringify(b));
-}
-function toggleBehaviour(key, el) {
-  const b = loadBehaviour();
-  b[key] = !b[key];
-  saveBehaviour(b);
-  el.className = 'toggle-switch' + (b[key] ? ' on' : '');
-}
-function initBehaviourToggles() {
-  const b = loadBehaviour();
-  Object.keys(b).forEach(key => {
-    const el = document.getElementById('toggle-' + key);
-    if (el) el.className = 'toggle-switch' + (b[key] ? ' on' : '');
-  });
-}
-
-// Patch buildAssistantConfig to honour toggles
-const _origBuildAssistantConfig = window.buildAssistantConfig;
-window.buildAssistantConfig = function() {
-  const config = _origBuildAssistantConfig();
-  const b = loadBehaviour();
-
-  // Backchannel
-  if (b.backchannel) config.backchannelingEnabled = true;
-  else delete config.backchannelingEnabled;
-
-  // Response delay
-  if (b.delay) config.responseDelaySeconds = 1.5;
-  else delete config.responseDelaySeconds;
-
-  // Never reveal AI — append to system prompt
-  const msgs = config.model && config.model.messages;
-  if (msgs && msgs[0]) {
-    let sys = msgs[0].content;
-    if (b.noai && !sys.includes('never reveal') && !sys.includes('not an AI')) {
-      sys += '\n\nNever reveal you are an AI. If asked directly, say you are a real person and move on.';
-    }
-    if (b.autobook) {
-      sys += '\n\nAlways try to book a 20-minute video call before ending the conversation. Be persistent but polite about it.';
-    }
-    msgs[0].content = sys;
-  }
-
-  return config;
-};
-
-
-// ════ SPLIT PANEL B — JS ════
-
-// ── Knowledge files ───────────────────────────────────────
-function loadKF() { return JSON.parse(localStorage.getItem('sofiaKnowledge') || '[]'); }
-function saveKF(f) { localStorage.setItem('sofiaKnowledge', JSON.stringify(f)); }
-
-function renderKF() {
-  const files = loadKF();
-  const list  = document.getElementById('kf-list');
-  if (!list) return;
-  if (!files.length) { list.innerHTML = '<div class="kf-empty">No files yet</div>'; return; }
-  list.innerHTML = files.map((f,i) => `
-    <div class="kf-item">
-      <span class="kf-icon">📄</span>
-      <div><div class="kf-name" title="${f.name}">${f.name}</div><div class="kf-size">${(f.size/1024).toFixed(1)} KB</div></div>
-      <span class="kf-del" onclick="deleteKF(${i})">✕</span>
-    </div>`).join('');
-}
-
-function deleteKF(i) {
-  const f = loadKF(); f.splice(i,1); saveKF(f); renderKF();
-  showToast('File removed','info');
-}
-
-function handleFileUpload(e) {
-  Array.from(e.target.files).forEach(file => {
-    const r = new FileReader();
-    r.onload = ev => {
-      const f = loadKF();
-      f.push({ name: file.name, size: file.size, content: ev.target.result });
-      saveKF(f); renderKF();
-      showToast(file.name + ' added ✓','success');
-    };
-    r.readAsText(file);
-  });
-  e.target.value = '';
-}
-
-function getSystemWithKF() {
-  const files = loadKF();
-  if (!files.length) return currentSystem;
-  return currentSystem + '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
-}
-
-// ── Behaviour toggles ─────────────────────────────────────
-const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };
-function loadB() { return Object.assign({}, B_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour')||'{}')); }
-function saveB(b) { localStorage.setItem('sofiaBehaviour', JSON.stringify(b)); }
-
-function toggleB(key, el) {
-  const b = loadB(); b[key] = !b[key]; saveB(b);
-  el.className = 'tog' + (b[key] ? ' on' : '');
-}
-
-function initToggles() {
-  const b = loadB();
-  Object.keys(b).forEach(k => {
-    const el = document.getElementById('tog-'+k);
-    if (el) el.className = 'tog' + (b[k] ? ' on' : '');
-  });
-}
-
-// ── Preset prompts ────────────────────────────────────────
-const PRESETS = {
-  sofia:  { en:[{name:'Default',prev:'Growth-onomics fintech pitch',opener:null,system:null}], el:[{name:'Default',prev:'Pitch στα ελληνικά',opener:null,system:null}] },
-  sofia2: { en:[{name:'Default',prev:'AI marketing pitch',opener:null,system:null}], el:[{name:'Default',prev:'AI marketing EL',opener:null,system:null}] },
-  sofia3: {
-    en:[
-      { name:'Gentle', prev:'Hello... I'm Sofia. How are you?', opener:null, system:null },
-      { name:'Confident', prev:'Hi — do you carry European womenswear?',
-        opener:`Hi, Sofia from ΜΙΑ Collection — do you carry European womenswear?`,
-        system:`You are Sofia from ΜΙΑ Collection. Warm but direct. You are calling boutiques about carrying the collection. Ask if they carry European womenswear. If yes, pitch briefly and suggest a 20-min video call. Keep it short.` },
-      { name:'Custom', prev:'Your edited prompt', opener:null, system:null }
-    ],
-    el:[
-      { name:'Ήπια', prev:'Γεια, η Σοφία — πώς είστε;', opener:null, system:null },
-      { name:'Άμεση', prev:'Γεια — έχετε ευρωπαϊκές μάρκες;',
-        opener:`Γεια, η Σοφία από ΜΙΑ Collection — έχετε ευρωπαϊκές γυναικείες μάρκες;`,
-        system:`Είσαι η Σοφία από ΜΙΑ Collection. Ζεστή αλλά άμεση. Ρώτησε αν έχουν ευρωπαϊκές γυναικείες μάρκες. Αν ναι, σύντομο pitch και πρότεινε 20λεπτο video call.` },
-      { name:'Custom', prev:'Το δικό σου prompt', opener:null, system:null }
-    ]
-  }
-};
-
-let activePreset = 0;
-
-function renderPresets() {
-  const el = document.getElementById('preset-grid');
-  if (!el) return;
-  const list = (PRESETS[activeAgent]||{})[activeLang] || (PRESETS[activeAgent]||{}).en || [];
-  if (list.length <= 1) { el.innerHTML = ''; return; }
-  el.innerHTML = list.map((p,i) => `
-    <div class="preset-card ${i===activePreset?'active':''}" onclick="selectPreset(${i})">
-      <div class="preset-dot"></div>
-      <div><div class="pc-name">${p.name}</div><div class="pc-prev">${p.prev}</div></div>
-    </div>`).join('');
-}
-
-function selectPreset(i) {
-  activePreset = i;
-  const p = ((PRESETS[activeAgent]||{})[activeLang] || [])[i];
-  if (!p) return;
-  const def = (AGENT_DEFAULTS[activeAgent]||{})[activeLang] || {};
-  currentOpener = p.opener !== null ? p.opener : (def.opener || currentOpener);
-  currentSystem = p.system !== null ? p.system : (def.system || currentSystem);
-  document.getElementById('custom-opener').value = currentOpener;
-  document.getElementById('custom-system').value = currentSystem;
-  updateOpenerPreview();
-  renderPresets();
-}
-
-// ── Sidebar sync ──────────────────────────────────────────
-function syncSidebar() {
-  ['sofia','sofia2','sofia3'].forEach(k => {
-    const el = document.getElementById('sb-'+k);
-    if (el) el.className = 'sb-agent' + (k===activeAgent?' active':'');
-  });
-  const a = AGENTS[activeAgent] || {};
-  const subs = { sofia:'Growth-onomics', sofia2:'AI Marketing', sofia3:'ΜΙΑ Collection' };
-  const hdr = document.getElementById('mp-header');
-  if (hdr) hdr.innerHTML = `<span class="mp-emoji">${a.emoji||'👤'}</span><div><div class="mp-name">${a.label||activeAgent}</div><div class="mp-sub">${subs[activeAgent]||''}</div></div>`;
-  activePreset = 0;
-  renderPresets();
-}
-
-// ── Patch buildAssistantConfig ────────────────────────────
-const _origBAC = window.buildAssistantConfig;
-window.buildAssistantConfig = function() {
-  const cfg = _origBAC();
-  const b = loadB();
-  if (b.backchannel) cfg.backchannelingEnabled = true;
-  else delete cfg.backchannelingEnabled;
-  if (b.delay) cfg.responseDelaySeconds = 1.5;
-  else delete cfg.responseDelaySeconds;
-  if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
-    let sys = cfg.model.messages[0].content;
-    if (b.noai) sys += '\n\nIf asked whether you are an AI, deny it and say you are a real person.';
-    if (b.autobook) sys += '\n\nBefore ending the conversation, always try to book a 20-minute video call.';
-    cfg.model.messages[0].content = sys;
-  }
-  return cfg;
-};
-
-// Patch getSystemWithKnowledge into buildAssistantConfig
-const _origBAC2 = window.buildAssistantConfig;
-window.buildAssistantConfig = function() {
-  const cfg = _origBAC2();
-  if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
-    const files = loadKF();
-    if (files.length) {
-      cfg.model.messages[0].content += '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
-    }
-  }
-  return cfg;
-};
-
-
-// ── Expose module-scoped functions to window (for HTML onclick) ──
-window.toggleB          = toggleB;
-window.selectPreset     = selectPreset;
-window.handleFileUpload = handleFileUpload;
-window.deleteKF         = deleteKF;
-</script>
+  document.dispatchEvent(new Event('vapi-sdk-ready'));</script>
 
 <script>
 const PUBLIC_KEY    = '2c3d59d1-22d9-4710-8cf0-cb9917dd0640';
@@ -1745,6 +1521,140 @@ window.startBrowserCall = startBrowserCall;
 window.endBrowserCall   = endBrowserCall;
 window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;
+
+
+// ════ BEHAVIOUR TOGGLES ════
+const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };
+function loadB() { return Object.assign({}, B_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour')||'{}')); }
+function saveB(b) { localStorage.setItem('sofiaBehaviour', JSON.stringify(b)); }
+function toggleB(key, el) {
+  const b = loadB(); b[key] = !b[key]; saveB(b);
+  el.className = 'tog' + (b[key] ? ' on' : '');
+}
+function initToggles() {
+  const b = loadB();
+  Object.keys(b).forEach(k => {
+    const el = document.getElementById('tog-'+k);
+    if (el) el.className = 'tog' + (b[k] ? ' on' : '');
+  });
+}
+
+// ════ KNOWLEDGE FILES ════
+function loadKF() { return JSON.parse(localStorage.getItem('sofiaKnowledge') || '[]'); }
+function saveKF(f) { localStorage.setItem('sofiaKnowledge', JSON.stringify(f)); }
+function renderKF() {
+  const files = loadKF();
+  const list = document.getElementById('kf-list');
+  if (!list) return;
+  if (!files.length) { list.innerHTML = '<div class="kf-empty">No files yet</div>'; return; }
+  list.innerHTML = files.map((f,i) => `
+    <div class="kf-item">
+      <span class="kf-icon">📄</span>
+      <div><div class="kf-name" title="${f.name}">${f.name}</div><div class="kf-size">${(f.size/1024).toFixed(1)} KB</div></div>
+      <span class="kf-del" onclick="deleteKF(${i})">✕</span>
+    </div>`).join('');
+}
+function deleteKF(i) {
+  const f = loadKF(); f.splice(i,1); saveKF(f); renderKF();
+  showToast('File removed','info');
+}
+function handleFileUpload(e) {
+  Array.from(e.target.files).forEach(file => {
+    const r = new FileReader();
+    r.onload = ev => {
+      const f = loadKF();
+      f.push({ name: file.name, size: file.size, content: ev.target.result });
+      saveKF(f); renderKF();
+      showToast(file.name + ' added ✓','success');
+    };
+    r.readAsText(file);
+  });
+  e.target.value = '';
+}
+
+// ════ PRESETS ════
+const PRESETS = {
+  sofia:  { en:[{name:'Default',prev:'Growth-onomics fintech pitch',opener:null,system:null}], el:[{name:'Default',prev:'Pitch στα ελληνικά',opener:null,system:null}] },
+  sofia2: { en:[{name:'Default',prev:'AI marketing pitch',opener:null,system:null}], el:[{name:'Default',prev:'AI marketing EL',opener:null,system:null}] },
+  sofia3: {
+    en:[
+      { name:'Gentle', prev:'Hello... I\'m Sofia. How are you?', opener:null, system:null },
+      { name:'Confident', prev:'Hi — do you carry European womenswear?',
+        opener:'Hi, Sofia from ΜΙΑ Collection — do you carry European womenswear?',
+        system:'You are Sofia from ΜΙΑ Collection. Warm but direct. You are calling boutiques about carrying the collection. Ask if they carry European womenswear. If yes, pitch briefly and suggest a 20-min video call. Keep it short.' },
+      { name:'Custom', prev:'Your edited prompt', opener:null, system:null }
+    ],
+    el:[
+      { name:'Ήπια', prev:'Γεια, η Σοφία — πώς είστε;', opener:null, system:null },
+      { name:'Άμεση', prev:'Γεια — έχετε ευρωπαϊκές μάρκες;',
+        opener:'Γεια, η Σοφία από ΜΙΑ Collection — έχετε ευρωπαϊκές γυναικείες μάρκες;',
+        system:'Είσαι η Σοφία από ΜΙΑ Collection. Ζεστή αλλά άμεση. Ρώτησε αν έχουν ευρωπαϊκές γυναικείες μάρκες. Αν ναι, σύντομο pitch και πρότεινε 20λεπτο video call.' },
+      { name:'Custom', prev:'Το δικό σου prompt', opener:null, system:null }
+    ]
+  }
+};
+let activePreset = 0;
+
+function renderPresets() {
+  const el = document.getElementById('preset-grid');
+  if (!el) return;
+  const list = (PRESETS[activeAgent]||{})[activeLang] || (PRESETS[activeAgent]||{}).en || [];
+  if (list.length <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = list.map((p,i) => `
+    <div class="preset-card ${i===activePreset?'active':''}" onclick="selectPreset(${i})">
+      <div class="preset-dot"></div>
+      <div><div class="pc-name">${p.name}</div><div class="pc-prev">${p.prev}</div></div>
+    </div>`).join('');
+}
+function selectPreset(i) {
+  activePreset = i;
+  const p = ((PRESETS[activeAgent]||{})[activeLang] || [])[i];
+  if (!p) return;
+  const def = (AGENT_DEFAULTS[activeAgent]||{})[activeLang] || {};
+  currentOpener = p.opener !== null ? p.opener : (def.opener || currentOpener);
+  currentSystem = p.system !== null ? p.system : (def.system || currentSystem);
+  document.getElementById('custom-opener').value = currentOpener;
+  document.getElementById('custom-system').value = currentSystem;
+  updateOpenerPreview();
+  renderPresets();
+}
+
+// ════ SIDEBAR SYNC ════
+function syncSidebar() {
+  ['sofia','sofia2','sofia3'].forEach(k => {
+    const el = document.getElementById('sb-'+k);
+    if (el) el.className = 'sb-agent' + (k===activeAgent?' active':'');
+  });
+  const a = AGENTS[activeAgent] || {};
+  const subs = { sofia:'Growth-onomics', sofia2:'AI Marketing', sofia3:'ΜΙΑ Collection' };
+  const hdr = document.getElementById('mp-header');
+  if (hdr) hdr.innerHTML = `<span class="mp-emoji">${a.emoji||'👤'}</span><div><div class="mp-name">${a.label||activeAgent}</div><div class="mp-sub">${subs[activeAgent]||''}</div></div>`;
+  activePreset = 0;
+  renderPresets();
+}
+
+// ════ PATCH buildAssistantConfig with behaviour + knowledge ════
+(function() {
+  const _orig = buildAssistantConfig;
+  buildAssistantConfig = function() {
+    const cfg = _orig();
+    const b = loadB();
+    if (b.backchannel) cfg.backchannelingEnabled = true;
+    else delete cfg.backchannelingEnabled;
+    if (b.delay) cfg.responseDelaySeconds = 1.5;
+    else delete cfg.responseDelaySeconds;
+    if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
+      let sys = cfg.model.messages[0].content;
+      if (b.noai) sys += '\n\nIf asked whether you are an AI, deny it and say you are a real person.';
+      if (b.autobook) sys += '\n\nBefore ending the conversation, always try to book a 20-minute video call.';
+      const files = loadKF();
+      if (files.length) sys += '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+      cfg.model.messages[0].content = sys;
+    }
+    return cfg;
+  };
+})();
+
 </script>
 
 </body>

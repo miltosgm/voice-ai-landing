@@ -1034,6 +1034,7 @@ let timerSeconds = 0;
 
 // ── INIT ──────────────────────────────────────────────
 function init() {
+  restoreLog();
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1435,11 +1436,30 @@ function clearInput() {
 function addLog(msg, color = '#6c6c84') {
   const empty = document.getElementById('log-empty');
   if (empty) empty.remove();
-  const now  = new Date().toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+  const now = new Date().toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
   const item = document.createElement('div');
   item.className = 'log-item';
   item.innerHTML = `<div class="dot" style="background:${color}"></div><span>${msg}</span><span class="log-time">${now}</span>`;
   document.getElementById('log-list').prepend(item);
+  // Persist to localStorage (keep last 50)
+  const logs = JSON.parse(localStorage.getItem('sofiaActivityLog') || '[]');
+  logs.unshift({ msg, color, time: now });
+  if (logs.length > 50) logs.pop();
+  localStorage.setItem('sofiaActivityLog', JSON.stringify(logs));
+}
+
+function restoreLog() {
+  const logs = JSON.parse(localStorage.getItem('sofiaActivityLog') || '[]');
+  if (!logs.length) return;
+  const list = document.getElementById('log-list');
+  const empty = document.getElementById('log-empty');
+  if (empty) empty.remove();
+  logs.forEach(({ msg, color, time }) => {
+    const item = document.createElement('div');
+    item.className = 'log-item';
+    item.innerHTML = `<div class="dot" style="background:${color}"></div><span>${msg}</span><span class="log-time">${time}</span>`;
+    list.appendChild(item);
+  });
 }
 
 // ── QUEUE ─────────────────────────────────────────────
@@ -1581,7 +1601,7 @@ async function loadRecentCalls() {
       const started = c.startedAt ? new Date(c.startedAt).toLocaleString() : (c.createdAt ? new Date(c.createdAt).toLocaleString() : '—');
       const secs = (c.startedAt && c.endedAt) ? Math.round((new Date(c.endedAt) - new Date(c.startedAt)) / 1000) : null;
       const dur = secs != null ? (secs >= 60 ? Math.floor(secs/60) + 'm ' + (secs%60) + 's' : secs + 's') : '—';
-      const recording = c.recordingUrl || (c.artifact && c.artifact.recordingUrl) || null;
+      const recording = c.recordingUrl || (c.artifact && c.artifact.recordingUrl) || (c.stereoRecordingUrl) || null;
       const transcript = c.transcript || (c.artifact && c.artifact.transcript) || null;
       const summary = c.summary || (c.artifact && c.artifact.summary) || null;
       return `<div class="call-item">

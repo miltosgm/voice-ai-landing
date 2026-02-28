@@ -408,11 +408,160 @@
 }
 .toggle-switch.on::after { left: 18px; }
 
+
+/* ── SPLIT PANEL B ──────────────────────────────────── */
+.split-layout { display: flex; min-height: 100vh; }
+
+.sb { width: 230px; flex-shrink: 0; background: #07070f; border-right: 1px solid #15152a;
+  display: flex; flex-direction: column; padding: 16px 12px; gap: 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+
+.sb-label { font-size: 9px; font-weight: 700; color: #333; text-transform: uppercase;
+  letter-spacing: 1.2px; margin: 14px 0 7px; }
+.sb-label:first-child { margin-top: 0; }
+.sb-hr { border: none; border-top: 1px solid #111120; margin: 10px 0; }
+
+/* Sidebar agent cards */
+.sb-agent { display: flex; align-items: center; gap: 9px; padding: 9px 10px;
+  border-radius: 10px; border: 1px solid transparent; cursor: pointer;
+  transition: all 0.15s; margin-bottom: 5px; }
+.sb-agent:hover { background: #111120; border-color: #1e1e35; }
+.sb-agent.active { background: #170d35; border-color: #7c3aed; }
+.sb-agent .sa-emoji { font-size: 18px; flex-shrink: 0; }
+.sb-agent .sa-name { font-size: 12px; font-weight: 600; }
+.sb-agent .sa-sub  { font-size: 10px; color: #444; margin-top: 1px; }
+.sb-new { display: flex; align-items: center; justify-content: center;
+  padding: 7px; border-radius: 10px; border: 1.5px dashed #1a1a2e;
+  color: #2a2a4a; font-size: 12px; cursor: pointer; margin-bottom: 5px; }
+
+/* Knowledge files */
+.kf-item { display: flex; align-items: center; gap: 8px; background: #0d0d18;
+  border: 1px solid #141428; border-radius: 8px; padding: 7px 9px; margin-bottom: 5px; }
+.kf-icon { font-size: 14px; flex-shrink: 0; }
+.kf-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; max-width: 110px; }
+.kf-size { font-size: 9px; color: #333; }
+.kf-del { margin-left: auto; color: #2a2a4a; cursor: pointer; font-size: 13px; flex-shrink: 0; }
+.kf-del:hover { color: #cc2244; }
+.kf-empty { font-size: 10px; color: #2a2a4a; text-align: center; padding: 4px 0 8px; }
+
+.upload-btn { display: flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1.5px dashed #1e1e35; border-radius: 9px; padding: 10px;
+  color: #333; font-size: 11px; cursor: pointer; transition: all 0.15s; margin-top: 2px; }
+.upload-btn:hover { border-color: #7c3aed; color: #666; }
+
+/* Behaviour toggles */
+.tog-row { display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 2px; border-bottom: 1px solid #0f0f1e; }
+.tog-row:last-child { border: none; }
+.tog-label { font-size: 10px; color: #666; line-height: 1.3; }
+.tog-label small { display: block; font-size: 9px; color: #333; margin-top: 1px; }
+.tog { width: 30px; height: 16px; border-radius: 16px; background: #1a1a2e;
+  position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; margin-left: 6px; }
+.tog.on { background: #7c3aed; }
+.tog::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: #555;
+  position: absolute; top: 2px; left: 2px; transition: left 0.15s, background 0.15s; }
+.tog.on::after { left: 16px; background: white; }
+
+/* Main panel */
+.mp { flex: 1; min-width: 0; padding: 20px 18px; max-width: 620px; }
+
+/* Preset cards */
+.preset-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.preset-card { display: flex; align-items: center; gap: 9px; background: #0d0d18;
+  border: 1px solid #141428; border-radius: 9px; padding: 9px 11px; cursor: pointer; transition: all 0.15s; }
+.preset-card:hover { border-color: #2a1a5a; }
+.preset-card.active { border-color: #7c3aed; background: #100828; }
+.preset-dot { width: 6px; height: 6px; border-radius: 50%; background: #222; flex-shrink: 0; }
+.preset-card.active .preset-dot { background: #7c3aed; }
+.preset-card .pc-name { font-size: 11px; font-weight: 600; }
+.preset-card .pc-prev { font-size: 10px; color: #444; margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+
+/* Agent header in main panel */
+.mp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  padding-bottom: 14px; border-bottom: 1px solid #151525; }
+.mp-emoji { font-size: 26px; }
+.mp-name  { font-size: 17px; font-weight: 700; }
+.mp-sub   { font-size: 11px; color: #444; margin-top: 2px; }
+
+/* Mobile */
+@media (max-width: 680px) {
+  .split-layout { flex-direction: column; }
+  .sb { width: 100%; height: auto; position: static; flex-direction: column;
+    padding: 12px; border-right: none; border-bottom: 1px solid #15152a; }
+  .sb-agents-row { display: flex; flex-direction: row; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .sb-agents-row .sb-agent { flex-shrink: 0; width: auto; }
+  .mp { padding: 14px; }
+}
+
 </style>
 </head>
 <body>
 
-<div class="page">
+<div class="split-layout">
+
+<!-- ════ SIDEBAR ════ -->
+<div class="sb" id="sb">
+
+  <div class="sb-label">Agents</div>
+  <div id="sb-agents-wrap">
+    <div class="sb-agent active" id="sb-sofia" onclick="setAgent('sofia')">
+      <span class="sa-emoji">👩‍💼</span>
+      <div><div class="sa-name">Sofia</div><div class="sa-sub">Growth-onomics</div></div>
+    </div>
+    <div class="sb-agent" id="sb-sofia2" onclick="setAgent('sofia2')">
+      <span class="sa-emoji">🤖</span>
+      <div><div class="sa-name">Sofia 2</div><div class="sa-sub">AI Marketing</div></div>
+    </div>
+    <div class="sb-agent" id="sb-sofia3" onclick="setAgent('sofia3')">
+      <span class="sa-emoji">👗</span>
+      <div><div class="sa-name">Sofia 3</div><div class="sa-sub">ΜΙΑ Collection</div></div>
+    </div>
+    <div class="sb-new">＋ New Agent</div>
+  </div>
+
+  <div class="sb-hr"></div>
+  <div class="sb-label">📁 Knowledge Files</div>
+  <div id="kf-list"><div class="kf-empty">No files yet</div></div>
+  <div class="upload-btn" onclick="document.getElementById('kf-input').click()">
+    📎 &nbsp;Add file (PDF · TXT · DOCX)
+  </div>
+  <input type="file" id="kf-input" accept=".pdf,.txt,.docx" multiple style="display:none" onchange="handleFileUpload(event)">
+
+  <div class="sb-hr"></div>
+  <div class="sb-label">🎛 Behaviour</div>
+
+  <div class="tog-row">
+    <div class="tog-label">Backchanneling<small>"yeah", "uh-huh"</small></div>
+    <div class="tog on" id="tog-backchannel" onclick="toggleB('backchannel',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Response delay<small>Pause before speaking</small></div>
+    <div class="tog on" id="tog-delay" onclick="toggleB('delay',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Never reveal AI<small>Deny being a bot</small></div>
+    <div class="tog on" id="tog-noai" onclick="toggleB('noai',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Auto-book call<small>Push for 20-min video</small></div>
+    <div class="tog" id="tog-autobook" onclick="toggleB('autobook',this)"></div>
+  </div>
+
+</div><!-- /sb -->
+
+<!-- ════ MAIN PANEL ════ -->
+<div class="mp">
+
+  <!-- Agent header -->
+  <div class="mp-header" id="mp-header">
+    <span class="mp-emoji">👩‍💼</span>
+    <div><div class="mp-name">Sofia</div><div class="mp-sub">Growth-onomics</div></div>
+  </div>
+
+  <!-- Old page content starts here -->
+  <div class="page" style="padding:0;background:none;max-width:none">
 
   <!-- HEADER -->
   <div class="header">
@@ -594,7 +743,9 @@
     </div>
   </div>
 
-</div><!-- /page -->
+  </div><!-- /inner-page -->
+</div><!-- /mp -->
+</div><!-- /split-layout -->
 
 <div class="toast" id="toast"></div>
 
@@ -803,6 +954,163 @@ buildAssistantConfig = function() {
   }
 
   return config;
+};
+
+
+// ════ SPLIT PANEL B — JS ════
+
+// ── Knowledge files ───────────────────────────────────────
+function loadKF() { return JSON.parse(localStorage.getItem('sofiaKnowledge') || '[]'); }
+function saveKF(f) { localStorage.setItem('sofiaKnowledge', JSON.stringify(f)); }
+
+function renderKF() {
+  const files = loadKF();
+  const list  = document.getElementById('kf-list');
+  if (!list) return;
+  if (!files.length) { list.innerHTML = '<div class="kf-empty">No files yet</div>'; return; }
+  list.innerHTML = files.map((f,i) => `
+    <div class="kf-item">
+      <span class="kf-icon">📄</span>
+      <div><div class="kf-name" title="${f.name}">${f.name}</div><div class="kf-size">${(f.size/1024).toFixed(1)} KB</div></div>
+      <span class="kf-del" onclick="deleteKF(${i})">✕</span>
+    </div>`).join('');
+}
+
+function deleteKF(i) {
+  const f = loadKF(); f.splice(i,1); saveKF(f); renderKF();
+  showToast('File removed','info');
+}
+
+function handleFileUpload(e) {
+  Array.from(e.target.files).forEach(file => {
+    const r = new FileReader();
+    r.onload = ev => {
+      const f = loadKF();
+      f.push({ name: file.name, size: file.size, content: ev.target.result });
+      saveKF(f); renderKF();
+      showToast(file.name + ' added ✓','success');
+    };
+    r.readAsText(file);
+  });
+  e.target.value = '';
+}
+
+function getSystemWithKF() {
+  const files = loadKF();
+  if (!files.length) return currentSystem;
+  return currentSystem + '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+}
+
+// ── Behaviour toggles ─────────────────────────────────────
+const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };
+function loadB() { return Object.assign({}, B_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour')||'{}')); }
+function saveB(b) { localStorage.setItem('sofiaBehaviour', JSON.stringify(b)); }
+
+function toggleB(key, el) {
+  const b = loadB(); b[key] = !b[key]; saveB(b);
+  el.className = 'tog' + (b[key] ? ' on' : '');
+}
+
+function initToggles() {
+  const b = loadB();
+  Object.keys(b).forEach(k => {
+    const el = document.getElementById('tog-'+k);
+    if (el) el.className = 'tog' + (b[k] ? ' on' : '');
+  });
+}
+
+// ── Preset prompts ────────────────────────────────────────
+const PRESETS = {
+  sofia:  { en:[{name:'Default',prev:'Growth-onomics fintech pitch',opener:null,system:null}], el:[{name:'Default',prev:'Pitch στα ελληνικά',opener:null,system:null}] },
+  sofia2: { en:[{name:'Default',prev:'AI marketing pitch',opener:null,system:null}], el:[{name:'Default',prev:'AI marketing EL',opener:null,system:null}] },
+  sofia3: {
+    en:[
+      { name:'Gentle', prev:'Hello... I'm Sofia. How are you?', opener:null, system:null },
+      { name:'Confident', prev:'Hi — do you carry European womenswear?',
+        opener:`Hi, Sofia from ΜΙΑ Collection — do you carry European womenswear?`,
+        system:`You are Sofia from ΜΙΑ Collection. Warm but direct. You are calling boutiques about carrying the collection. Ask if they carry European womenswear. If yes, pitch briefly and suggest a 20-min video call. Keep it short.` },
+      { name:'Custom', prev:'Your edited prompt', opener:null, system:null }
+    ],
+    el:[
+      { name:'Ήπια', prev:'Γεια, η Σοφία — πώς είστε;', opener:null, system:null },
+      { name:'Άμεση', prev:'Γεια — έχετε ευρωπαϊκές μάρκες;',
+        opener:`Γεια, η Σοφία από ΜΙΑ Collection — έχετε ευρωπαϊκές γυναικείες μάρκες;`,
+        system:`Είσαι η Σοφία από ΜΙΑ Collection. Ζεστή αλλά άμεση. Ρώτησε αν έχουν ευρωπαϊκές γυναικείες μάρκες. Αν ναι, σύντομο pitch και πρότεινε 20λεπτο video call.` },
+      { name:'Custom', prev:'Το δικό σου prompt', opener:null, system:null }
+    ]
+  }
+};
+
+let activePreset = 0;
+
+function renderPresets() {
+  const el = document.getElementById('preset-grid');
+  if (!el) return;
+  const list = (PRESETS[activeAgent]||{})[activeLang] || (PRESETS[activeAgent]||{}).en || [];
+  if (list.length <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = list.map((p,i) => `
+    <div class="preset-card ${i===activePreset?'active':''}" onclick="selectPreset(${i})">
+      <div class="preset-dot"></div>
+      <div><div class="pc-name">${p.name}</div><div class="pc-prev">${p.prev}</div></div>
+    </div>`).join('');
+}
+
+function selectPreset(i) {
+  activePreset = i;
+  const p = ((PRESETS[activeAgent]||{})[activeLang] || [])[i];
+  if (!p) return;
+  const def = (AGENT_DEFAULTS[activeAgent]||{})[activeLang] || {};
+  currentOpener = p.opener !== null ? p.opener : (def.opener || currentOpener);
+  currentSystem = p.system !== null ? p.system : (def.system || currentSystem);
+  document.getElementById('custom-opener').value = currentOpener;
+  document.getElementById('custom-system').value = currentSystem;
+  updateOpenerPreview();
+  renderPresets();
+}
+
+// ── Sidebar sync ──────────────────────────────────────────
+function syncSidebar() {
+  ['sofia','sofia2','sofia3'].forEach(k => {
+    const el = document.getElementById('sb-'+k);
+    if (el) el.className = 'sb-agent' + (k===activeAgent?' active':'');
+  });
+  const a = AGENTS[activeAgent] || {};
+  const subs = { sofia:'Growth-onomics', sofia2:'AI Marketing', sofia3:'ΜΙΑ Collection' };
+  const hdr = document.getElementById('mp-header');
+  if (hdr) hdr.innerHTML = `<span class="mp-emoji">${a.emoji||'👤'}</span><div><div class="mp-name">${a.label||activeAgent}</div><div class="mp-sub">${subs[activeAgent]||''}</div></div>`;
+  activePreset = 0;
+  renderPresets();
+}
+
+// ── Patch buildAssistantConfig ────────────────────────────
+const _origBAC = buildAssistantConfig;
+buildAssistantConfig = function() {
+  const cfg = _origBAC();
+  const b = loadB();
+  if (b.backchannel) cfg.backchannelingEnabled = true;
+  else delete cfg.backchannelingEnabled;
+  if (b.delay) cfg.responseDelaySeconds = 1.5;
+  else delete cfg.responseDelaySeconds;
+  if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
+    let sys = cfg.model.messages[0].content;
+    if (b.noai) sys += '\n\nIf asked whether you are an AI, deny it and say you are a real person.';
+    if (b.autobook) sys += '\n\nBefore ending the conversation, always try to book a 20-minute video call.';
+    cfg.model.messages[0].content = sys;
+  }
+  return cfg;
+};
+
+// Patch getSystemWithKnowledge into buildAssistantConfig
+const _origBAC2 = buildAssistantConfig;
+buildAssistantConfig = function() {
+  const cfg = _origBAC2();
+  if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
+    const files = loadKF();
+    if (files.length) {
+      cfg.model.messages[0].content += '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+    }
+  }
+  return cfg;
 };
 
 </script>
@@ -1201,6 +1509,7 @@ function setAgent(agentKey) {
 
   const agent = AGENTS[agentKey];
   showToast(`${agent.emoji} ${agent.label} selected`, 'info');
+  syncSidebar();
   syncSidebarCards();
   updateMainHeader();
 }

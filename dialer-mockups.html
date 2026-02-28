@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofia Dialer — Dashboard Mockups</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; }
+
+  h1 { text-align: center; font-size: 18px; color: #9b8fff; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 13px; color: #555; margin-bottom: 30px; }
+
+  .concept { background: #11111a; border: 1px solid #222; border-radius: 16px; margin-bottom: 40px; overflow: hidden; }
+  .concept-label { background: #1a1a2e; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+  .concept-badge { background: #7c3aed; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .concept-title { font-size: 15px; font-weight: 600; color: #e0e0f0; }
+  .concept-desc { font-size: 12px; color: #666; margin-top: 2px; }
+  .concept-body { padding: 20px; }
+
+  /* SHARED COMPONENTS */
+  .agent-row { display: flex; gap: 10px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+  .agent-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 12px 14px; min-width: 100px; flex-shrink: 0; }
+  .agent-card.active { border-color: #7c3aed; background: #1e1040; }
+  .agent-card .emoji { font-size: 22px; }
+  .agent-card .name { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .agent-card .desc { font-size: 10px; color: #555; margin-top: 2px; }
+
+  .section-title { font-size: 11px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+  textarea { width: 100%; background: #0d0d18; border: 1px solid #2a2a4a; border-radius: 10px; color: #c0c0e0; font-size: 12px; padding: 12px; resize: vertical; line-height: 1.5; font-family: inherit; }
+  textarea:focus { outline: none; border-color: #7c3aed; }
+
+  .btn { padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+  .btn-primary { background: #7c3aed; color: white; }
+  .btn-ghost { background: transparent; border: 1px solid #333; color: #888; }
+  .btn-sm { padding: 6px 12px; font-size: 11px; border-radius: 8px; }
+
+  .call-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .call-btns .btn { flex: 1; }
+
+  /* CONCEPT A — Tabs */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid #222; margin-bottom: 16px; }
+  .tab { padding: 10px 16px; font-size: 12px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab.active { color: #9b8fff; border-bottom-color: #7c3aed; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* CONCEPT B — Sidebar */
+  .two-col { display: flex; gap: 16px; }
+  .sidebar { width: 180px; flex-shrink: 0; }
+  .main-col { flex: 1; min-width: 0; }
+  .sidebar .agent-card { width: 100%; margin-bottom: 8px; min-width: unset; }
+
+  .knowledge-item { background: #0d0d18; border: 1px solid #1e1e30; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .knowledge-icon { font-size: 18px; }
+  .knowledge-name { font-size: 12px; font-weight: 600; }
+  .knowledge-size { font-size: 10px; color: #444; }
+  .knowledge-del { margin-left: auto; font-size: 16px; color: #333; cursor: pointer; }
+
+  .upload-zone { border: 1.5px dashed #2a2a4a; border-radius: 10px; padding: 20px; text-align: center; color: #444; font-size: 12px; margin-bottom: 12px; }
+  .upload-zone span { display: block; font-size: 22px; margin-bottom: 6px; }
+
+  .preset-item { background: #0d0d18; border: 1px solid #1e1e30; border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .preset-item.selected { border-color: #7c3aed; background: #12082e; }
+  .preset-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; flex-shrink: 0; }
+  .preset-item.selected .preset-dot { background: #7c3aed; }
+  .preset-name { font-size: 12px; font-weight: 600; }
+  .preset-preview { font-size: 10px; color: #444; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* CONCEPT C — Drawer */
+  .settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .settings-btn { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 10px; padding: 8px 14px; font-size: 12px; color: #888; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .drawer { background: #0f0f1a; border: 1px solid #2a2a4a; border-radius: 14px; overflow: hidden; }
+  .drawer-header { background: #1a1a2e; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .drawer-header .title { font-size: 14px; font-weight: 600; }
+  .drawer-header .close { color: #444; font-size: 18px; cursor: pointer; }
+  .drawer-body { padding: 16px; }
+  .drawer-section { margin-bottom: 20px; }
+
+  .field-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .field { flex: 1; }
+  .field label { font-size: 10px; color: #555; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .field input { width: 100%; background: #0d0d18; border: 1px solid #2a2a4a; border-radius: 8px; color: #c0c0e0; font-size: 12px; padding: 8px 10px; }
+
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1a1a2e; }
+  .toggle-row:last-child { border: none; }
+  .toggle-label { font-size: 12px; color: #888; }
+  .toggle { width: 36px; height: 20px; background: #7c3aed; border-radius: 20px; position: relative; }
+  .toggle::after { content: ''; width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px; }
+  .toggle.off { background: #222; }
+  .toggle.off::after { right: unset; left: 2px; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #888; cursor: pointer; }
+  .tag.active { background: #1e1040; border-color: #7c3aed; color: #9b8fff; }
+
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .badge { background: #1a1a2e; border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #666; display: flex; align-items: center; gap: 4px; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7c3aed; }
+
+  .divider { border: none; border-top: 1px solid #1a1a2e; margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<h1>Sofia Dialer — Dashboard Mockups</h1>
+<p class="subtitle">3 concepts for making the dialer fully customizable</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CONCEPT A: Tabs -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="concept-badge">A</span>
+        <span class="concept-title">Tab Panel</span>
+      </div>
+      <div class="concept-desc">Tabs below the agent cards — Prompt / Knowledge / Presets / Settings</div>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="agent-row">
+      <div class="agent-card">
+        <div class="emoji">👩‍💼</div>
+        <div class="name">Sofia</div>
+        <div class="desc">Growth-onomics</div>
+      </div>
+      <div class="agent-card">
+        <div class="emoji">🤖</div>
+        <div class="name">Sofia 2</div>
+        <div class="desc">AI Marketing</div>
+      </div>
+      <div class="agent-card active">
+        <div class="emoji">👗</div>
+        <div class="name">Sofia 3</div>
+        <div class="desc">ΜΙΑ Collection</div>
+      </div>
+      <div class="agent-card" style="border-style:dashed;display:flex;align-items:center;justify-content:center;min-width:80px">
+        <div style="font-size:22px;color:#333">＋</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">💬 Prompt</div>
+      <div class="tab">📁 Knowledge</div>
+      <div class="tab">⚡ Presets</div>
+      <div class="tab">⚙️ Settings</div>
+    </div>
+
+    <!-- Prompt Tab -->
+    <div class="tab-content active">
+      <div class="section-title">Opener</div>
+      <textarea rows="2" style="margin-bottom:12px">Hello... I'm Sofia. How are you?</textarea>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="section-title" style="margin:0">System Prompt</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm">↺ Reset</button>
+          <button class="btn btn-primary btn-sm">Save</button>
+        </div>
+      </div>
+      <textarea rows="6">You are Sofia, from ΜΙΑ Collection — a small Greek womenswear label. Real person, not AI.
+
+Your personality: gentle, warm, a little shy. You ease into the conversation naturally. Never pitch directly...</textarea>
+
+      <div class="call-btns">
+        <button class="btn btn-ghost">🌐 Browser Call</button>
+        <button class="btn btn-primary">📞 Phone Call</button>
+      </div>
+    </div>
+
+    <!-- Knowledge Tab (hidden, just shown for mockup) -->
+    <div class="tab-content" style="display:block;margin-top:0">
+      <!-- shown below as Concept B -->
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CONCEPT B: Sidebar + Knowledge Panel -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="concept-badge" style="background:#0891b2">B</span>
+        <span class="concept-title">Split Panel</span>
+      </div>
+      <div class="concept-desc">Left: agents + files. Right: prompt editor + call controls</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="two-col">
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="section-title">Agents</div>
+        <div class="agent-card" style="margin-bottom:8px">
+          <div class="emoji">👩‍💼</div>
+          <div class="name">Sofia</div>
+        </div>
+        <div class="agent-card" style="margin-bottom:8px">
+          <div class="emoji">🤖</div>
+          <div class="name">Sofia 2</div>
+        </div>
+        <div class="agent-card active" style="margin-bottom:8px">
+          <div class="emoji">👗</div>
+          <div class="name">Sofia 3</div>
+        </div>
+        <div class="agent-card" style="border-style:dashed;text-align:center;color:#333;margin-bottom:16px">＋ New</div>
+
+        <div class="section-title">Knowledge Files</div>
+        <div class="knowledge-item">
+          <div class="knowledge-icon">📄</div>
+          <div>
+            <div class="knowledge-name">brand-info.pdf</div>
+            <div class="knowledge-size">42 KB</div>
+          </div>
+          <div class="knowledge-del">✕</div>
+        </div>
+        <div class="knowledge-item">
+          <div class="knowledge-icon">📝</div>
+          <div>
+            <div class="knowledge-name">collections.txt</div>
+            <div class="knowledge-size">8 KB</div>
+          </div>
+          <div class="knowledge-del">✕</div>
+        </div>
+        <div class="upload-zone">
+          <span>📎</span>
+          Drop files here<br>PDF, TXT, DOCX
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main-col">
+        <div class="section-title">Opener</div>
+        <textarea rows="2" style="margin-bottom:12px">Hello... I'm Sofia. How are you?</textarea>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="section-title" style="margin:0">System Prompt</div>
+          <button class="btn btn-ghost btn-sm">↺ Reset</button>
+        </div>
+        <textarea rows="7">You are Sofia, from ΜΙΑ Collection — a small Greek womenswear label. Real person, not AI.
+
+Your personality: gentle, warm, a little shy. Use the uploaded brand files for context about the company and collection details...</textarea>
+
+        <div style="margin-top:12px">
+          <div class="section-title">Preset Prompts</div>
+          <div class="preset-item selected">
+            <div class="preset-dot"></div>
+            <div>
+              <div class="preset-name">Gentle / Low pressure</div>
+              <div class="preset-preview">Soft opener, follows their lead, no push...</div>
+            </div>
+          </div>
+          <div class="preset-item">
+            <div class="preset-dot"></div>
+            <div>
+              <div class="preset-name">Confident / Direct</div>
+              <div class="preset-preview">States purpose clearly, asks for meeting...</div>
+            </div>
+          </div>
+          <div class="preset-item">
+            <div class="preset-dot"></div>
+            <div>
+              <div class="preset-name">Custom</div>
+              <div class="preset-preview">Your own prompt above</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="call-btns">
+          <button class="btn btn-ghost">🌐 Browser</button>
+          <button class="btn btn-primary">📞 Call</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CONCEPT C: Settings Drawer -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="concept-badge" style="background:#059669">C</span>
+        <span class="concept-title">Settings Drawer</span>
+      </div>
+      <div class="concept-desc">Clean dialer + per-agent settings drawer with identity, files, toggles</div>
+    </div>
+  </div>
+  <div class="concept-body">
+
+    <div class="agent-row">
+      <div class="agent-card">
+        <div class="emoji">👩‍💼</div>
+        <div class="name">Sofia</div>
+      </div>
+      <div class="agent-card">
+        <div class="emoji">🤖</div>
+        <div class="name">Sofia 2</div>
+      </div>
+      <div class="agent-card active">
+        <div class="emoji">👗</div>
+        <div class="name">Sofia 3</div>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div style="font-size:13px;color:#666">👗 Sofia 3 — ΜΙΑ Collection</div>
+      <div class="settings-btn">⚙️ Customize</div>
+    </div>
+
+    <!-- Drawer (open state) -->
+    <div class="drawer">
+      <div class="drawer-header">
+        <div class="title">⚙️ Customize Sofia 3</div>
+        <div class="close">✕</div>
+      </div>
+      <div class="drawer-body">
+
+        <!-- Identity -->
+        <div class="drawer-section">
+          <div class="section-title">🏷 Identity</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Agent Name</label>
+              <input value="Sofia 3" />
+            </div>
+            <div class="field">
+              <label>Company</label>
+              <input value="ΜΙΑ Collection" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Tagline / Description</label>
+            <input value="Greek contemporary womenswear" style="width:100%" />
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Prompt Presets -->
+        <div class="drawer-section">
+          <div class="section-title">⚡ Prompt Style</div>
+          <div class="tag-row" style="margin-bottom:12px">
+            <div class="tag active">Gentle</div>
+            <div class="tag">Confident</div>
+            <div class="tag">Curious</div>
+            <div class="tag">Direct</div>
+            <div class="tag">Custom</div>
+          </div>
+          <textarea rows="4" style="font-size:11px">You are Sofia. Gentle, warm, not pushy. Real person. Ease into the conversation. Use the knowledge files for brand context...</textarea>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Knowledge Files -->
+        <div class="drawer-section">
+          <div class="section-title">📁 Knowledge Files</div>
+          <div class="knowledge-item">
+            <div class="knowledge-icon">📄</div>
+            <div>
+              <div class="knowledge-name">mia-brand-guide.pdf</div>
+              <div class="knowledge-size">42 KB · Active</div>
+            </div>
+            <div class="knowledge-del">✕</div>
+          </div>
+          <div class="knowledge-item">
+            <div class="knowledge-icon">📝</div>
+            <div>
+              <div class="knowledge-name">lotus-swan-collections.txt</div>
+              <div class="knowledge-size">8 KB · Active</div>
+            </div>
+            <div class="knowledge-del">✕</div>
+          </div>
+          <div class="upload-zone">
+            <span>📎</span>
+            Add files — PDF, TXT, DOCX
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Behaviour Toggles -->
+        <div class="drawer-section">
+          <div class="section-title">🎛 Behaviour</div>
+          <div class="toggle-row">
+            <div class="toggle-label">Backchanneling ("yeah", "uh-huh")</div>
+            <div class="toggle"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Response delay (sounds more human)</div>
+            <div class="toggle"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Never reveal it's AI</div>
+            <div class="toggle"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">Auto-book video call</div>
+            <div class="toggle off"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%">Save Changes</button>
+
+      </div>
+    </div>
+
+    <div class="call-btns" style="margin-top:16px">
+      <button class="btn btn-ghost">🌐 Browser Call</button>
+      <button class="btn btn-primary">📞 Phone Call</button>
+    </div>
+
+  </div>
+</div>
+
+<p style="text-align:center;font-size:12px;color:#333;margin-top:10px;padding-bottom:20px">Which concept do you prefer? A, B, or C?</p>
+
+</body>
+</html>

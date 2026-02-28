@@ -968,6 +968,12 @@ buildAssistantConfig = function() {
   return cfg;
 };
 
+
+// ── Expose module-scoped functions to window (for HTML onclick) ──
+window.toggleB          = toggleB;
+window.selectPreset     = selectPreset;
+window.handleFileUpload = handleFileUpload;
+window.deleteKF         = deleteKF;
 </script>
 
 <script>
@@ -1743,13 +1749,6 @@ window.startBrowserCall = startBrowserCall;
 window.endBrowserCall   = endBrowserCall;
 window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;
-window.toggleB          = toggleB;
-window.toggleCustomize  = toggleCustomize;
-window.selectPreset     = selectPreset;
-window.handleFileUpload = handleFileUpload;
-window.deleteKF         = deleteKF;
-window.saveAgentEdit    = saveAgentEdit;
-window.cancelAgentEdit  = cancelAgentEdit;
 </script>
 
 </body>

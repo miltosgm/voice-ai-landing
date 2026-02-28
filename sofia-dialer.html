@@ -1523,6 +1523,14 @@ window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;
 
 
+// ════ KNOWLEDGE FILES HELPERS ════
+function getSystemWithKnowledge() {
+  const files = loadKF();
+  if (!files.length) return currentSystem;
+  return currentSystem + '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+}
+function getSystemWithKF() { return getSystemWithKnowledge(); }
+
 // ════ BEHAVIOUR TOGGLES ════
 const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };
 function loadB() { return Object.assign({}, B_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour')||'{}')); }

@@ -581,6 +581,149 @@
   import Vapi from 'https://esm.sh/@vapi-ai/web';
   window.Vapi = Vapi;
   document.dispatchEvent(new Event('vapi-sdk-ready'));
+
+// ── KNOWLEDGE FILES ───────────────────────────────────────
+function loadKnowledge() {
+  return JSON.parse(localStorage.getItem('sofiaKnowledge') || '[]');
+}
+function saveKnowledge(files) {
+  localStorage.setItem('sofiaKnowledge', JSON.stringify(files));
+}
+function renderKnowledge() {
+  const files = loadKnowledge();
+  const list = document.getElementById('knowledge-list');
+  if (!list) return;
+  list.innerHTML = files.length === 0 ? '' : files.map((f, i) => `
+    <div class="knowledge-file">
+      <span class="kf-icon">📄</span>
+      <div class="kf-info">
+        <div class="kf-name" title="${f.name}">${f.name}</div>
+        <div class="kf-size">${(f.size/1024).toFixed(1)} KB</div>
+      </div>
+      <span class="kf-del" onclick="deleteKnowledge(${i})">✕</span>
+    </div>`).join('');
+}
+function deleteKnowledge(i) {
+  const files = loadKnowledge();
+  files.splice(i, 1);
+  saveKnowledge(files);
+  renderKnowledge();
+  showToast('File removed', 'info');
+}
+function handleFileUpload(e) {
+  const toProcess = Array.from(e.target.files);
+  toProcess.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const files = loadKnowledge();
+      files.push({ name: file.name, size: file.size, content: ev.target.result });
+      saveKnowledge(files);
+      renderKnowledge();
+      showToast(file.name + ' added ✓', 'success');
+    };
+    reader.readAsText(file);
+  });
+  e.target.value = '';
+}
+
+// Inject knowledge into system prompt
+function getSystemWithKnowledge() {
+  const files = loadKnowledge();
+  if (!files.length) return currentSystem;
+  const kb = files.map(f => f.name + ':\n' + f.content).join('\n\n');
+  return currentSystem + '\n\n[Knowledge Base]\n' + kb;
+}
+
+// ── PRESETS ───────────────────────────────────────────────
+const PRESETS = {
+  sofia:  { en: [{ name: 'Default', preview: 'Growth-onomics pitch...' }], el: [{ name: 'Default', preview: 'Pitch στα Ελληνικά...' }] },
+  sofia2: { en: [{ name: 'Default', preview: 'AI marketing pitch...' }],   el: [{ name: 'Default', preview: 'AI marketing EL...' }] },
+  sofia3: {
+    en: [
+      { name: 'Gentle', preview: 'Hello... I'm Sofia. How are you?',
+        opener: `Hello... I'm Sofia. How are you?`,
+        system: null /* loaded from AGENT_DEFAULTS */ },
+      { name: 'Confident', preview: 'Hi, Sofia from MIA Collection...',
+        opener: `Hi, Sofia from ΜΙΑ Collection — do you carry European womenswear?`,
+        system: `You are Sofia from ΜΙΑ Collection. Warm but direct. You are calling boutiques to see if they would carry the collection. State your purpose clearly in the first 2 sentences. Ask if they carry European womenswear. If yes, give a brief pitch and suggest a 20-minute video call. If no, thank them and move on. Keep responses short.` },
+      { name: 'Custom', preview: 'Your edited prompt', opener: null, system: null }
+    ],
+    el: [
+      { name: 'Ήπια', preview: 'Γεια, η Σοφία — πώς είστε;',
+        opener: null, system: null },
+      { name: 'Άμεση', preview: 'Γεια, Σοφία από ΜΙΑ Collection...',
+        opener: `Γεια, η Σοφία από ΜΙΑ Collection — έχετε ευρωπαϊκές γυναικείες μάρκες;`,
+        system: `Είσαι η Σοφία από ΜΙΑ Collection. Ζεστή αλλά άμεση. Εξήγησε γρήγορα γιατί καλείς. Ρώτησε αν έχουν ευρωπαϊκές γυναικείες μάρκες. Αν ναι, κάνε σύντομο pitch και πρότεινε 20λεπτο video call. Κράτα τις απαντήσεις κοντές.` },
+      { name: 'Custom', preview: 'Το δικό σου prompt', opener: null, system: null }
+    ]
+  }
+};
+
+let activePreset = 0;
+
+function renderPresets() {
+  const container = document.getElementById('preset-grid');
+  if (!container) return;
+  const agentPresets = PRESETS[activeAgent];
+  if (!agentPresets) { container.innerHTML = ''; return; }
+  const presets = agentPresets[activeLang] || agentPresets['en'];
+  container.innerHTML = presets.map((p, i) => `
+    <div class="preset-card ${i === activePreset ? 'active' : ''}" onclick="selectPreset(${i})">
+      <div class="preset-dot"></div>
+      <div class="pc-info">
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-preview">${p.preview}</div>
+      </div>
+    </div>`).join('');
+}
+
+function selectPreset(i) {
+  activePreset = i;
+  const presets = (PRESETS[activeAgent] || {})[activeLang] || [];
+  const p = presets[i];
+  if (!p) return;
+  if (p.opener !== null && p.opener !== undefined) {
+    currentOpener = p.opener;
+    document.getElementById('custom-opener').value = currentOpener;
+  } else if (p.opener === null && AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang]) {
+    currentOpener = AGENT_DEFAULTS[activeAgent][activeLang].opener;
+    document.getElementById('custom-opener').value = currentOpener;
+  }
+  if (p.system !== null && p.system !== undefined) {
+    currentSystem = p.system;
+    document.getElementById('custom-system').value = currentSystem;
+  } else if (p.system === null && AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang]) {
+    currentSystem = AGENT_DEFAULTS[activeAgent][activeLang].system;
+    document.getElementById('custom-system').value = currentSystem;
+  }
+  updateOpenerPreview();
+  renderPresets();
+}
+
+// Update main panel header when agent changes
+function updateMainHeader() {
+  const a = AGENTS[activeAgent];
+  if (!a) return;
+  const hdr = document.getElementById('main-agent-header');
+  if (hdr) hdr.innerHTML = `
+    <span class="mah-emoji">${a.emoji}</span>
+    <div><div class="mah-name">${a.label}</div><div class="mah-sub">${activeAgent === 'sofia3' ? 'ΜΙΑ Collection' : activeAgent === 'sofia2' ? 'AI Marketing' : 'Growth-onomics'}</div></div>`;
+  activePreset = 0;
+  renderPresets();
+}
+
+// Sync sidebar agent cards
+function syncSidebarCards() {
+  ['sofia','sofia2','sofia3'].forEach(k => {
+    const el = document.getElementById('sb-card-' + k);
+    if (el) el.className = 'agent-card' + (k === activeAgent ? ' active' : '');
+  });
+}
+
+// ── PATCH buildAssistantConfig to inject knowledge ────────
+const _origBuildConfig = buildAssistantConfig;
+// We patch via override after page loads
+
 </script>
 
 <script>
@@ -977,6 +1120,8 @@ function setAgent(agentKey) {
 
   const agent = AGENTS[agentKey];
   showToast(`${agent.emoji} ${agent.label} selected`, 'info');
+  syncSidebarCards();
+  updateMainHeader();
 }
 
 // ── MODE SWITCHING ────────────────────────────────────
@@ -1050,7 +1195,7 @@ function buildAssistantConfig() {
     model: {
       provider: "openai",
       model: "gpt-4o",
-      messages: [{ role: "system", content: currentSystem }],
+      messages: [{ role: "system", content: getSystemWithKnowledge() }],
       temperature: activeAgent === 'sofia3' ? 0.9 : 0.7
     },
     voice: (() => {

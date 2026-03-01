@@ -2322,9 +2322,10 @@ async function startSimCall() {
       appendSimLine('User', customerLine);
       await speakSimLine(customerLine, 'User');
 
-      // Add to both histories
+      // Agent chat history: customer = user, agent = assistant
       simChatHistory.push({ role: 'user', content: customerLine });
-      customerHistory.push({ role: 'user', content: customerLine });
+      // Customer chat history (roles flipped): customer = assistant, agent = user
+      customerHistory.push({ role: 'assistant', content: customerLine });
 
       // Get agent response
       await sleep(300);
@@ -2335,8 +2336,8 @@ async function startSimCall() {
       if (!agentReply) agentReply = '[No response]';
       appendSimLine('AI', agentReply);
       simChatHistory.push({ role: 'assistant', content: agentReply });
-      // From customer POV, agent reply is the "assistant" turn (flipped)
-      customerHistory.push({ role: 'assistant', content: agentReply });
+      // From customer POV, agent reply is the "user" (the other person speaking)
+      customerHistory.push({ role: 'user', content: agentReply });
       await speakSimLine(agentReply, 'AI');
 
       await sleep(400);

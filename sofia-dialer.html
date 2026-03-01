@@ -1475,6 +1475,8 @@ function setAgent(agentKey) {
 
   const agent = AGENTS[agentKey];
   showToast(`${agent.emoji} ${agent.label} selected`, 'info');
+  const talkBtn = document.getElementById('btn-talk');
+  if (talkBtn) talkBtn.innerHTML = '🎙️ &nbsp;Talk to ' + agent.label;
   syncSidebar();
   syncSidebarCards();
   updateMainHeader();

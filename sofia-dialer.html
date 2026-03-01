@@ -2209,12 +2209,22 @@ function removeTypingIndicator() {
 
 // Generate next customer reply based on conversation history
 async function customerChat(persona, conversationHistory) {
+  var systemPrompt = persona +
+    '\n\nYou are on a phone call. You just received a cold call out of nowhere.' +
+    '\nCRITICAL RULES:' +
+    '\n- You do NOT know who is calling or what company they represent until THEY tell you.' +
+    '\n- NEVER invent or assume any company name, brand name, or product name.' +
+    '\n- ONLY refer to names/brands/products that the caller explicitly mentioned in this conversation.' +
+    '\n- If you want to reference what they sell, use vague words like "it", "that", "your products", "your company".' +
+    '\n- Respond with ONLY your spoken words — no stage directions, no labels, no quotes.' +
+    '\n- Maximum 1-2 short sentences.';
+
   var payload = {
     assistant: {
       model: {
         provider: 'openai',
         model: 'gpt-4o-mini',
-        messages: [{ role: 'system', content: persona + '\n\nRespond with ONLY your spoken reply — no stage directions, no quotes, no labels. 1-2 sentences maximum.' }]
+        messages: [{ role: 'system', content: systemPrompt }]
       }
     },
     input: conversationHistory

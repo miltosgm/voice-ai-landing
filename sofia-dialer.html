@@ -1466,6 +1466,7 @@ function init() {
   initCustomAgents();
   renderContacts().catch(console.error);
   renderCRM().catch(console.error);
+  loadPromptsFromSupabase().catch(console.error);
   initSettingsOnLoad();
   const talkBtn = document.getElementById('btn-talk');
   if (talkBtn) talkBtn.innerHTML = '🎙️ &nbsp;Talk to ' + (AGENTS[activeAgent]||{label:'Agent'}).label;
@@ -2470,7 +2471,11 @@ function showSimScore() {
   document.getElementById('sim-score-card').classList.add('visible');
 
   // Auto-save to Supabase
-  if (simTranscriptLines.length > 0) saveSimulation({ pct: pct, checks: checks });
+  if (simTranscriptLines.length > 0) {
+    var scoreData = { pct: pct, checks: checks };
+    saveSimulation(scoreData);
+    autoImproveAgent(scoreData); // silently improve if score < 80%
+  }
 }
 
 // ── SIM TABS ──────────────────────────────────────
@@ -2621,6 +2626,113 @@ async function improveFromSim(id) {
       modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
     }
   } catch(e) { showToast('Analysis error: ' + e.message, 'error'); }
+}
+
+// ════ AUTONOMOUS PROMPT IMPROVEMENT SYSTEM ════════════════════════
+
+// Load saved prompts from Supabase and apply to active agent
+async function loadPromptsFromSupabase() {
+  try {
+    var rows = await sbGet('dialer_agent_prompts', {});
+    if (!rows || !rows.length) return;
+    rows.forEach(function(r) {
+      var key = r.agent + '_' + r.lang;
+      if (!AGENT_DEFAULTS[r.agent]) return;
+      if (!AGENT_DEFAULTS[r.agent][r.lang]) AGENT_DEFAULTS[r.agent][r.lang] = {};
+      if (r.system_prompt) AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;
+      if (r.opener) AGENT_DEFAULTS[r.agent][r.lang].opener = r.opener;
+    });
+    // Re-apply to current textarea if it's the active agent
+    var d = AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang];
+    if (d) {
+      currentSystem = d.system || currentSystem;
+      currentOpener = d.opener || currentOpener;
+      var sysEl = document.getElementById('custom-system');
+      var opEl = document.getElementById('custom-opener');
+      if (sysEl) sysEl.value = currentSystem;
+      if (opEl) opEl.value = currentOpener;
+    }
+  } catch(e) {
+    console.warn('Could not load prompts from Supabase:', e);
+  }
+}
+
+// Save improved prompt back to Supabase
+async function savePromptToSupabase(agent, lang, systemPrompt, opener, scoreAvg) {
+  try {
+    // Try update first, then insert
+    var existing = await sbGet('dialer_agent_prompts', { agent: 'eq.' + agent, lang: 'eq.' + lang });
+    var row = {
+      agent: agent,
+      lang: lang,
+      system_prompt: systemPrompt,
+      opener: opener || null,
+      improved_by: 'auto',
+      sim_score_avg: scoreAvg || null,
+      updated_at: new Date().toISOString()
+    };
+    if (existing && existing.length) {
+      await sbUpdate('dialer_agent_prompts', existing[0].id, row);
+    } else {
+      await sbInsert('dialer_agent_prompts', row);
+    }
+  } catch(e) {
+    console.warn('Failed to save prompt:', e);
+  }
+}
+
+// Auto-improve agent after a simulation — called silently if score < 80
+async function autoImproveAgent(scoreData) {
+  if (!scoreData || scoreData.pct >= 80) return; // Only improve when needed
+  try {
+    var checks = scoreData.checks || [];
+    var failedChecks = checks.filter(function(c) { return !c.pass; }).map(function(c) { return c.label; });
+    if (!failedChecks.length) return;
+
+    var currentSys = (AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].system) || currentSystem;
+    var currentOp  = (AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].opener) || currentOpener;
+    var tx = simTranscriptLines.map(function(l) { return l.role + ': ' + l.text; }).join('\n');
+
+    var prompt = 'You are improving a voice sales agent system prompt based on a failed simulation test.\n' +
+      'Agent: ' + (AGENTS[activeAgent] || {label: activeAgent}).label + ' (' + activeLang.toUpperCase() + ')\n' +
+      'Simulation score: ' + scoreData.pct + '%\n\n' +
+      'Failed checks:\n' + failedChecks.map(function(c) { return '- ' + c; }).join('\n') + '\n\n' +
+      'Simulation transcript:\n' + tx + '\n\n' +
+      'Current system prompt:\n' + currentSys + '\n\n' +
+      'Return ONLY the improved system prompt — no explanation, no preamble, no markdown fences. ' +
+      'Keep all existing rules and brand identity intact. Only fix what failed. Keep same language and tone.';
+
+    var res = await fetch('https://api.vapi.ai/chat', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assistant: { model: { provider: 'openai', model: 'gpt-4o', messages: [{ role: 'system', content: 'You are an expert voice AI prompt engineer. Return only the improved prompt, nothing else.' }] } },
+        input: [{ role: 'user', content: prompt }]
+      })
+    });
+    var data = await res.json();
+    var newPrompt = '';
+    (data.output || []).forEach(function(o) { if (o.role === 'assistant') newPrompt = o.content.trim(); });
+
+    if (!newPrompt || newPrompt.length < 100) return;
+
+    // Apply immediately in memory
+    if (!AGENT_DEFAULTS[activeAgent]) AGENT_DEFAULTS[activeAgent] = {};
+    if (!AGENT_DEFAULTS[activeAgent][activeLang]) AGENT_DEFAULTS[activeAgent][activeLang] = {};
+    AGENT_DEFAULTS[activeAgent][activeLang].system = newPrompt;
+    currentSystem = newPrompt;
+    var sysEl = document.getElementById('custom-system');
+    if (sysEl && activeAgent === activeAgent) sysEl.value = newPrompt;
+
+    // Persist to Supabase
+    await savePromptToSupabase(activeAgent, activeLang, newPrompt, currentOp, scoreData.pct);
+
+    addLog('🤖 Agent auto-improved (score was ' + scoreData.pct + '%)', '#22c55e');
+    showToast('Agent prompt auto-improved based on simulation results', 'success');
+
+  } catch(e) {
+    console.warn('Auto-improve failed:', e);
+  }
 }
 
 window.openSimModal    = openSimModal;

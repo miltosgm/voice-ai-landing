@@ -981,7 +981,10 @@
         <strong>Scenario:</strong> A curious potential customer who received a cold call — open and friendly, asks what the brand sells.
       </div>
 
-      <div class="sim-section-label">2. Run the simulation — no mic needed</div>
+      <div class="sim-section-label" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>2. Run the simulation — no mic needed</span>
+        <button id="sim-mute-btn" onclick="toggleSimMute()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;">🔊 Sound ON</button>
+      </div>
       <button class="sim-start-btn" id="sim-start-btn" onclick="startSimCall()">▶ Run Auto-Simulation</button>
 
       <div class="sim-live-transcript" id="sim-transcript">
@@ -1982,6 +1985,66 @@ window.endBrowserCall   = endBrowserCall;
 
 // ════ AGENT SIMULATION TESTING (FULLY AUTOMATED) ══════════════════
 
+var simMuted = false;
+var simVoices = { agent: null, customer: null };
+
+function toggleSimMute() {
+  simMuted = !simMuted;
+  var btn = document.getElementById('sim-mute-btn');
+  if (btn) btn.textContent = simMuted ? '🔇 Sound OFF' : '🔊 Sound ON';
+  if (simMuted) window.speechSynthesis.cancel();
+}
+
+function loadSimVoices() {
+  var voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return;
+  // Agent: prefer a warm female English voice
+  var agentPref = ['Samantha', 'Victoria', 'Karen', 'Moira', 'Tessa', 'Google UK English Female', 'Google US English'];
+  for (var i = 0; i < agentPref.length; i++) {
+    var v = voices.find(function(x) { return x.name.indexOf(agentPref[i]) !== -1; });
+    if (v) { simVoices.agent = v; break; }
+  }
+  if (!simVoices.agent) simVoices.agent = voices.find(function(v) { return /female|woman/i.test(v.name); }) || voices[0];
+
+  // Customer: pick a different voice
+  var custPref = ['Daniel', 'Alex', 'Google UK English Male', 'Google US English', 'Tom', 'Fred'];
+  for (var j = 0; j < custPref.length; j++) {
+    var cv = voices.find(function(x) { return x.name.indexOf(custPref[j]) !== -1; });
+    if (cv && cv !== simVoices.agent) { simVoices.customer = cv; break; }
+  }
+  if (!simVoices.customer) {
+    simVoices.customer = voices.find(function(v) { return v !== simVoices.agent; }) || voices[0];
+  }
+}
+
+// Load voices when available (Chrome fires voiceschanged)
+if (window.speechSynthesis) {
+  loadSimVoices();
+  window.speechSynthesis.onvoiceschanged = loadSimVoices;
+}
+
+function speakSimLine(text, role) {
+  return new Promise(function(resolve) {
+    if (simMuted || !window.speechSynthesis) return resolve();
+    window.speechSynthesis.cancel();
+    var utter = new SpeechSynthesisUtterance(text);
+    if (role === 'AI') {
+      if (simVoices.agent) utter.voice = simVoices.agent;
+      utter.pitch = 1.1;
+      utter.rate = 1.0;
+    } else {
+      if (simVoices.customer) utter.voice = simVoices.customer;
+      utter.pitch = 0.85;
+      utter.rate = 0.95;
+    }
+    utter.onend = resolve;
+    utter.onerror = resolve;
+    window.speechSynthesis.speak(utter);
+  });
+}
+
+window.toggleSimMute = toggleSimMute;
+
 var SIM_SCENARIOS = [
   {
     name: 'Interested Buyer',
@@ -2055,6 +2118,7 @@ function openSimModal() {
 
 function closeSimModal() {
   simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
   document.getElementById('sim-modal').classList.remove('open');
 }
 
@@ -2069,6 +2133,7 @@ function selectScenario(idx) {
 
 function resetSim() {
   simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
   simTranscriptLines = [];
   simChatHistory = [];
   var tx = document.getElementById('sim-transcript');
@@ -2173,17 +2238,19 @@ async function startSimCall() {
 
       var customerLine = scenario.turns[t];
 
-      // Show customer typing
-      await sleep(600);
+      // Show customer typing then speak
+      await sleep(400);
       showTypingIndicator('User');
-      await sleep(700 + customerLine.length * 12);
+      await sleep(500 + customerLine.length * 10);
       removeTypingIndicator();
       appendSimLine('User', customerLine);
+      await speakSimLine(customerLine, 'User');
 
       // Add to history
       simChatHistory.push({ role: 'user', content: customerLine });
 
       // Get agent response
+      await sleep(300);
       showTypingIndicator('AI');
       var agentReply = await vapiChat(simChatHistory.slice());
       removeTypingIndicator();
@@ -2191,9 +2258,10 @@ async function startSimCall() {
       if (!agentReply) agentReply = '[No response]';
       appendSimLine('AI', agentReply);
       simChatHistory.push({ role: 'assistant', content: agentReply });
+      await speakSimLine(agentReply, 'AI');
 
       // Natural pause between turns
-      await sleep(1000);
+      await sleep(500);
     }
 
     if (simRunning) {

@@ -976,25 +976,7 @@
     </div>
   </div>
 
-  <!-- White-label -->
-  <div class="sdrawer-section">
-    <div class="sdrawer-label">🎨 White-label</div>
-    <div style="margin-bottom:8px">
-      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Company name</div>
-      <input type="text" id="s-company-name" placeholder="ΜΙΑ Collection" class="sdrawer-input" oninput="applyWhitelabel()">
-    </div>
-    <div style="margin-bottom:8px">
-      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Logo URL</div>
-      <input type="url" id="s-logo-url" placeholder="https://..." class="sdrawer-input" oninput="applyWhitelabel()">
-    </div>
-    <div style="margin-bottom:8px">
-      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Primary color</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input type="color" id="s-color" value="#6c47ff" oninput="applyWhitelabel()" style="width:44px;height:36px;border:1px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
-        <input type="text" id="s-color-hex" placeholder="#6c47ff" class="sdrawer-input" style="flex:1" oninput="syncColorPicker()">
-      </div>
-    </div>
-  </div>
+  
 
 </div>
 
@@ -2522,58 +2504,15 @@ function loadSettingsUI() {
   setTog('tog-gsheets', s.gsheets); setVal('s-gsheets-url', s.gsheetsUrl);
   setTog('tog-emailfu', s.emailfu); setVal('s-email-template', s.emailTemplate);
   setTog('tog-schedule', s.schedule); setVal('s-sched-time', s.schedTime);
-  setVal('s-company-name', s.companyName);
-  setVal('s-logo-url', s.logoUrl);
-  if (s.primaryColor) { setVal('s-color', s.primaryColor); setVal('s-color-hex', s.primaryColor); }
   if (s.schedDays) {
     document.querySelectorAll('#sched-days input').forEach(function(cb) {
       cb.checked = s.schedDays.indexOf(cb.value) !== -1;
     });
   }
 }
-function syncColorPicker() {
-  var hex = document.getElementById('s-color-hex').value.trim();
-  if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-    document.getElementById('s-color').value = hex;
-    saveSetting('primaryColor', hex);
-    applyWhitelabel();
-  }
-}
-
-function applyWhitelabel() {
-  var name  = (document.getElementById('s-company-name') || {}).value || '';
-  var logo  = (document.getElementById('s-logo-url') || {}).value || '';
-  var color = (document.getElementById('s-color') || {}).value || '';
-  var hexEl = document.getElementById('s-color-hex');
-  if (hexEl && color) hexEl.value = color;
-  saveSetting('companyName', name);
-  saveSetting('logoUrl', logo);
-  saveSetting('primaryColor', color);
-
-  // Apply company name
-  var compLabel = name || 'ΜΙΑ Collection';
-  document.title = compLabel + ' Dialer';
-  var sbFooter = document.getElementById('sb-company-label');
-  if (sbFooter) sbFooter.textContent = sbFooter.getAttribute('data-label') || 'Agents';
-
-  // Apply logo
-  var logoImg = document.getElementById('sb-logo-img');
-  if (logoImg) {
-    if (logo) { logoImg.src = logo; logoImg.style.display = 'block'; }
-    else { logoImg.style.display = 'none'; }
-  }
-
-  // Apply color
-  if (color) {
-    document.documentElement.style.setProperty('--accent', color);
-    // Lighter version for accent2
-    document.documentElement.style.setProperty('--accent2', color + 'cc');
-  }
-}
 
 function initSettingsOnLoad() {
   var s = loadSofiaSettings();
-  if (s.companyName || s.logoUrl || s.primaryColor) applyWhitelabel();
   if (s.schedule && s.schedTime && s.schedDays && s.schedDays.length) initScheduledCalling(s);
 }
 
@@ -2600,8 +2539,6 @@ window.closeSettings  = closeSettings;
 window.toggleSetting  = toggleSetting;
 window.saveSetting    = saveSetting;
 window.saveSchedDays  = saveSchedDays;
-window.syncColorPicker = syncColorPicker;
-window.applyWhitelabel = applyWhitelabel;
 window.showOutcomeModal = showOutcomeModal;
 window.closeOutcomeModal = closeOutcomeModal;
 window.submitOutcome  = submitOutcome;

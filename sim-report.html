@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Simulation Report — March 1, 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0a0f; color: #e2e0ff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; padding: 40px 20px 80px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .header { margin-bottom: 40px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .header .sub { font-size: 13px; color: #666; }
+  .header .badge { display: inline-block; background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4); color: #c4b5fd; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 11px; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #1a1a2e; }
+
+  /* Summary cards */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .sum-card { background: #1a1a2e; border: 1px solid #2a1a5a; border-radius: 12px; padding: 18px; }
+  .sum-card .num { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .sum-card .label { font-size: 12px; color: #888; }
+
+  /* Sim results table */
+  .sim-table { width: 100%; border-collapse: collapse; }
+  .sim-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #555; padding: 8px 12px; text-align: left; }
+  .sim-table td { padding: 10px 12px; font-size: 13px; border-top: 1px solid #1a1a2e; vertical-align: middle; }
+  .sim-table tr:hover td { background: rgba(124,58,237,0.05); }
+  .score-pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .score-100 { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .score-80  { background: rgba(124,58,237,0.15); color: #a78bfa; }
+  .score-60  { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .score-low { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+  /* Agent cards */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .agent-card { background: #1a1a2e; border: 1px solid #2a1a5a; border-radius: 14px; padding: 20px; }
+  .agent-card.improved { border-color: rgba(124,58,237,0.5); }
+  .agent-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .agent-sub { font-size: 11px; color: #666; margin-bottom: 14px; }
+  .agent-score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: #aaa; }
+  .agent-bar { height: 6px; background: #2a1a5a; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .agent-bar-fill { height: 100%; border-radius: 3px; }
+  .improved-tag { display: inline-block; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #22c55e; border-radius: 6px; font-size: 10px; font-weight: 700; padding: 2px 8px; margin-top: 10px; }
+  .no-change-tag { display: inline-block; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25); color: #7c3aed; border-radius: 6px; font-size: 10px; font-weight: 700; padding: 2px 8px; margin-top: 10px; }
+
+  /* Failures */
+  .fail-list { list-style: none; }
+  .fail-list li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #1a1a2e; font-size: 13px; color: #ccc; }
+  .fail-list li:last-child { border-bottom: none; }
+  .fail-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .fail-count { margin-left: auto; font-size: 11px; color: #666; white-space: nowrap; }
+
+  /* Improvements */
+  .improvement-card { background: #0f1a0f; border: 1px solid rgba(34,197,94,0.2); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+  .improvement-card h3 { font-size: 14px; font-weight: 700; color: #22c55e; margin-bottom: 4px; }
+  .improvement-card .meta { font-size: 11px; color: #666; margin-bottom: 12px; }
+  .improvement-card ul { list-style: none; }
+  .improvement-card ul li { font-size: 12px; color: #aaa; padding: 5px 0; border-bottom: 1px solid rgba(34,197,94,0.08); display: flex; gap: 8px; }
+  .improvement-card ul li:last-child { border-bottom: none; }
+
+  /* What was built */
+  .built-list { list-style: none; }
+  .built-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a2e; align-items: flex-start; }
+  .built-list li:last-child { border-bottom: none; }
+  .built-emoji { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .built-text strong { display: block; font-size: 13px; color: #e2e0ff; margin-bottom: 2px; }
+  .built-text span { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Transcript sample */
+  .tx-box { background: #080810; border: 1px solid #1a1a2e; border-radius: 10px; padding: 14px; font-size: 12px; line-height: 1.7; }
+  .tx-ai { color: #c4b5fd; margin-bottom: 4px; }
+  .tx-user { color: #6ee7b7; margin-bottom: 4px; }
+  .tx-label { font-weight: 700; margin-right: 6px; }
+
+  /* Next steps */
+  .next-card { background: #1a1a2e; border: 1px solid #2a1a5a; border-radius: 10px; padding: 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .next-num { width: 24px; height: 24px; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .next-text strong { display: block; font-size: 13px; margin-bottom: 2px; }
+  .next-text span { font-size: 12px; color: #666; }
+
+  .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid #1a1a2e; font-size: 11px; color: #444; text-align: center; }
+  .footer a { color: #7c3aed; text-decoration: none; }
+
+  @media (max-width: 600px) { .summary-grid { grid-template-columns: 1fr 1fr; } .agent-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">🤖 AI Agent Simulation Report</div>
+    <h1>Sofia Dialer — Agent Improvements</h1>
+    <div class="sub">March 1, 2026 &nbsp;·&nbsp; Autonomous simulation testing &amp; prompt optimization &nbsp;·&nbsp; ΜΙΑ Collection / AISquad</div>
+  </div>
+
+  <!-- SUMMARY STATS -->
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="num" style="color:#7c3aed;">14</div>
+      <div class="label">Simulations run</div>
+    </div>
+    <div class="sum-card">
+      <div class="num" style="color:#22c55e;">3</div>
+      <div class="label">Agents tested</div>
+    </div>
+    <div class="sum-card">
+      <div class="num" style="color:#f59e0b;">2</div>
+      <div class="label">Agents auto-improved</div>
+    </div>
+    <div class="sum-card">
+      <div class="num" style="color:#e2e0ff;">4</div>
+      <div class="label">Scenarios per agent</div>
+    </div>
+  </div>
+
+  <!-- WHAT WAS BUILT TODAY -->
+  <div class="section">
+    <div class="section-title">🔨 Features Built Today</div>
+    <ul class="built-list">
+      <li>
+        <div class="built-emoji">🧪</div>
+        <div class="built-text">
+          <strong>Agent Simulation Testing</strong>
+          <span>Fully automated — AI customer + AI agent simulate a complete sales call. 4 customer scenarios: Interested Buyer, Objector, Price Shopper, Hostile. No mic or human needed.</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">🔊</div>
+        <div class="built-text">
+          <strong>Real Agent Voice in Simulation</strong>
+          <span>Agent speaks using the actual ElevenLabs voice (voice ID from agent config). Customer uses browser TTS with a distinct voice for clear separation. AudioContext used to bypass autoplay blocks.</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">📋</div>
+        <div class="built-text">
+          <strong>Simulation History Tab</strong>
+          <span>All simulations saved to Supabase <code>dialer_simulations</code>. View past runs, expand transcripts, export all as CSV.</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">🤖</div>
+        <div class="built-text">
+          <strong>Autonomous Agent Improvement</strong>
+          <span>After every simulation: if score &lt; 80%, GPT-4o analyzes the transcript + failures and rewrites the system prompt. Saved to Supabase <code>dialer_agent_prompts</code>. Dialer loads improved prompts on next page open.</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">⏰</div>
+        <div class="built-text">
+          <strong>Nightly Cron at 03:00 Athens</strong>
+          <span>OpenClaw cron reads all simulations from the last 24h, groups by agent/language, finds failure patterns across multiple runs, generates improved prompts and saves them. Reports changes to Miltos via Telegram.</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">⏹</div>
+        <div class="built-text">
+          <strong>Stop Button + Speed Fix</strong>
+          <span>Stop simulation at any time — cancels audio, saves partial score. Fixed agent speaking too slow (ElevenLabs ignores <code>speed</code> in voice_settings — now uses <code>AudioBufferSourceNode.playbackRate</code>).</span>
+        </div>
+      </li>
+      <li>
+        <div class="built-emoji">🧠</div>
+        <div class="built-text">
+          <strong>Dynamic AI Customer</strong>
+          <span>Customer is a live GPT-4o-mini that reacts to what the agent actually says. Fixed role-flip bug that caused customer to echo agent responses. Fixed hardcoded brand name in customer scripts.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SIMULATION RESULTS -->
+  <div class="section">
+    <div class="section-title">📊 Simulation Results</div>
+    <table class="sim-table">
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>Language</th>
+          <th>Scenario</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Maria</td><td>EN</td><td>Interested Buyer</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Maria</td><td>EN</td><td>The Objector</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Maria</td><td>EN</td><td>Price Shopper</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Maria</td><td>EN</td><td>Wrong Number / Hostile</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Sofia 3</td><td>EN</td><td>Interested Buyer</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Sofia 3</td><td>EN</td><td>The Objector</td><td><span class="score-pill score-100">🏆 100%</span></td></tr>
+        <tr><td>Sofia 3</td><td>EN</td><td>Wrong Number / Hostile</td><td><span class="score-pill score-80">✅ 83%</span></td></tr>
+        <tr><td>Elena</td><td>EL</td><td>Wrong Number / Hostile</td><td><span class="score-pill score-60">⚠️ 67%</span></td></tr>
+        <tr><td>Sofia 3</td><td>EL</td><td>Interested Buyer</td><td><span class="score-pill score-60">⚠️ 67%</span></td></tr>
+        <tr><td>Sofia 3</td><td>EL</td><td>The Objector</td><td><span class="score-pill score-low">❌ 50%</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AGENT OVERVIEW -->
+  <div class="section">
+    <div class="section-title">🤖 Agent Performance Overview</div>
+    <div class="agent-grid">
+
+      <div class="agent-card">
+        <div class="agent-name">Maria</div>
+        <div class="agent-sub">sofia · EN tested</div>
+        <div class="agent-score-row"><span>English</span><span style="color:#22c55e;font-weight:700;">100%</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:100%;background:#22c55e;"></div></div>
+        <div class="agent-score-row"><span>Greek</span><span style="color:#555;">Not tested (rate limit)</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:0%;background:#555;"></div></div>
+        <div class="no-change-tag">✅ No changes needed</div>
+      </div>
+
+      <div class="agent-card improved">
+        <div class="agent-name">Elena</div>
+        <div class="agent-sub">sofia2 · EL tested</div>
+        <div class="agent-score-row"><span>English</span><span style="color:#555;">Not tested (rate limit)</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:0%;background:#555;"></div></div>
+        <div class="agent-score-row"><span>Greek</span><span style="color:#f59e0b;font-weight:700;">67%</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:67%;background:#f59e0b;"></div></div>
+        <div class="improved-tag">🤖 Auto-improved by AI</div>
+      </div>
+
+      <div class="agent-card improved">
+        <div class="agent-name">Sofia 3</div>
+        <div class="agent-sub">sofia3 · EN + EL tested</div>
+        <div class="agent-score-row"><span>English</span><span style="color:#a78bfa;font-weight:700;">94%</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:94%;background:#7c3aed;"></div></div>
+        <div class="agent-score-row"><span>Greek</span><span style="color:#ef4444;font-weight:700;">59%</span></div>
+        <div class="agent-bar"><div class="agent-bar-fill" style="width:59%;background:#ef4444;"></div></div>
+        <div class="improved-tag">🤖 EL prompt auto-improved by AI</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOP FAILURES -->
+  <div class="section">
+    <div class="section-title">❌ Top Failures Found</div>
+    <ul class="fail-list">
+      <li>
+        <span class="fail-icon">🔴</span>
+        <div>
+          <strong>Not guiding toward a next step</strong><br>
+          <span style="font-size:12px;color:#888;">Agent talked well but didn't push for booking, a follow-up call, or sending information. Conversation ended without clear CTA.</span>
+        </div>
+        <span class="fail-count">5 occurrences</span>
+      </li>
+      <li>
+        <span class="fail-icon">🔴</span>
+        <div>
+          <strong>Not introducing itself by name</strong><br>
+          <span style="font-size:12px;color:#888;">Greek-language agents skipped the self-introduction or introduced too late in the conversation. Affected Elena EL and Sofia 3 EL.</span>
+        </div>
+        <span class="fail-count">3 occurrences</span>
+      </li>
+      <li>
+        <span class="fail-icon">🟡</span>
+        <div>
+          <strong>Not explaining what the brand offers</strong><br>
+          <span style="font-size:12px;color:#888;">Sofia 3 EL in "The Objector" scenario failed to clearly explain what ΜΙΑ Collection sells before the customer rejected the call.</span>
+        </div>
+        <span class="fail-count">1 occurrence</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- AUTO IMPROVEMENTS -->
+  <div class="section">
+    <div class="section-title">✅ Autonomous Prompt Improvements Applied</div>
+
+    <div class="improvement-card">
+      <h3>Elena — Greek (sofia2 / el)</h3>
+      <div class="meta">Previous avg score: 67% &nbsp;·&nbsp; Improved by: AI cron &nbsp;·&nbsp; Saved to: Supabase dialer_agent_prompts</div>
+      <ul>
+        <li><span>🔧</span> Added explicit instruction to introduce name and company within the first sentence</li>
+        <li><span>🔧</span> Added closing CTA pattern — always end with a concrete next step offer</li>
+        <li><span>🔧</span> Tightened Greek language to be more natural and direct</li>
+      </ul>
+    </div>
+
+    <div class="improvement-card">
+      <h3>Sofia 3 — Greek (sofia3 / el)</h3>
+      <div class="meta">Previous avg score: 59% &nbsp;·&nbsp; Improved by: AI cron &nbsp;·&nbsp; Saved to: Supabase dialer_agent_prompts</div>
+      <ul>
+        <li><span>🔧</span> Added strict rule: introduce "Είμαι η Σοφία από ΜΙΑ Collection" in the opening line</li>
+        <li><span>🔧</span> Added brand description trigger: explain ΜΙΑ Collection immediately after introduction</li>
+        <li><span>🔧</span> Added closing CTA: always guide toward appointment or sending catalogue</li>
+        <li><span>🔧</span> Fixed Greek prompt to not mix English phrases mid-sentence</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HOW THE LOOP WORKS -->
+  <div class="section">
+    <div class="section-title">🔄 Autonomous Improvement Loop</div>
+    <div style="background:#1a1a2e;border:1px solid #2a1a5a;border-radius:14px;padding:20px;font-size:13px;line-height:1.9;color:#aaa;">
+      <strong style="color:#e2e0ff;display:block;margin-bottom:8px;">How it works without human intervention:</strong>
+      1. &nbsp;Simulation runs (browser or terminal) → transcript + score saved to Supabase <code>dialer_simulations</code><br>
+      2. &nbsp;If score &lt; 80%: GPT-4o rewrites the system prompt immediately and saves to <code>dialer_agent_prompts</code><br>
+      3. &nbsp;Dialer page loads → pulls latest prompts from Supabase → agents use improved prompts automatically<br>
+      4. &nbsp;Every night at <strong style="color:#7c3aed;">03:00 Athens</strong>: cron reads all sims from last 24h, groups by agent/lang, finds patterns, improves any agent averaging below 80%<br>
+      5. &nbsp;Telegram message sent with summary of what changed<br>
+      <strong style="color:#22c55e;display:block;margin-top:10px;">Result: The more simulations run, the better the agents get — automatically.</strong>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section">
+    <div class="section-title">🎯 Next Steps</div>
+    <div class="next-card">
+      <div class="next-num">1</div>
+      <div class="next-text"><strong>Run full Greek simulations</strong><span>Maria EL, Elena EN, and remaining Sofia 3 scenarios — blocked today by VAPI rate limits. Will run nightly cron to cover remaining gaps gradually.</span></div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">2</div>
+      <div class="next-text"><strong>Validate Elena + Sofia 3 EL improvements</strong><span>Run the same failing scenarios again to confirm the auto-improved prompts now score ≥80%.</span></div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">3</div>
+      <div class="next-text"><strong>Add more scenarios</strong><span>Price Shopper in Greek, objection handling for boutique owners (Sofia 3 specific), competitor comparison objections.</span></div>
+    </div>
+    <div class="next-card">
+      <div class="next-num">4</div>
+      <div class="next-text"><strong>Complete Concept B Split Panel</strong><span>Knowledge files JS (upload, render, delete), preset cards for each agent, buildAssistantConfig patch to append knowledge.</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Generated by OpenClaw AI Assistant &nbsp;·&nbsp; <a href="https://miltosgm.github.io/voice-ai-landing/sofia-dialer.html">Open Dialer</a> &nbsp;·&nbsp; <a href="https://github.com/miltosgm/voice-ai-landing">GitHub Repo</a></p>
+    <p style="margin-top:6px;">Simulations stored in Supabase · Prompts auto-improved by GPT-4o · Nightly cron at 03:00 Athens</p>
+  </div>
+
+</div>
+</body>
+</html>

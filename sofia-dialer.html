@@ -792,7 +792,7 @@
   <!-- RECENT CALLS -->
   <div class="card" id="recent-calls-card">
     <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
-      <span>📞 Recent Calls</span>
+      <span>📞 Recent Calls — <span id="calls-agent-label" style="color:var(--accent2)">All</span></span>
       <button onclick="loadRecentCalls()" id="calls-refresh-btn" style="font-size:11px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">↻ Refresh</button>
     </div>
     <div id="calls-list"><div class="log-empty">Press Refresh to load calls</div></div>
@@ -1675,6 +1675,8 @@ async function loadRecentCalls() {
   const el = document.getElementById('calls-list');
   const btn = document.getElementById('calls-refresh-btn');
   el.innerHTML = '<div class="log-empty">Loading...</div>';
+  const labelEl = document.getElementById('calls-agent-label');
+  if (labelEl) labelEl.textContent = (AGENTS[activeAgent] || {}).label || activeAgent;
   btn.textContent = '⏳';
   btn.disabled = true;
   try {
@@ -1686,8 +1688,24 @@ async function loadRecentCalls() {
     let data;
     try { data = JSON.parse(raw); } catch(pe) { el.innerHTML = '<div class="log-empty" style="color:var(--red)">Parse error: ' + pe.message + '<br>' + raw.substring(0,100) + '</div>'; return; }
     console.log('VAPI calls type:', typeof data, Array.isArray(data), data && data.length);
-    const calls = Array.isArray(data) ? data : (data.results || data.calls || []);
+    let calls = Array.isArray(data) ? data : (data.results || data.calls || []);
     if (!calls.length) { el.innerHTML = '<div class="log-empty">No calls found — check console for raw response</div>'; return; }
+
+    // Filter by active agent using transcript keywords
+    const agentKeywords = {
+      sofia:  ['Maria', 'Growth-onomics', 'Growthonomics', 'growtho'],
+      sofia2: ['Elena', 'AI Marketing', 'AI marketing'],
+      sofia3: ['MIA Collection', 'ΜΙΑ Collection', 'Mia Collection', 'Miya'],
+    };
+    const keywords = agentKeywords[activeAgent];
+    if (keywords) {
+      const filtered = calls.filter(c => {
+        const text = (c.transcript || '') + (c.summary || '');
+        return keywords.some(k => text.toLowerCase().includes(k.toLowerCase()));
+      });
+      calls = filtered.length ? filtered : calls; // fallback to all if none match
+      if (!filtered.length) el.innerHTML = '<div class="log-empty" style="color:var(--yellow)">No calls found for this agent — showing all calls</div>';
+    }
     el.innerHTML = calls.map((c, i) => {
       const status = c.status || 'unknown';
       const statusClass = status === 'ended' ? 'ended' : status.includes('fail') || status.includes('error') ? 'failed' : 'other';

@@ -985,7 +985,10 @@
         <span>2. Run the simulation — no mic needed</span>
         <button id="sim-mute-btn" onclick="toggleSimMute()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;">🔊 Sound ON</button>
       </div>
-      <button class="sim-start-btn" id="sim-start-btn" onclick="startSimCall()">▶ Run Auto-Simulation</button>
+      <div style="display:flex;gap:8px;">
+        <button class="sim-start-btn" id="sim-start-btn" onclick="startSimCall()" style="margin-bottom:0;flex:1;">▶ Run Auto-Simulation</button>
+        <button id="sim-stop-btn" onclick="stopSim()" style="display:none;padding:13px 18px;background:rgba(239,68,68,0.15);border:1.5px solid rgba(239,68,68,0.4);color:#fca5a5;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">⏹ Stop</button>
+      </div>
 
       <div class="sim-live-transcript" id="sim-transcript">
         <div style="color:#555;font-size:12px;text-align:center;margin-top:16px;">Live transcript will appear here...</div>
@@ -2158,6 +2161,19 @@ function selectScenario(idx) {
   if (tip) tip.innerHTML = '<strong>Scenario:</strong> ' + SIM_SCENARIOS[idx].persona.split('.')[0] + '.';
 }
 
+function stopSim() {
+  simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (simAudioCtx) { try { simAudioCtx.close(); } catch(e){} simAudioCtx = null; }
+  removeTypingIndicator();
+  appendSimLine(null, '— Stopped by user —', true);
+  document.getElementById('sim-stop-btn').style.display = 'none';
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = false;
+  btn.textContent = '▶ Run Auto-Simulation';
+  setTimeout(function() { showSimScore(); }, 300);
+}
+
 function resetSim() {
   simRunning = false;
   if (window.speechSynthesis) window.speechSynthesis.cancel();
@@ -2295,6 +2311,7 @@ async function startSimCall() {
   simChatHistory = [];
   simRunning = true;
 
+  document.getElementById('sim-stop-btn').style.display = 'flex';
   appendSimLine(null, '— Simulation started: ' + scenario.name + ' —', true);
   addLog('Auto-simulation started (' + scenario.name + ')', '#7c3aed');
 
@@ -2346,6 +2363,7 @@ async function startSimCall() {
     if (simRunning) {
       appendSimLine(null, '— Simulation complete —', true);
       btn.textContent = '✅ Done';
+      document.getElementById('sim-stop-btn').style.display = 'none';
       addLog('Auto-simulation complete', '#888');
       await sleep(400);
       showSimScore();
@@ -2357,6 +2375,7 @@ async function startSimCall() {
     showToast('Simulation error: ' + (e.message || 'check console'), 'error');
     btn.disabled = false;
     btn.textContent = '▶ Run Auto-Simulation';
+    document.getElementById('sim-stop-btn').style.display = 'none';
     simRunning = false;
   }
 }
@@ -2417,6 +2436,7 @@ window.openSimModal    = openSimModal;
 window.closeSimModal   = closeSimModal;
 window.selectScenario  = selectScenario;
 window.startSimCall    = startSimCall;
+window.stopSim         = stopSim;
 window.resetSim        = resetSim;
 window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;

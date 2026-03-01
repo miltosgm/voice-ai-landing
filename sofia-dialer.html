@@ -35,6 +35,24 @@
   }
   body::before { display: none; }
 
+  /* Outcome modal buttons */
+  .outcome-btn { width:100%;padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:opacity 0.15s; }
+  .outcome-btn:hover { opacity:0.8; }
+
+  /* Settings drawer */
+  .sdrawer-section { border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:18px; }
+  .sdrawer-label { font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white); }
+  .sdrawer-input { width:100%;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none;color:var(--white);background:var(--bg);transition:border-color 0.2s; }
+  .sdrawer-input:focus { border-color:var(--accent); }
+  .day-check { display:flex;align-items:center;gap:4px;font-size:12px;color:var(--gray);cursor:pointer;padding:4px 8px;border:1px solid var(--border);border-radius:8px;background:var(--bg); }
+  .day-check input { cursor:pointer; }
+
+  /* Campaign badge */
+  .campaign-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(108,92,231,0.12);color:var(--accent2);border:1px solid rgba(108,92,231,0.2);margin-left:6px;vertical-align:middle; }
+
+  /* Sidebar logo */
+  #sb-logo-img { max-height:32px;object-fit:contain;margin-bottom:8px;display:none; }
+
   .page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
 
   /* HEADER */
@@ -584,7 +602,8 @@
 <!-- ════ SIDEBAR ════ -->
 <div class="sb" id="sb">
 
-  <div class="sb-label">Agents</div>
+  <img id="sb-logo-img" src="" alt="logo">
+  <div class="sb-label" id="sb-company-label">Agents</div>
   <div id="sb-agents-wrap">
     <div class="sb-agent active" id="sb-sofia" onclick="setAgent('sofia')">
       <span class="sa-emoji">👩‍💼</span>
@@ -627,6 +646,11 @@
   <div class="tog-row">
     <div class="tog-label">Auto-book call<small>Push for 20-min video</small></div>
     <div class="tog" id="tog-autobook" onclick="toggleB('autobook',this)"></div>
+  </div>
+
+  <div class="sb-hr"></div>
+  <div style="padding:8px 0 4px">
+    <button id="btn-settings" onclick="openSettings()" style="width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--gray);font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">⚙️ &nbsp;Settings</button>
   </div>
 
 </div><!-- /sb -->
@@ -823,9 +847,18 @@
       </div>
     </div>
     <input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(event)">
+    <!-- Campaign filter -->
+    <div style="margin-bottom:10px">
+      <select id="cb-campaign-filter" onchange="renderContacts()" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-family:inherit;outline:none;color:var(--gray);background:var(--surface);cursor:pointer">
+        <option value="">All campaigns</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <input type="text" id="cb-name" placeholder="Name" style="flex:1;min-width:90px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <input type="tel" id="cb-number" placeholder="+30..." style="flex:1;min-width:90px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+    </div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
-      <input type="text" id="cb-name" placeholder="Name" style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
-      <input type="tel" id="cb-number" placeholder="+30..." style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <input type="text" id="cb-campaign" placeholder="Campaign (optional)" style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
       <button onclick="addContact()" style="padding:8px 14px;border-radius:10px;background:var(--accent);border:none;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0">+ Add</button>
     </div>
     <div id="contact-book-empty" class="queue-empty" style="padding:16px 0">No contacts yet — add one above or import a CSV</div>
@@ -866,6 +899,104 @@
 </div><!-- /split-layout -->
 
 <div class="toast" id="toast"></div>
+
+<!-- ════ CALL OUTCOME MODAL ════ -->
+<div id="outcome-modal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;display:none">
+  <div style="background:var(--surface);border-radius:18px;padding:24px 20px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.3);border:1px solid var(--border)">
+    <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:var(--white)">How did the call go?</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:18px" id="outcome-contact-label"></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="submitOutcome('booked')" class="outcome-btn" style="background:rgba(5,150,105,0.1);color:#059669;border:1px solid rgba(5,150,105,0.25)">🗓️ &nbsp;Booked meeting</button>
+      <button onclick="submitOutcome('email')" class="outcome-btn" style="background:rgba(108,92,231,0.1);color:var(--accent2);border:1px solid rgba(108,92,231,0.25)">📧 &nbsp;Requested email</button>
+      <button onclick="submitOutcome('followup')" class="outcome-btn" style="background:rgba(217,119,6,0.1);color:#d97706;border:1px solid rgba(217,119,6,0.25)">❓ &nbsp;Needs follow-up</button>
+      <button onclick="submitOutcome('notinterested')" class="outcome-btn" style="background:rgba(225,112,85,0.1);color:var(--red);border:1px solid rgba(225,112,85,0.25)">❌ &nbsp;Not interested</button>
+    </div>
+    <button onclick="closeOutcomeModal()" style="margin-top:14px;width:100%;background:none;border:none;color:var(--gray);font-size:12px;cursor:pointer;font-family:inherit">Skip</button>
+  </div>
+</div>
+
+<!-- ════ SETTINGS DRAWER ════ -->
+<div id="settings-overlay" onclick="closeSettings()" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.35)"></div>
+<div id="settings-drawer" style="position:fixed;top:0;right:-340px;width:320px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:401;transition:right 0.3s ease;overflow-y:auto;padding:24px 20px;display:flex;flex-direction:column;gap:0">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:16px;font-weight:700">⚙️ Settings</div>
+    <button onclick="closeSettings()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--gray)">✕</button>
+  </div>
+
+  <!-- HubSpot -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">🔗 HubSpot Webhook</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-hubspot" onclick="toggleSetting('hubspot',this)"></div>
+    </div>
+    <input type="url" id="s-hubspot-url" placeholder="https://api.hubspot.com/webhooks/..." class="sdrawer-input" oninput="saveSetting('hubspotUrl',this.value)">
+  </div>
+
+  <!-- Google Sheets -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">📊 Google Sheets Webhook</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-gsheets" onclick="toggleSetting('gsheets',this)"></div>
+    </div>
+    <input type="url" id="s-gsheets-url" placeholder="https://script.google.com/macros/..." class="sdrawer-input" oninput="saveSetting('gsheetsUrl',this.value)">
+  </div>
+
+  <!-- Email Follow-up -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">📧 Email Follow-up</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-emailfu" onclick="toggleSetting('emailfu',this)"></div>
+    </div>
+    <textarea id="s-email-template" class="sdrawer-input" rows="4" placeholder="Email template..." oninput="saveSetting('emailTemplate',this.value)" style="resize:vertical"></textarea>
+  </div>
+
+  <!-- Scheduled Calling -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">⏰ Scheduled Calling</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-schedule" onclick="toggleSetting('schedule',this)"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:12px;color:var(--gray)">Start time:</span>
+      <input type="time" id="s-sched-time" class="sdrawer-input" style="width:120px" oninput="saveSetting('schedTime',this.value)">
+    </div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:6px">Days:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px" id="sched-days">
+      <label class="day-check"><input type="checkbox" value="Mon" onchange="saveSchedDays()"> Mon</label>
+      <label class="day-check"><input type="checkbox" value="Tue" onchange="saveSchedDays()"> Tue</label>
+      <label class="day-check"><input type="checkbox" value="Wed" onchange="saveSchedDays()"> Wed</label>
+      <label class="day-check"><input type="checkbox" value="Thu" onchange="saveSchedDays()"> Thu</label>
+      <label class="day-check"><input type="checkbox" value="Fri" onchange="saveSchedDays()"> Fri</label>
+      <label class="day-check"><input type="checkbox" value="Sat" onchange="saveSchedDays()"> Sat</label>
+      <label class="day-check"><input type="checkbox" value="Sun" onchange="saveSchedDays()"> Sun</label>
+    </div>
+  </div>
+
+  <!-- White-label -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">🎨 White-label</div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Company name</div>
+      <input type="text" id="s-company-name" placeholder="ΜΙΑ Collection" class="sdrawer-input" oninput="applyWhitelabel()">
+    </div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Logo URL</div>
+      <input type="url" id="s-logo-url" placeholder="https://..." class="sdrawer-input" oninput="applyWhitelabel()">
+    </div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Primary color</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="color" id="s-color" value="#6c47ff" oninput="applyWhitelabel()" style="width:44px;height:36px;border:1px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+        <input type="text" id="s-color-hex" placeholder="#6c47ff" class="sdrawer-input" style="flex:1" oninput="syncColorPicker()">
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <!-- NEW AGENT MODAL -->
 <div class="modal-overlay" id="agent-modal" onclick="closeAgentModal(event)">
@@ -1206,6 +1337,7 @@ function init() {
   initCustomAgents();
   renderContacts().catch(console.error);
   renderCRM().catch(console.error);
+  initSettingsOnLoad();
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1550,6 +1682,7 @@ async function startBrowserCall() {
       setBrowserStatus(activeLang === 'el' ? 'Η κλήση τελείωσε' : 'Call ended');
       setTimeout(() => setBrowserStatus(activeLang === 'el' ? 'Διαθέσιμη' : 'Available now'), 3000);
       addLog('Browser call ended', 'var(--gray)');
+      showOutcomeModal('Browser call', null);
     });
     vapiWeb.on('error', e => {
       showToast(e.message || 'Something went wrong', 'error');
@@ -1674,10 +1807,11 @@ async function callNow() {
   const btn = document.getElementById('btn-call-now');
   btn.disabled = true; btn.textContent = '⏳ Dialing...';
   try {
-    await makePhoneCall(number);
+    const callData = await makePhoneCall(number);
     showToast(`📞 Sofia is calling ${name}`, 'success');
     addLog(`Call initiated → ${name} (${number})`, 'var(--accent2)');
     clearInput();
+    setTimeout(() => showOutcomeModal(name, callData ? callData.id : null), 8000);
   } catch(e) {
     showToast(e.message, 'error');
     addLog(`Failed → ${name}: ${e.message}`, 'var(--red)');
@@ -1950,31 +2084,52 @@ async function renderContacts() {
   const list  = document.getElementById('contact-book-list');
   const empty = document.getElementById('contact-book-empty');
   if (!list) return;
-  if (!contacts.length) { empty.style.display = ''; list.innerHTML = ''; return; }
+
+  // Update campaign filter dropdown
+  const filterEl = document.getElementById('cb-campaign-filter');
+  if (filterEl) {
+    const currentFilter = filterEl.value;
+    const campaigns = [...new Set(contacts.map(c => c.campaign).filter(Boolean))];
+    filterEl.innerHTML = '<option value="">All campaigns</option>' +
+      campaigns.map(c => '<option value="' + c + '"' + (c === currentFilter ? ' selected' : '') + '>' + c + '</option>').join('');
+    filterEl.value = currentFilter;
+  }
+
+  const filterVal = filterEl ? filterEl.value : '';
+  const filtered = filterVal ? contacts.filter(c => c.campaign === filterVal) : contacts;
+
+  if (!filtered.length) { empty.style.display = ''; list.innerHTML = ''; return; }
   empty.style.display = 'none';
-  list.innerHTML = contacts.map(c => `
-    <div class="contact-item">
-      <div class="contact-avatar">${c.name.charAt(0).toUpperCase()}</div>
-      <div class="contact-info">
-        <div class="contact-name">${c.name}</div>
-        <div class="contact-number">${c.number}</div>
-      </div>
-      <div class="contact-actions">
-        <button class="contact-btn call" onclick="callContact('${c.number}','${c.name.replace(/'/g,"\'")}')" >📞 Call</button>
-        <button class="contact-btn queue" onclick="queueContact('${c.number}','${c.name.replace(/'/g,"\'")}')" >+ Queue</button>
-        <button class="contact-btn del" onclick="deleteContact('${c.id}')">✕</button>
-      </div>
-    </div>`).join('');
+  list.innerHTML = filtered.map(c => {
+    const safeName = (c.name || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+    const safeNum  = (c.number || '').replace(/'/g, "&#39;");
+    return '<div class="contact-item">' +
+      '<div class="contact-avatar">' + (c.name || '?').charAt(0).toUpperCase() + '</div>' +
+      '<div class="contact-info">' +
+        '<div class="contact-name">' + safeName + (c.campaign ? '<span class="campaign-badge">' + c.campaign + '</span>' : '') + '</div>' +
+        '<div class="contact-number">' + (c.number || '') + '</div>' +
+      '</div>' +
+      '<div class="contact-actions">' +
+        '<button class="contact-btn call" onclick="callContact(\'' + safeNum + '\',\'' + safeName + '\')">📞 Call</button>' +
+        '<button class="contact-btn queue" onclick="queueContact(\'' + safeNum + '\',\'' + safeName + '\')">+ Queue</button>' +
+        '<button class="contact-btn del" onclick="deleteContact(\'' + c.id + '\')">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
 async function addContact() {
-  const name   = document.getElementById('cb-name').value.trim();
-  const number = document.getElementById('cb-number').value.trim().replace(/\s+/g,'');
+  const name     = document.getElementById('cb-name').value.trim();
+  const number   = document.getElementById('cb-number').value.trim().replace(/\s+/g,'');
+  const campaign = document.getElementById('cb-campaign') ? document.getElementById('cb-campaign').value.trim() : '';
   if (!number) { showToast('Enter a phone number', 'error'); return; }
-  await sbInsert('dialer_contacts', { name: name || number, number });
+  const payload = { name: name || number, number };
+  if (campaign) payload.campaign = campaign;
+  await sbInsert('dialer_contacts', payload);
   renderContacts();
   document.getElementById('cb-name').value = '';
   document.getElementById('cb-number').value = '';
+  if (document.getElementById('cb-campaign')) document.getElementById('cb-campaign').value = '';
   document.getElementById('cb-name').focus();
   showToast('Contact saved ✓', 'success');
 }
@@ -2261,6 +2416,193 @@ function syncSidebar() {
   activePreset = 0;
   renderPresets();
 }
+
+// ════ CALL OUTCOME MODAL ════
+var _outcomeCallId = null;
+var _outcomeContactName = '';
+
+function showOutcomeModal(contactName, callId) {
+  _outcomeContactName = contactName || 'Unknown';
+  _outcomeCallId = callId || null;
+  var el = document.getElementById('outcome-modal');
+  var lbl = document.getElementById('outcome-contact-label');
+  if (lbl) lbl.textContent = 'Contact: ' + _outcomeContactName;
+  if (el) { el.style.display = 'flex'; }
+}
+
+function closeOutcomeModal() {
+  var el = document.getElementById('outcome-modal');
+  if (el) el.style.display = 'none';
+}
+
+async function submitOutcome(outcome) {
+  var outcomeMap = { booked:'🗓️ Booked meeting', email:'📧 Requested email', followup:'❓ Needs follow-up', notinterested:'❌ Not interested' };
+  var scoreMap   = { booked: { label:'🔥 Hot', cls:'hot' }, email: { label:'🔥 Hot', cls:'hot' }, followup: { label:'⭐ Warm', cls:'warm' }, notinterested: { label:'❄️ Cold', cls:'cold' } };
+  var label = outcomeMap[outcome] || outcome;
+  var score = scoreMap[outcome] || { label:'⭐ Warm', cls:'warm' };
+  var now = new Date().toLocaleString();
+  try {
+    if (_outcomeCallId) {
+      await sbUpdate('dialer_crm', _outcomeCallId, { notes: label, score_label: score.label, score_cls: score.cls });
+    } else {
+      await sbInsert('dialer_crm', {
+        name: _outcomeContactName,
+        number: _outcomeContactName,
+        agent: (window.AGENTS && window.AGENTS[window.activeAgent] ? window.AGENTS[window.activeAgent].label : 'Agent'),
+        score_label: score.label,
+        score_cls: score.cls,
+        notes: label,
+        called_at: now
+      });
+    }
+    renderCRM();
+    // Fire webhooks for positive outcomes
+    if (outcome !== 'notinterested') {
+      fireWebhooks({ name: _outcomeContactName, outcome: label, score: score.label, time: now });
+    }
+  } catch(e) { console.error('Outcome save error', e); }
+  closeOutcomeModal();
+  showToast('Outcome saved: ' + label, 'success');
+}
+
+async function fireWebhooks(lead) {
+  var s = loadSofiaSettings();
+  if (s.hubspot && s.hubspotUrl) {
+    try { await fetch(s.hubspotUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead) }); } catch(e) { console.warn('HubSpot webhook error', e); }
+  }
+  if (s.gsheets && s.gsheetsUrl) {
+    try { await fetch(s.gsheetsUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead) }); } catch(e) { console.warn('GSheets webhook error', e); }
+  }
+}
+
+// ════ SETTINGS DRAWER ════
+function loadSofiaSettings() {
+  try { return JSON.parse(localStorage.getItem('sofiaSettings') || '{}'); } catch(e) { return {}; }
+}
+function saveSofiaSettings(s) {
+  localStorage.setItem('sofiaSettings', JSON.stringify(s));
+}
+function saveSetting(key, val) {
+  var s = loadSofiaSettings();
+  s[key] = val;
+  saveSofiaSettings(s);
+}
+function toggleSetting(key, el) {
+  var s = loadSofiaSettings();
+  s[key] = !s[key];
+  saveSofiaSettings(s);
+  el.className = 'tog' + (s[key] ? ' on' : '');
+}
+function saveSchedDays() {
+  var checked = [];
+  document.querySelectorAll('#sched-days input:checked').forEach(function(c) { checked.push(c.value); });
+  saveSetting('schedDays', checked);
+}
+
+function openSettings() {
+  var drawer = document.getElementById('settings-drawer');
+  var overlay = document.getElementById('settings-overlay');
+  if (drawer) drawer.style.right = '0';
+  if (overlay) overlay.style.display = 'block';
+  loadSettingsUI();
+}
+function closeSettings() {
+  var drawer = document.getElementById('settings-drawer');
+  var overlay = document.getElementById('settings-overlay');
+  if (drawer) drawer.style.right = '-340px';
+  if (overlay) overlay.style.display = 'none';
+}
+function loadSettingsUI() {
+  var s = loadSofiaSettings();
+  var setTog = function(id, val) { var el = document.getElementById(id); if (el) el.className = 'tog' + (val ? ' on' : ''); };
+  var setVal = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
+  setTog('tog-hubspot', s.hubspot); setVal('s-hubspot-url', s.hubspotUrl);
+  setTog('tog-gsheets', s.gsheets); setVal('s-gsheets-url', s.gsheetsUrl);
+  setTog('tog-emailfu', s.emailfu); setVal('s-email-template', s.emailTemplate);
+  setTog('tog-schedule', s.schedule); setVal('s-sched-time', s.schedTime);
+  setVal('s-company-name', s.companyName);
+  setVal('s-logo-url', s.logoUrl);
+  if (s.primaryColor) { setVal('s-color', s.primaryColor); setVal('s-color-hex', s.primaryColor); }
+  if (s.schedDays) {
+    document.querySelectorAll('#sched-days input').forEach(function(cb) {
+      cb.checked = s.schedDays.indexOf(cb.value) !== -1;
+    });
+  }
+}
+function syncColorPicker() {
+  var hex = document.getElementById('s-color-hex').value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+    document.getElementById('s-color').value = hex;
+    saveSetting('primaryColor', hex);
+    applyWhitelabel();
+  }
+}
+
+function applyWhitelabel() {
+  var name  = (document.getElementById('s-company-name') || {}).value || '';
+  var logo  = (document.getElementById('s-logo-url') || {}).value || '';
+  var color = (document.getElementById('s-color') || {}).value || '';
+  var hexEl = document.getElementById('s-color-hex');
+  if (hexEl && color) hexEl.value = color;
+  saveSetting('companyName', name);
+  saveSetting('logoUrl', logo);
+  saveSetting('primaryColor', color);
+
+  // Apply company name
+  var compLabel = name || 'ΜΙΑ Collection';
+  document.title = compLabel + ' Dialer';
+  var sbFooter = document.getElementById('sb-company-label');
+  if (sbFooter) sbFooter.textContent = sbFooter.getAttribute('data-label') || 'Agents';
+
+  // Apply logo
+  var logoImg = document.getElementById('sb-logo-img');
+  if (logoImg) {
+    if (logo) { logoImg.src = logo; logoImg.style.display = 'block'; }
+    else { logoImg.style.display = 'none'; }
+  }
+
+  // Apply color
+  if (color) {
+    document.documentElement.style.setProperty('--accent', color);
+    // Lighter version for accent2
+    document.documentElement.style.setProperty('--accent2', color + 'cc');
+  }
+}
+
+function initSettingsOnLoad() {
+  var s = loadSofiaSettings();
+  if (s.companyName || s.logoUrl || s.primaryColor) applyWhitelabel();
+  if (s.schedule && s.schedTime && s.schedDays && s.schedDays.length) initScheduledCalling(s);
+}
+
+function initScheduledCalling(s) {
+  var checkSchedule = function() {
+    var now = new Date();
+    var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var today = days[now.getDay()];
+    if (!s.schedDays || s.schedDays.indexOf(today) === -1) return;
+    var parts = (s.schedTime || '09:00').split(':');
+    var h = parseInt(parts[0], 10);
+    var m = parseInt(parts[1], 10);
+    if (now.getHours() === h && now.getMinutes() === m) {
+      showToast('Scheduled calling starting now!', 'success');
+      setMode('phone');
+      setTimeout(function() { callAll(); }, 1000);
+    }
+  };
+  setInterval(checkSchedule, 60000);
+}
+
+window.openSettings   = openSettings;
+window.closeSettings  = closeSettings;
+window.toggleSetting  = toggleSetting;
+window.saveSetting    = saveSetting;
+window.saveSchedDays  = saveSchedDays;
+window.syncColorPicker = syncColorPicker;
+window.applyWhitelabel = applyWhitelabel;
+window.showOutcomeModal = showOutcomeModal;
+window.closeOutcomeModal = closeOutcomeModal;
+window.submitOutcome  = submitOutcome;
 
 // ════ PATCH buildAssistantConfig with behaviour + knowledge ════
 (function() {

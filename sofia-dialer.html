@@ -2553,7 +2553,7 @@ window.submitOutcome  = submitOutcome;
     const b = loadB();
     if (b.backchannel) cfg.backchannelingEnabled = true;
     else delete cfg.backchannelingEnabled;
-    if (b.delay) cfg.responseDelaySeconds = 1.5;
+    if (b.delay) cfg.responseDelaySeconds = activeAgent === 'sofia3' ? 1.5 : 0.5;
     else delete cfg.responseDelaySeconds;
     if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
       let sys = cfg.model.messages[0].content;

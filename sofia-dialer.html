@@ -922,6 +922,27 @@
 <script>
 const PUBLIC_KEY    = '2c3d59d1-22d9-4710-8cf0-cb9917dd0640';
 const PRIVATE_KEY   = '097d545f-09c1-4b39-9b25-b8ae9bdde624';
+
+// ── Supabase ──────────────────────────────────────────────────
+const SB_URL  = 'https://zugfvpgvofjuipjrzesz.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1Z2Z2cGd2b2ZqdWlwanJ6ZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjU0NTcsImV4cCI6MjA4Nzk0MTQ1N30.HVWNW5AiJ5ynVC0DZ9dsTS2sZj1nyr1pzXV8-2OJZEI';
+const sbHeaders = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
+
+async function sbGet(table, params='') {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}&order=created_at.desc`, { headers: sbHeaders });
+  return r.json();
+}
+async function sbInsert(table, row) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, { method:'POST', headers: sbHeaders, body: JSON.stringify(row) });
+  return r.json();
+}
+async function sbUpdate(table, id, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { method:'PATCH', headers: sbHeaders, body: JSON.stringify(data) });
+  return r.json();
+}
+async function sbDelete(table, id) {
+  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { method:'DELETE', headers: sbHeaders });
+}
 const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 
 // ── AGENTS ────────────────────────────────────────────
@@ -1183,8 +1204,8 @@ let timerSeconds = 0;
 function init() {
   restoreLog();
   initCustomAgents();
-  renderContacts();
-  renderCRM();
+  renderContacts().catch(console.error);
+  renderCRM().catch(console.error);
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1799,12 +1820,12 @@ async function loadRecentCalls() {
       const crmLead = { callId: c.id, name: number, number: number, agent: (AGENTS[activeAgent]||{}).label||activeAgent, date: started, summary, recording, scoreLabel: score.label, scoreCls: score.cls, notes: '' };
       // Auto-add Hot & Warm calls to CRM silently
       if (score.rank >= 1) {
-        const existing = loadCRM();
-        if (!existing.find(l => l.callId === c.id)) {
-          existing.unshift(crmLead);
-          saveCRM(existing);
-          renderCRM();
-        }
+        sbInsert('dialer_crm', {
+          call_id: crmLead.callId, name: crmLead.name, number: crmLead.number,
+          agent: crmLead.agent, score_label: crmLead.scoreLabel, score_cls: crmLead.scoreCls,
+          summary: crmLead.summary, recording_url: crmLead.recording,
+          notes: '', called_at: crmLead.date
+        }).then(() => renderCRM()).catch(()=>{});
       }
       return `<div class="call-item">
         <div class="call-row">
@@ -1863,35 +1884,33 @@ function scoreCall(transcript, summary) {
   return { label: '❄️ Cold', cls: 'cold', rank: 0 };
 }
 
-function loadCRM() { return JSON.parse(localStorage.getItem('sofiaCRM') || '[]'); }
-function saveCRM(leads) { localStorage.setItem('sofiaCRM', JSON.stringify(leads)); }
+// ── CRM (Supabase) ──────────────────────────────────────────
+async function addToCRM(lead) {
+  try {
+    await sbInsert('dialer_crm', {
+      call_id: lead.callId, name: lead.name, number: lead.number,
+      agent: lead.agent, score_label: lead.scoreLabel, score_cls: lead.scoreCls,
+      summary: lead.summary, recording_url: lead.recording,
+      notes: '', called_at: lead.date
+    });
+    await renderCRM();
+  } catch(e) { console.error('CRM insert error', e); }
+}
 
-function addToCRM(lead) {
-  const leads = loadCRM();
-  if (leads.find(l => l.callId === lead.callId)) { showToast('Already in CRM', 'info'); return; }
-  leads.unshift(lead);
-  saveCRM(leads);
+async function removeCRMLead(id) {
+  await sbDelete('dialer_crm', id);
   renderCRM();
-  showToast('✅ Added to CRM', 'success');
 }
 
-function removeCRMLead(callId) {
-  const leads = loadCRM().filter(l => l.callId !== callId);
-  saveCRM(leads);
-  renderCRM();
+async function saveCRMNote(id, note) {
+  await sbUpdate('dialer_crm', id, { notes: note });
 }
 
-function saveCRMNote(callId, note) {
-  const leads = loadCRM();
-  const lead = leads.find(l => l.callId === callId);
-  if (lead) { lead.notes = note; saveCRM(leads); }
-}
-
-function renderCRM() {
-  const leads = loadCRM();
+async function renderCRM() {
   const list  = document.getElementById('crm-list');
   const empty = document.getElementById('crm-empty');
   if (!list) return;
+  const leads = await sbGet('dialer_crm');
   if (!leads.length) { empty.style.display = ''; list.innerHTML = ''; return; }
   empty.style.display = 'none';
   list.innerHTML = leads.map(l => `
@@ -1900,23 +1919,23 @@ function renderCRM() {
         <div class="crm-avatar">${(l.name||'?').charAt(0).toUpperCase()}</div>
         <div class="crm-info">
           <div class="crm-name">${l.name || l.number || 'Unknown'}</div>
-          <div class="crm-meta">${l.number || ''} · ${l.agent || ''} · ${l.date || ''} · <span class="score-badge score-${l.scoreCls}">${l.scoreLabel}</span></div>
+          <div class="crm-meta">${l.number || ''} · ${l.agent || ''} · ${l.called_at || ''} · <span class="score-badge score-${l.score_cls}">${l.score_label}</span></div>
         </div>
       </div>
       ${l.summary ? `<div class="crm-summary">📋 ${l.summary}</div>` : ''}
-      ${l.recording ? `<audio class="crm-audio" controls src="${l.recording}"></audio>` : ''}
-      <textarea class="crm-notes" rows="2" placeholder="Add follow-up notes..." onchange="saveCRMNote('${l.callId}',this.value)">${l.notes || ''}</textarea>
+      ${l.recording_url ? `<audio class="crm-audio" controls src="${l.recording_url}"></audio>` : ''}
+      <textarea class="crm-notes" rows="2" placeholder="Add follow-up notes..." onchange="saveCRMNote('${l.id}',this.value)">${l.notes || ''}</textarea>
       <div class="crm-actions">
-        <button class="crm-btn" onclick="removeCRMLead('${l.callId}')">✕ Remove</button>
+        <button class="crm-btn" onclick="removeCRMLead('${l.id}')">✕ Remove</button>
       </div>
     </div>`).join('');
 }
 
-function exportCRM() {
-  const leads = loadCRM();
+async function exportCRM() {
+  const leads = await sbGet('dialer_crm');
   if (!leads.length) { showToast('No leads to export', 'error'); return; }
   const rows = [['Name','Number','Agent','Score','Date','Summary','Notes','Recording']];
-  leads.forEach(l => rows.push([l.name||'', l.number||'', l.agent||'', l.scoreLabel||'', l.date||'', (l.summary||'').replace(/,/g,' '), (l.notes||'').replace(/,/g,' '), l.recording||'']));
+  leads.forEach(l => rows.push([l.name||'', l.number||'', l.agent||'', l.score_label||'', l.called_at||'', (l.summary||'').replace(/,/g,' '), (l.notes||'').replace(/,/g,' '), l.recording_url||'']));
   const csv = rows.map(r => r.map(v => '"'+v+'"').join(',')).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -1925,18 +1944,15 @@ function exportCRM() {
   showToast('Exported ✓', 'success');
 }
 
-// ════ CONTACT BOOK ════
-function loadContacts() { return JSON.parse(localStorage.getItem('sofiaContacts') || '[]'); }
-function saveContacts(c) { localStorage.setItem('sofiaContacts', JSON.stringify(c)); }
-
-function renderContacts() {
-  const contacts = loadContacts();
+// ════ CONTACT BOOK (Supabase) ════
+async function renderContacts() {
+  const contacts = await sbGet('dialer_contacts');
   const list  = document.getElementById('contact-book-list');
   const empty = document.getElementById('contact-book-empty');
   if (!list) return;
   if (!contacts.length) { empty.style.display = ''; list.innerHTML = ''; return; }
   empty.style.display = 'none';
-  list.innerHTML = contacts.map((c, i) => `
+  list.innerHTML = contacts.map(c => `
     <div class="contact-item">
       <div class="contact-avatar">${c.name.charAt(0).toUpperCase()}</div>
       <div class="contact-info">
@@ -1944,20 +1960,18 @@ function renderContacts() {
         <div class="contact-number">${c.number}</div>
       </div>
       <div class="contact-actions">
-        <button class="contact-btn call" onclick="callContact('${c.number}','${c.name.replace(/'/g,"\\'")}')">📞 Call</button>
-        <button class="contact-btn queue" onclick="queueContact('${c.number}','${c.name.replace(/'/g,"\\'")}')">+ Queue</button>
-        <button class="contact-btn del" onclick="deleteContact(${i})">✕</button>
+        <button class="contact-btn call" onclick="callContact('${c.number}','${c.name.replace(/'/g,"\'")}')" >📞 Call</button>
+        <button class="contact-btn queue" onclick="queueContact('${c.number}','${c.name.replace(/'/g,"\'")}')" >+ Queue</button>
+        <button class="contact-btn del" onclick="deleteContact('${c.id}')">✕</button>
       </div>
     </div>`).join('');
 }
 
-function addContact() {
+async function addContact() {
   const name   = document.getElementById('cb-name').value.trim();
   const number = document.getElementById('cb-number').value.trim().replace(/\s+/g,'');
   if (!number) { showToast('Enter a phone number', 'error'); return; }
-  const contacts = loadContacts();
-  contacts.push({ name: name || number, number });
-  saveContacts(contacts);
+  await sbInsert('dialer_contacts', { name: name || number, number });
   renderContacts();
   document.getElementById('cb-name').value = '';
   document.getElementById('cb-number').value = '';
@@ -1965,14 +1979,11 @@ function addContact() {
   showToast('Contact saved ✓', 'success');
 }
 
-function deleteContact(i) {
-  const contacts = loadContacts();
-  contacts.splice(i, 1);
-  saveContacts(contacts);
+async function deleteContact(id) {
+  await sbDelete('dialer_contacts', id);
   renderContacts();
   showToast('Contact removed', 'info');
 }
-
 function callContact(number, name) {
   document.getElementById('phone-number').value = number;
   document.getElementById('contact-name').value = name;
@@ -1981,15 +1992,13 @@ function callContact(number, name) {
 }
 
 function queueContact(number, name) {
-  const contacts = loadContacts();
-  const c = contacts.find(c => c.number === number);
   queue.push({ id: Date.now().toString(), number, name: name || number, status: 'pending' });
   renderQueue();
   showToast(name + ' added to queue', 'success');
 }
 
-function queueAllContacts() {
-  const contacts = loadContacts();
+async function queueAllContacts() {
+  const contacts = await sbGet('dialer_contacts');
   if (!contacts.length) { showToast('No contacts to queue', 'error'); return; }
   contacts.forEach(c => queue.push({ id: Date.now().toString(), number: c.number, name: c.name, status: 'pending' }));
   renderQueue();
@@ -2001,19 +2010,17 @@ function importCSV(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = async ev => {
     const lines = ev.target.result.split('\n').filter(l => l.trim());
-    const contacts = loadContacts();
     let added = 0;
-    lines.forEach(line => {
+    for (const line of lines) {
       const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g,''));
       const number = parts.find(p => /^\+?\d{7,}$/.test(p.replace(/\s/g,'')));
-      if (!number) return;
+      if (!number) continue;
       const name = parts.find(p => p && !/^\+?\d/.test(p)) || number;
-      contacts.push({ name, number });
+      await sbInsert('dialer_contacts', { name, number });
       added++;
-    });
-    saveContacts(contacts);
+    }
     renderContacts();
     showToast(added + ' contacts imported ✓', 'success');
   };

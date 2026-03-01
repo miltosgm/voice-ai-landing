@@ -634,6 +634,26 @@
 .sim-reset-btn:hover { background:#1e0a40; }
 .btn-simulate { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(124,58,237,0.15); border:1.5px solid rgba(124,58,237,0.4); color:#c4b5fd; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; margin-left:8px; }
 .btn-simulate:hover { background:rgba(124,58,237,0.3); border-color:#7c3aed; }
+.sim-tab-bar { display:flex; gap:4px; background:#0a0a18; border-radius:8px; padding:3px; }
+.sim-tab { background:none; border:none; color:#666; font-size:12px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer; transition:all .2s; }
+.sim-tab.active { background:#1e0a40; color:#c4b5fd; }
+.sim-history-item { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:12px 14px; }
+.sim-history-item:hover { border-color:#7c3aed; }
+.sim-hi-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.sim-hi-title { font-size:12px; font-weight:700; color:#e2e0ff; }
+.sim-hi-meta { font-size:11px; color:#666; }
+.sim-hi-score { font-size:12px; font-weight:700; }
+.sim-hi-transcript { margin-top:8px; max-height:140px; overflow-y:auto; display:none; }
+.sim-hi-transcript.open { display:block; }
+.sim-hi-tx-line { font-size:11px; line-height:1.5; margin-bottom:3px; }
+.sim-hi-tx-line.ai { color:#c4b5fd; }
+.sim-hi-tx-line.user { color:#6ee7b7; }
+.sim-hi-tx-line.sys { color:#444; font-style:italic; font-size:10px; }
+.sim-hi-actions { display:flex; gap:6px; margin-top:8px; }
+.sim-hi-btn { flex:1; padding:5px 0; font-size:11px; border-radius:6px; cursor:pointer; border:1px solid #2a2a4a; background:transparent; color:#9ca3af; }
+.sim-hi-btn:hover { background:#1e0a40; color:#c4b5fd; }
+.sim-hi-btn.danger { border-color:rgba(239,68,68,0.3); color:#fca5a5; }
+.sim-hi-btn.danger:hover { background:rgba(239,68,68,0.1); }
 @media (max-width:480px) { .scenario-grid { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -949,9 +969,15 @@
   <div class="sim-box">
     <div class="sim-header">
       <h3>🧪 Agent Simulation Test</h3>
-      <button class="sim-close" onclick="closeSimModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="sim-tab-bar">
+          <button class="sim-tab active" id="sim-tab-run" onclick="switchSimTab('run')">▶ Run</button>
+          <button class="sim-tab" id="sim-tab-history" onclick="switchSimTab('history')">📋 History</button>
+        </div>
+        <button class="sim-close" onclick="closeSimModal()">✕</button>
+      </div>
     </div>
-    <div class="sim-body">
+    <div class="sim-body" id="sim-tab-run-body">
 
       <div class="sim-section-label">1. Pick a customer scenario</div>
       <div class="scenario-grid" id="scenario-grid">
@@ -1006,6 +1032,18 @@
       </div>
 
     </div>
+
+    <!-- HISTORY TAB -->
+    <div class="sim-body" id="sim-tab-history-body" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="sim-section-label" style="margin-bottom:0;">Saved Simulations</div>
+        <button onclick="exportSimCSV()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-weight:600;">⬇ Export CSV</button>
+      </div>
+      <div id="sim-history-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">Loading...</div>
+      </div>
+    </div>
+
   </div>
 </div>
 <!-- ════════════════════════════════════════════════════════ -->
@@ -2430,6 +2468,159 @@ function showSimScore() {
   fill.style.background = color;
   setTimeout(function() { fill.style.width = pct + '%'; }, 50);
   document.getElementById('sim-score-card').classList.add('visible');
+
+  // Auto-save to Supabase
+  if (simTranscriptLines.length > 0) saveSimulation({ pct: pct, checks: checks });
+}
+
+// ── SIM TABS ──────────────────────────────────────
+function switchSimTab(tab) {
+  document.getElementById('sim-tab-run-body').style.display = tab === 'run' ? '' : 'none';
+  document.getElementById('sim-tab-history-body').style.display = tab === 'history' ? '' : 'none';
+  document.getElementById('sim-tab-run').classList.toggle('active', tab === 'run');
+  document.getElementById('sim-tab-history').classList.toggle('active', tab === 'history');
+  if (tab === 'history') loadSimHistory();
+}
+
+// ── SAVE SIMULATION ────────────────────────────────
+async function saveSimulation(scoreData) {
+  try {
+    var agent = AGENTS[activeAgent] || { label: activeAgent };
+    var scenario = SIM_SCENARIOS[activeScenarioIdx];
+    await sbInsert('dialer_simulations', {
+      agent: activeAgent,
+      agent_label: agent.label || activeAgent,
+      scenario: scenario.name,
+      lang: activeLang,
+      transcript: simTranscriptLines,
+      score_pct: scoreData.pct,
+      score_details: scoreData.checks
+    });
+  } catch(e) {
+    console.warn('Failed to save simulation:', e);
+  }
+}
+
+// ── LOAD HISTORY ───────────────────────────────────
+async function loadSimHistory() {
+  var list = document.getElementById('sim-history-list');
+  list.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">Loading...</div>';
+  try {
+    var rows = await sbGet('dialer_simulations', { order: 'created_at.desc', limit: 50 });
+    if (!rows || !rows.length) {
+      list.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">No simulations saved yet.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(function(r) {
+      var pct = r.score_pct || 0;
+      var color = pct >= 90 ? '#22c55e' : pct >= 70 ? '#7c3aed' : pct >= 50 ? '#f59e0b' : '#ef4444';
+      var grade = pct >= 90 ? '🏆' : pct >= 70 ? '✅' : pct >= 50 ? '⚠️' : '❌';
+      var date = new Date(r.created_at).toLocaleDateString('el-GR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      var txLines = (r.transcript || []).map(function(l) {
+        var cls = l.role === 'AI' ? 'ai' : (l.role === 'User' ? 'user' : 'sys');
+        var label = l.role === 'AI' ? (r.agent_label || 'Agent') : (l.role === 'User' ? 'Customer' : '');
+        return '<div class="sim-hi-tx-line ' + cls + '">' + (label ? '<strong>' + label + '</strong> ' : '') + escHtml(l.text) + '</div>';
+      }).join('');
+      var checks = (r.score_details || []).map(function(c) {
+        return (c.pass ? '✅' : '❌') + ' ' + c.label;
+      }).join('\n');
+      return '<div class="sim-history-item" id="shi-' + r.id + '">' +
+        '<div class="sim-hi-header">' +
+          '<div class="sim-hi-title">' + escHtml(r.agent_label) + ' &mdash; ' + escHtml(r.scenario) + ' (' + r.lang.toUpperCase() + ')</div>' +
+          '<div class="sim-hi-score" style="color:' + color + '">' + grade + ' ' + pct + '%</div>' +
+        '</div>' +
+        '<div class="sim-hi-meta">' + date + '</div>' +
+        '<div class="sim-hi-transcript" id="shi-tx-' + r.id + '">' + txLines + '</div>' +
+        '<div class="sim-hi-actions">' +
+          '<button class="sim-hi-btn" onclick="toggleSimTx(\'' + r.id + '\')">📄 Transcript</button>' +
+          '<button class="sim-hi-btn" onclick="improveFromSim(\'' + r.id + '\')" title="' + escHtml(checks) + '">🤖 Improve Agent</button>' +
+          '<button class="sim-hi-btn danger" onclick="deleteSimulation(\'' + r.id + '\')">🗑</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="color:#ef4444;font-size:12px;text-align:center;padding:24px 0;">Error: ' + e.message + '</div>';
+  }
+}
+
+function toggleSimTx(id) {
+  var el = document.getElementById('shi-tx-' + id);
+  if (el) el.classList.toggle('open');
+}
+
+async function deleteSimulation(id) {
+  await sbDelete('dialer_simulations', id);
+  loadSimHistory();
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── EXPORT CSV ─────────────────────────────────────
+async function exportSimCSV() {
+  try {
+    var rows = await sbGet('dialer_simulations', { order: 'created_at.desc', limit: 200 });
+    if (!rows || !rows.length) { showToast('No simulations to export', 'error'); return; }
+    var lines = ['Date,Agent,Scenario,Language,Score %,Checks,Transcript'];
+    rows.forEach(function(r) {
+      var tx = (r.transcript || []).map(function(l) { return (l.role + ': ' + l.text); }).join(' | ');
+      var checks = (r.score_details || []).map(function(c) { return (c.pass ? 'PASS' : 'FAIL') + ':' + c.label; }).join('; ');
+      var date = new Date(r.created_at).toISOString().slice(0,16).replace('T',' ');
+      lines.push([date, r.agent_label, r.scenario, r.lang, r.score_pct, checks, tx].map(function(v) {
+        return '"' + String(v||'').replace(/"/g,'""') + '"';
+      }).join(','));
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'simulations_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) { showToast('Export error: ' + e.message, 'error'); }
+}
+
+// ── IMPROVE AGENT FROM SIM ─────────────────────────
+async function improveFromSim(id) {
+  showToast('Analyzing simulation...', 'info');
+  try {
+    var rows = await sbGet('dialer_simulations', { id: 'eq.' + id });
+    if (!rows || !rows.length) return;
+    var sim = rows[0];
+    var tx = (sim.transcript || []).map(function(l) { return l.role + ': ' + l.text; }).join('\n');
+    var failedChecks = (sim.score_details || []).filter(function(c) { return !c.pass; }).map(function(c) { return c.label; });
+
+    var prompt = 'You are improving a voice sales agent system prompt based on a simulation test.\n\nFailed checks:\n' +
+      (failedChecks.length ? failedChecks.map(function(c) { return '- ' + c; }).join('\n') : '(none)') +
+      '\n\nSimulation transcript:\n' + tx +
+      '\n\nCurrent system prompt:\n' + (document.getElementById('custom-system') ? document.getElementById('custom-system').value : '') +
+      '\n\nWrite 3 specific, actionable improvements to the system prompt to fix the failed checks. Be concise. Format: numbered list.';
+
+    var res = await fetch('https://api.vapi.ai/chat', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assistant: { model: { provider: 'openai', model: 'gpt-4o', messages: [{ role: 'system', content: 'You are an expert voice AI coach.' }] } },
+        input: [{ role: 'user', content: prompt }]
+      })
+    });
+    var data = await res.json();
+    var suggestion = '';
+    (data.output || []).forEach(function(o) { if (o.role === 'assistant') suggestion = o.content; });
+
+    if (suggestion) {
+      var modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;';
+      modal.innerHTML = '<div style="background:#1a1a2e;border:1px solid #2a1a5a;border-radius:14px;padding:24px;width:min(520px,92vw);max-height:80vh;overflow-y:auto;">' +
+        '<div style="font-size:14px;font-weight:700;color:#e2e0ff;margin-bottom:12px;">🤖 Suggested Improvements</div>' +
+        '<div style="font-size:12px;color:#ccc;line-height:1.7;white-space:pre-wrap;">' + escHtml(suggestion) + '</div>' +
+        '<div style="display:flex;gap:8px;margin-top:16px;">' +
+          '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="flex:1;padding:10px;background:transparent;border:1px solid #3a2a6a;color:#c4b5fd;border-radius:8px;cursor:pointer;">Close</button>' +
+        '</div>' +
+      '</div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+    }
+  } catch(e) { showToast('Analysis error: ' + e.message, 'error'); }
 }
 
 window.openSimModal    = openSimModal;
@@ -2438,6 +2629,12 @@ window.selectScenario  = selectScenario;
 window.startSimCall    = startSimCall;
 window.stopSim         = stopSim;
 window.resetSim        = resetSim;
+window.switchSimTab    = switchSimTab;
+window.loadSimHistory  = loadSimHistory;
+window.toggleSimTx     = toggleSimTx;
+window.deleteSimulation = deleteSimulation;
+window.exportSimCSV    = exportSimCSV;
+window.improveFromSim  = improveFromSim;
 window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;
 

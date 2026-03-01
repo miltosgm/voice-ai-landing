@@ -593,6 +593,48 @@
   .mp { padding: 14px; }
 }
 
+
+/* ── SIMULATION MODAL ─────────────────────────── */
+#sim-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; }
+#sim-modal.open { display:flex; }
+.sim-box { background:#1a1a2e; border:1px solid #2a1a5a; border-radius:16px; width:min(640px,96vw); max-height:88vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 24px 80px rgba(0,0,0,0.6); }
+.sim-header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px 14px; border-bottom:1px solid #2a1a5a; }
+.sim-header h3 { margin:0; font-size:15px; color:#e2e0ff; }
+.sim-header .sim-close { background:none; border:none; color:#888; font-size:20px; cursor:pointer; padding:0 4px; }
+.sim-header .sim-close:hover { color:#fff; }
+.sim-body { padding:20px 22px; overflow-y:auto; flex:1; }
+.sim-section-label { font-size:11px; font-weight:700; color:#7c3aed; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+.scenario-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.scenario-card { background:#0f0f20; border:1.5px solid #2a2a4a; border-radius:10px; padding:12px 14px; cursor:pointer; transition:border-color .2s,background .2s; }
+.scenario-card:hover { border-color:#7c3aed; }
+.scenario-card.active { border-color:#7c3aed; background:#1e0a40; }
+.scenario-card .sc-emoji { font-size:20px; margin-bottom:6px; }
+.scenario-card .sc-name { font-size:12px; font-weight:700; color:#e2e0ff; margin-bottom:3px; }
+.scenario-card .sc-hint { font-size:11px; color:#9ca3af; line-height:1.4; }
+.sim-tip { background:#0d1a2a; border:1px solid #1a3a5a; border-radius:8px; padding:11px 14px; font-size:12px; color:#7eb8e8; margin-bottom:18px; line-height:1.5; }
+.sim-tip strong { color:#a3d4f7; }
+.sim-start-btn { width:100%; padding:13px; background:linear-gradient(135deg,#7c3aed,#5b21b6); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .2s; margin-bottom:16px; }
+.sim-start-btn:hover { opacity:.88; }
+.sim-start-btn:disabled { opacity:.45; cursor:not-allowed; }
+.sim-live-transcript { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:12px 14px; min-height:80px; max-height:220px; overflow-y:auto; margin-bottom:16px; display:none; }
+.sim-live-transcript.visible { display:block; }
+.sim-tx-line { font-size:12px; line-height:1.6; margin-bottom:4px; }
+.sim-tx-line.ai { color:#c4b5fd; }
+.sim-tx-line.user { color:#6ee7b7; }
+.sim-tx-label { font-size:10px; font-weight:700; margin-right:5px; opacity:.7; }
+.sim-score-card { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:16px 18px; display:none; }
+.sim-score-card.visible { display:block; }
+.sim-score-title { font-size:13px; font-weight:700; color:#e2e0ff; margin-bottom:12px; }
+.sim-score-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:12px; color:#ccc; }
+.sim-score-row .si { font-size:15px; width:20px; text-align:center; }
+.sim-score-overall { display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid #2a1a5a; font-size:14px; font-weight:700; color:#e2e0ff; }
+.sim-score-bar { flex:1; height:8px; background:#2a1a5a; border-radius:4px; overflow:hidden; }
+.sim-score-fill { height:100%; border-radius:4px; transition:width .6s; }
+.sim-reset-btn { margin-top:14px; width:100%; padding:10px; background:transparent; border:1px solid #3a2a6a; color:#c4b5fd; border-radius:8px; font-size:13px; cursor:pointer; }
+.sim-reset-btn:hover { background:#1e0a40; }
+.btn-simulate { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(124,58,237,0.15); border:1.5px solid rgba(124,58,237,0.4); color:#c4b5fd; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; margin-left:8px; }
+.btn-simulate:hover { background:rgba(124,58,237,0.3); border-color:#7c3aed; }
+@media (max-width:480px) { .scenario-grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -766,6 +808,7 @@
 
       <button class="btn-talk" id="btn-talk" onclick="startBrowserCall()">🎙️ &nbsp;Talk to Maria</button>
       <button class="btn-end-call" id="btn-end-call" onclick="endBrowserCall()">📵 &nbsp;End Call</button>
+      <button class="btn-simulate" onclick="openSimModal()">🧪 &nbsp;Simulate</button>
     </div>
 
   </div>
@@ -901,6 +944,66 @@
 <div class="toast" id="toast"></div>
 
 <!-- ════ CALL OUTCOME MODAL ════ -->
+<!-- ═══════════════════════════════════ SIMULATION MODAL ══ -->
+<div id="sim-modal">
+  <div class="sim-box">
+    <div class="sim-header">
+      <h3>🧪 Agent Simulation Test</h3>
+      <button class="sim-close" onclick="closeSimModal()">✕</button>
+    </div>
+    <div class="sim-body">
+
+      <div class="sim-section-label">1. Pick a customer scenario</div>
+      <div class="scenario-grid" id="scenario-grid">
+        <div class="scenario-card active" data-idx="0" onclick="selectScenario(0)">
+          <div class="sc-emoji">😊</div>
+          <div class="sc-name">Interested Buyer</div>
+          <div class="sc-hint">Curious, open to listening. Asks what you sell and how it works.</div>
+        </div>
+        <div class="scenario-card" data-idx="1" onclick="selectScenario(1)">
+          <div class="sc-emoji">🤔</div>
+          <div class="sc-name">The Objector</div>
+          <div class="sc-hint">Skeptical. Says "I'm not sure" and "I need to think about it."</div>
+        </div>
+        <div class="scenario-card" data-idx="2" onclick="selectScenario(2)">
+          <div class="sc-emoji">💶</div>
+          <div class="sc-name">Price Shopper</div>
+          <div class="sc-hint">Asks "how much?" immediately. Compares with competitors.</div>
+        </div>
+        <div class="scenario-card" data-idx="3" onclick="selectScenario(3)">
+          <div class="sc-emoji">📵</div>
+          <div class="sc-name">Wrong Number / Hostile</div>
+          <div class="sc-hint">Annoyed from the start. Tests graceful recovery and politeness.</div>
+        </div>
+      </div>
+
+      <div class="sim-tip" id="sim-scenario-tip">
+        <strong>Your role:</strong> Act like a curious potential customer. Ask what the brand sells, say you heard about it from a friend. Let the agent lead.
+      </div>
+
+      <div class="sim-section-label">2. Start the voice test</div>
+      <button class="sim-start-btn" id="sim-start-btn" onclick="startSimCall()">🎙️ Start Voice Simulation</button>
+
+      <div class="sim-live-transcript" id="sim-transcript">
+        <div style="color:#555;font-size:12px;text-align:center;margin-top:16px;">Live transcript will appear here...</div>
+      </div>
+
+      <div class="sim-score-card" id="sim-score-card">
+        <div class="sim-score-title">📊 Simulation Results</div>
+        <div id="sim-score-rows"></div>
+        <div class="sim-score-overall">
+          <span id="sim-score-grade"></span>
+          <div class="sim-score-bar"><div class="sim-score-fill" id="sim-score-fill"></div></div>
+          <span id="sim-score-pct"></span>
+        </div>
+        <button class="sim-reset-btn" onclick="resetSim()">🔄 Run Another Test</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════ -->
+
 <div id="outcome-modal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;display:none">
   <div style="background:var(--surface);border-radius:18px;padding:24px 20px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.3);border:1px solid var(--border)">
     <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:var(--white)">How did the call go?</div>
@@ -1874,6 +1977,200 @@ window.addToQueue       = addToQueue;
 window.removeItem       = removeItem;
 window.startBrowserCall = startBrowserCall;
 window.endBrowserCall   = endBrowserCall;
+
+// ════ AGENT SIMULATION TESTING ════════════════════════════════════
+
+var SIM_SCENARIOS = [
+  {
+    name: 'Interested Buyer',
+    tip: '<strong>Your role:</strong> Act like a curious potential customer. Ask what the brand sells, say you heard about it from a friend. Let the agent lead.'
+  },
+  {
+    name: 'The Objector',
+    tip: '<strong>Your role:</strong> Be skeptical. Say "I\'m not sure I need this", "I need to think about it", "I\'ll call you back." Make the agent handle objections.'
+  },
+  {
+    name: 'Price Shopper',
+    tip: '<strong>Your role:</strong> Ask "how much does it cost?" right away. Compare with other options. See how the agent handles pricing pressure without quoting prices.'
+  },
+  {
+    name: 'Wrong Number / Hostile',
+    tip: '<strong>Your role:</strong> Say "Who is this?", "I didn\'t ask to be called", "Don\'t call me again." Test if the agent stays polite and recovers gracefully.'
+  }
+];
+
+var activeScenarioIdx = 0;
+var simVapi = null;
+var simTranscriptLines = [];
+
+function openSimModal() {
+  var m = document.getElementById('sim-modal');
+  m.classList.add('open');
+  resetSim();
+}
+
+function closeSimModal() {
+  if (simVapi) { try { simVapi.stop(); } catch(e){} simVapi = null; }
+  document.getElementById('sim-modal').classList.remove('open');
+}
+
+function selectScenario(idx) {
+  activeScenarioIdx = idx;
+  var cards = document.querySelectorAll('.scenario-card');
+  cards.forEach(function(c) { c.classList.remove('active'); });
+  var target = document.querySelector('.scenario-card[data-idx="' + idx + '"]');
+  if (target) target.classList.add('active');
+  var tip = document.getElementById('sim-scenario-tip');
+  if (tip) tip.innerHTML = SIM_SCENARIOS[idx].tip;
+}
+
+function resetSim() {
+  simTranscriptLines = [];
+  if (simVapi) { try { simVapi.stop(); } catch(e){} simVapi = null; }
+  var tx = document.getElementById('sim-transcript');
+  tx.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;margin-top:16px;">Live transcript will appear here...</div>';
+  tx.classList.remove('visible');
+  var sc = document.getElementById('sim-score-card');
+  sc.classList.remove('visible');
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = false;
+  btn.textContent = '🎙️ Start Voice Simulation';
+  selectScenario(activeScenarioIdx);
+}
+
+function appendSimLine(role, text) {
+  var tx = document.getElementById('sim-transcript');
+  tx.classList.add('visible');
+  var line = document.createElement('div');
+  line.className = 'sim-tx-line ' + (role === 'AI' ? 'ai' : 'user');
+  line.innerHTML = '<span class="sim-tx-label">' + role + '</span>' + text;
+  tx.appendChild(line);
+  tx.scrollTop = tx.scrollHeight;
+  simTranscriptLines.push({ role: role, text: text });
+}
+
+function scoreSimulation(lines) {
+  var fullText = lines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
+  var checks = [
+    {
+      label: 'Introduced itself by name',
+      pass: /sofia|maria|elena|γεια|hello|speaking|this is/.test(fullText)
+    },
+    {
+      label: 'Mentioned ΜΙΑ Collection brand',
+      pass: /μια collection|mia collection|collection/.test(fullText)
+    },
+    {
+      label: 'Explained what the brand offers',
+      pass: /fashion|ρούχα|clothes|γυναικεία|european|brands|collection|στυλ|style/.test(fullText)
+    },
+    {
+      label: 'Handled objections or questions',
+      pass: lines.some(function(l) { return l.role === 'AI' && l.text.length > 40; })
+    },
+    {
+      label: 'Asked about customer interest or next step',
+      pass: /ενδιαφέρεστε|interested|appointment|ραντεβού|schedule|book|when|πότε|θα θέλατε/.test(fullText)
+    },
+    {
+      label: 'Stayed polite throughout',
+      pass: !/rude|shut up|aggressive|go away/.test(fullText)
+    }
+  ];
+  return checks;
+}
+
+async function startSimCall() {
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Connecting...';
+
+  var tx = document.getElementById('sim-transcript');
+  tx.innerHTML = '';
+  tx.classList.add('visible');
+  simTranscriptLines = [];
+
+  if (!window.Vapi) {
+    showToast('VAPI SDK not loaded. Refresh the page.', 'error');
+    btn.disabled = false;
+    btn.textContent = '🎙️ Start Voice Simulation';
+    return;
+  }
+
+  try {
+    simVapi = new window.Vapi(PUBLIC_KEY);
+
+    simVapi.on('call-start', function() {
+      btn.textContent = '🔴 Simulation live — speak as the customer';
+      appendSimLine('System', '— Call started. You are the customer. —');
+      addLog('Simulation started (' + SIM_SCENARIOS[activeScenarioIdx].name + ')', '#7c3aed');
+    });
+
+    simVapi.on('message', function(msg) {
+      if (msg && msg.type === 'transcript') {
+        var role = (msg.role === 'assistant') ? 'AI' : 'User';
+        if (msg.transcriptType === 'final') {
+          appendSimLine(role, msg.transcript);
+        }
+      }
+    });
+
+    simVapi.on('call-end', function() {
+      btn.textContent = '✅ Simulation complete';
+      appendSimLine('System', '— Call ended —');
+      addLog('Simulation ended', '#888');
+      setTimeout(function() { showSimScore(); }, 600);
+    });
+
+    simVapi.on('error', function(e) {
+      showToast(e.message || 'Simulation error', 'error');
+      btn.disabled = false;
+      btn.textContent = '🎙️ Start Voice Simulation';
+    });
+
+    var cfg = buildAssistantConfig();
+    // Prepend scenario context to system prompt so agent knows it's a test
+    var scenarioNote = '\n\n[SIMULATION MODE: This is an internal test call. A team member is role-playing as a customer to evaluate your performance. Behave exactly as you would in a real call.]';
+    if (cfg.model && cfg.model.messages && cfg.model.messages.length > 0) {
+      cfg.model.messages[0].content += scenarioNote;
+    }
+
+    await simVapi.start(cfg);
+
+  } catch(e) {
+    showToast(e.message || 'Failed to start simulation', 'error');
+    btn.disabled = false;
+    btn.textContent = '🎙️ Start Voice Simulation';
+  }
+}
+
+function showSimScore() {
+  var checks = scoreSimulation(simTranscriptLines);
+  var passed = checks.filter(function(c) { return c.pass; }).length;
+  var pct = Math.round((passed / checks.length) * 100);
+  var grade = pct >= 90 ? '🏆 Excellent' : pct >= 70 ? '✅ Good' : pct >= 50 ? '⚠️ Needs Work' : '❌ Poor';
+  var color = pct >= 90 ? '#22c55e' : pct >= 70 ? '#7c3aed' : pct >= 50 ? '#f59e0b' : '#ef4444';
+
+  var rowsEl = document.getElementById('sim-score-rows');
+  rowsEl.innerHTML = checks.map(function(c) {
+    return '<div class="sim-score-row"><span class="si">' + (c.pass ? '✅' : '❌') + '</span><span>' + c.label + '</span></div>';
+  }).join('');
+
+  document.getElementById('sim-score-grade').textContent = grade;
+  document.getElementById('sim-score-pct').textContent = pct + '%';
+  var fill = document.getElementById('sim-score-fill');
+  fill.style.width = '0%';
+  fill.style.background = color;
+  setTimeout(function() { fill.style.width = pct + '%'; }, 50);
+
+  document.getElementById('sim-score-card').classList.add('visible');
+}
+
+window.openSimModal    = openSimModal;
+window.closeSimModal   = closeSimModal;
+window.selectScenario  = selectScenario;
+window.startSimCall    = startSimCall;
+window.resetSim        = resetSim;
 window.savePrompt       = savePrompt;
 window.resetDefaults    = resetDefaults;
 

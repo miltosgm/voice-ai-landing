@@ -2027,6 +2027,9 @@ function speakAgentElevenLabs(text) {
 
     var modelId = (cfg.voice && cfg.voice.model) ? cfg.voice.model : ((activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2');
 
+    var voiceSettings = { stability: stability, similarity_boost: 0.75 };
+    if (speed && speed >= 0.7) voiceSettings.speed = speed;
+
     fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
       method: 'POST',
       headers: {
@@ -2037,22 +2040,24 @@ function speakAgentElevenLabs(text) {
       body: JSON.stringify({
         text: text,
         model_id: modelId,
-        voice_settings: { stability: stability, similarity_boost: 0.75, speed: speed }
+        voice_settings: voiceSettings
       })
     })
     .then(function(res) {
-      if (!res.ok) throw new Error('EL TTS failed: ' + res.status);
+      if (!res.ok) return res.text().then(function(t) { throw new Error('EL ' + res.status + ': ' + t); });
       return res.blob();
     })
     .then(function(blob) {
       var url = URL.createObjectURL(blob);
       var audio = new Audio(url);
       audio.onended = function() { URL.revokeObjectURL(url); resolve(); };
-      audio.onerror = function() { URL.revokeObjectURL(url); resolve(); };
-      audio.play().catch(resolve);
+      audio.onerror = function(e) { console.warn('Audio playback error', e); URL.revokeObjectURL(url); resolve(); };
+      var playPromise = audio.play();
+      if (playPromise) playPromise.catch(function(e) { console.warn('Audio play() blocked:', e); resolve(); });
     })
     .catch(function(e) {
-      console.warn('ElevenLabs TTS error, falling back to browser TTS:', e);
+      console.warn('ElevenLabs TTS error:', e.message);
+      appendSimLine(null, '⚠️ EL voice error: ' + e.message, true);
       speakBrowser(text, 'AI').then(resolve);
     });
   });

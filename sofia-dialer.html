@@ -1793,7 +1793,15 @@ async function loadRecentCalls() {
       const summary = c.summary || (c.artifact && c.artifact.summary) || null;
       const score = scoreCall(transcript, summary);
       const crmLead = { callId: c.id, name: number, number: number, agent: (AGENTS[activeAgent]||{}).label||activeAgent, date: started, summary, recording, scoreLabel: score.label, scoreCls: score.cls, notes: '' };
-      const crmDataStr = encodeURIComponent(JSON.stringify(crmLead));
+      // Auto-add Hot & Warm calls to CRM silently
+      if (score.rank >= 1) {
+        const existing = loadCRM();
+        if (!existing.find(l => l.callId === c.id)) {
+          existing.unshift(crmLead);
+          saveCRM(existing);
+          renderCRM();
+        }
+      }
       return `<div class="call-item">
         <div class="call-row">
           <span class="call-status ${statusClass}">${status}</span>
@@ -1804,7 +1812,7 @@ async function loadRecentCalls() {
         <div class="call-time">${started}</div>
         ${recording ? `<audio class="call-audio" controls src="${recording}"></audio>` : '<div style="font-size:11px;color:var(--gray)">No recording available</div>'}
         ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">💬 Show conversation</button><div class="call-transcript" id="transcript-${i}">${summary ? '<div class="ct-summary"><strong>📋 Summary</strong><p>' + summary + '</p></div>' : ''}${transcript ? '<div class="ct-convo">' + formatTranscript(transcript) + '</div>' : ''}</div>` : ''}
-        ${score.rank >= 1 ? `<button onclick='addToCRM(${JSON.stringify(crmLead)})' style="margin-top:6px;width:100%;padding:6px;border-radius:8px;border:none;background:rgba(5,150,105,0.1);color:#059669;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">✅ Add to CRM</button>` : ''}
+        ${score.rank >= 1 ? `<div style="margin-top:6px;font-size:11px;color:#059669;font-weight:600">✅ Auto-added to CRM</div>` : ''}
       </div>`;
     }).join('');
   } catch(e) {

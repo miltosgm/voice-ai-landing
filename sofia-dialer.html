@@ -2633,24 +2633,24 @@ async function improveFromSim(id) {
 // Load saved prompts from Supabase and apply to active agent
 async function loadPromptsFromSupabase() {
   try {
-    var rows = await sbGet('dialer_agent_prompts', {});
-    if (!rows || !rows.length) return;
+    var rows = await sbGet('dialer_agent_prompts', '');
+    if (!Array.isArray(rows) || !rows.length) return;
     rows.forEach(function(r) {
-      var key = r.agent + '_' + r.lang;
-      if (!AGENT_DEFAULTS[r.agent]) return;
+      if (!r.agent || !r.lang || !r.system_prompt) return; // skip bad rows
+      if (!AGENT_DEFAULTS[r.agent]) return; // only known agents
       if (!AGENT_DEFAULTS[r.agent][r.lang]) AGENT_DEFAULTS[r.agent][r.lang] = {};
-      if (r.system_prompt) AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;
+      AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;
       if (r.opener) AGENT_DEFAULTS[r.agent][r.lang].opener = r.opener;
     });
-    // Re-apply to current textarea if it's the active agent
+    // Re-apply to current textarea only if active agent has an improved prompt
     var d = AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang];
-    if (d) {
-      currentSystem = d.system || currentSystem;
-      currentOpener = d.opener || currentOpener;
+    if (d && d.system) {
+      currentSystem = d.system;
+      if (d.opener) currentOpener = d.opener;
       var sysEl = document.getElementById('custom-system');
       var opEl = document.getElementById('custom-opener');
       if (sysEl) sysEl.value = currentSystem;
-      if (opEl) opEl.value = currentOpener;
+      if (opEl && d.opener) opEl.value = currentOpener;
     }
   } catch(e) {
     console.warn('Could not load prompts from Supabase:', e);
@@ -2661,7 +2661,7 @@ async function loadPromptsFromSupabase() {
 async function savePromptToSupabase(agent, lang, systemPrompt, opener, scoreAvg) {
   try {
     // Try update first, then insert
-    var existing = await sbGet('dialer_agent_prompts', { agent: 'eq.' + agent, lang: 'eq.' + lang });
+    var existing = await sbGet('dialer_agent_prompts', 'agent=eq.' + agent + '&lang=eq.' + lang);
     var row = {
       agent: agent,
       lang: lang,

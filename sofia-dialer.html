@@ -2025,7 +2025,7 @@ function speakAgentElevenLabs(text) {
     if (cfg.voice && cfg.voice.stability) stability = cfg.voice.stability;
     if (cfg.voice && cfg.voice.speed) speed = cfg.voice.speed;
 
-    var modelId = (activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2';
+    var modelId = (cfg.voice && cfg.voice.model) ? cfg.voice.model : ((activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2');
 
     fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
       method: 'POST',

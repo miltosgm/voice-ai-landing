@@ -1712,7 +1712,10 @@ function buildAssistantConfig() {
       }
       return baseVoice;
     })(),
-    transcriber: AGENT_DEFAULTS[activeAgent][activeLang].transcriber
+    transcriber: (AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].transcriber) ||
+      (activeLang === 'el'
+        ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
+        : { provider: 'deepgram', model: 'nova-3', language: 'en' })
   };
   
   // Add endCall config only for non-Sofia3 agents
@@ -2638,7 +2641,14 @@ async function loadPromptsFromSupabase() {
     rows.forEach(function(r) {
       if (!r.agent || !r.lang || !r.system_prompt) return; // skip bad rows
       if (!AGENT_DEFAULTS[r.agent]) return; // only known agents
-      if (!AGENT_DEFAULTS[r.agent][r.lang]) AGENT_DEFAULTS[r.agent][r.lang] = {};
+      // Patch only system/opener — never overwrite transcriber or other keys
+      if (!AGENT_DEFAULTS[r.agent][r.lang]) {
+        AGENT_DEFAULTS[r.agent][r.lang] = {
+          transcriber: r.lang === 'el'
+            ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
+            : { provider: 'deepgram', model: 'nova-3', language: 'en' }
+        };
+      }
       AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;
       if (r.opener) AGENT_DEFAULTS[r.agent][r.lang].opener = r.opener;
     });

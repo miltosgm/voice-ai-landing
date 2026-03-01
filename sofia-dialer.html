@@ -1772,14 +1772,18 @@ async function loadRecentCalls() {
       sofia2: ['Elena', 'AI Marketing', 'AI marketing'],
       sofia3: ['MIA Collection', 'ΜΙΑ Collection', 'Mia Collection', 'Miya'],
     };
+    // Phone calls only
+    calls = calls.filter(c => c.type === 'outboundPhoneCall' || c.type === 'inboundPhoneCall');
+    if (!calls.length) { el.innerHTML = '<div class="log-empty">No phone calls found</div>'; return; }
+
     const keywords = agentKeywords[activeAgent];
     if (keywords) {
       const filtered = calls.filter(c => {
         const text = (c.transcript || '') + (c.summary || '');
         return keywords.some(k => text.toLowerCase().includes(k.toLowerCase()));
       });
-      calls = filtered.length ? filtered : calls; // fallback to all if none match
-      if (!filtered.length) el.innerHTML = '<div class="log-empty" style="color:var(--yellow)">No calls found for this agent — showing all calls</div>';
+      calls = filtered.length ? filtered : calls;
+      if (!filtered.length) el.innerHTML = '<div class="log-empty" style="color:var(--yellow)">No phone calls found for this agent — showing all</div>';
     }
     el.innerHTML = calls.map((c, i) => {
       const status = c.status || 'unknown';

@@ -1995,52 +1995,88 @@ function toggleSimMute() {
   if (simMuted) window.speechSynthesis.cancel();
 }
 
+var EL_API_KEY = '12cb98753027013e75c93813effeaac5';
+
+// Load browser voices for customer side
 function loadSimVoices() {
   var voices = window.speechSynthesis.getVoices();
   if (!voices.length) return;
-  // Agent: prefer a warm female English voice
-  var agentPref = ['Samantha', 'Victoria', 'Karen', 'Moira', 'Tessa', 'Google UK English Female', 'Google US English'];
-  for (var i = 0; i < agentPref.length; i++) {
-    var v = voices.find(function(x) { return x.name.indexOf(agentPref[i]) !== -1; });
-    if (v) { simVoices.agent = v; break; }
-  }
-  if (!simVoices.agent) simVoices.agent = voices.find(function(v) { return /female|woman/i.test(v.name); }) || voices[0];
-
-  // Customer: pick a different voice
-  var custPref = ['Daniel', 'Alex', 'Google UK English Male', 'Google US English', 'Tom', 'Fred'];
+  var custPref = ['Daniel', 'Alex', 'Google UK English Male', 'Tom', 'Fred', 'Google US English'];
   for (var j = 0; j < custPref.length; j++) {
     var cv = voices.find(function(x) { return x.name.indexOf(custPref[j]) !== -1; });
-    if (cv && cv !== simVoices.agent) { simVoices.customer = cv; break; }
+    if (cv) { simVoices.customer = cv; break; }
   }
-  if (!simVoices.customer) {
-    simVoices.customer = voices.find(function(v) { return v !== simVoices.agent; }) || voices[0];
-  }
+  if (!simVoices.customer) simVoices.customer = voices[0];
 }
-
-// Load voices when available (Chrome fires voiceschanged)
 if (window.speechSynthesis) {
   loadSimVoices();
   window.speechSynthesis.onvoiceschanged = loadSimVoices;
 }
 
-function speakSimLine(text, role) {
+// Speak agent line via ElevenLabs TTS (actual agent voice)
+function speakAgentElevenLabs(text) {
   return new Promise(function(resolve) {
-    if (simMuted || !window.speechSynthesis) return resolve();
+    if (simMuted) return resolve();
+    var cfg = buildAssistantConfig();
+    var voiceId = '21m00Tcm4TlvDq8ikWAM'; // default Sofia 3
+    var stability = 0.55;
+    var speed = 0.7;
+    if (cfg.voice && cfg.voice.voiceId) voiceId = cfg.voice.voiceId;
+    if (cfg.voice && cfg.voice.stability) stability = cfg.voice.stability;
+    if (cfg.voice && cfg.voice.speed) speed = cfg.voice.speed;
+
+    var modelId = (activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2';
+
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': EL_API_KEY,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: modelId,
+        voice_settings: { stability: stability, similarity_boost: 0.75, speed: speed }
+      })
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('EL TTS failed: ' + res.status);
+      return res.blob();
+    })
+    .then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var audio = new Audio(url);
+      audio.onended = function() { URL.revokeObjectURL(url); resolve(); };
+      audio.onerror = function() { URL.revokeObjectURL(url); resolve(); };
+      audio.play().catch(resolve);
+    })
+    .catch(function(e) {
+      console.warn('ElevenLabs TTS error, falling back to browser TTS:', e);
+      speakBrowser(text, 'AI').then(resolve);
+    });
+  });
+}
+
+// Browser TTS fallback / customer voice
+function speakBrowser(text, role) {
+  return new Promise(function(resolve) {
+    if (!window.speechSynthesis) return resolve();
     window.speechSynthesis.cancel();
     var utter = new SpeechSynthesisUtterance(text);
-    if (role === 'AI') {
-      if (simVoices.agent) utter.voice = simVoices.agent;
-      utter.pitch = 1.1;
-      utter.rate = 1.0;
-    } else {
-      if (simVoices.customer) utter.voice = simVoices.customer;
-      utter.pitch = 0.85;
-      utter.rate = 0.95;
-    }
+    if (role === 'User' && simVoices.customer) utter.voice = simVoices.customer;
+    utter.pitch = 0.85;
+    utter.rate = 0.95;
     utter.onend = resolve;
     utter.onerror = resolve;
     window.speechSynthesis.speak(utter);
   });
+}
+
+function speakSimLine(text, role) {
+  if (simMuted) return Promise.resolve();
+  if (role === 'AI') return speakAgentElevenLabs(text);
+  return speakBrowser(text, 'User');
 }
 
 window.toggleSimMute = toggleSimMute;

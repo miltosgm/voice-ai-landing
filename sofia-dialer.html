@@ -453,7 +453,32 @@
 .sb-agent .sa-sub  { font-size: 10px; color: #9ca3af; margin-top: 1px; }
 .sb-new { display: flex; align-items: center; justify-content: center;
   padding: 7px; border-radius: 10px; border: 1.5px dashed #ddddf5;
-  color: #c7c7e8; font-size: 12px; cursor: pointer; margin-bottom: 5px; }
+  color: #c7c7e8; font-size: 12px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
+.sb-new:hover { border-color: #7c3aed; color: #7c3aed; background: rgba(124,58,237,0.05); }
+
+/* New Agent Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 18px; padding: 28px 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
+.modal-field { margin-bottom: 16px; }
+.modal-field label { display: block; font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.modal-field input, .modal-field textarea { width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: #1a1a2e; outline: none; transition: border 0.15s; resize: vertical; }
+.modal-field input:focus, .modal-field textarea:focus { border-color: #7c3aed; }
+.modal-emoji-row { display: flex; gap: 8px; align-items: center; }
+.modal-emoji-row input { width: 60px; text-align: center; font-size: 20px; flex-shrink: 0; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-btn { flex: 1; padding: 11px; border-radius: 12px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.modal-btn.primary { background: #7c3aed; color: white; }
+.modal-btn.primary:hover { background: #6d28d9; }
+.modal-btn.secondary { background: #f3f4f6; color: #6b7280; }
+.modal-btn.secondary:hover { background: #e5e7eb; }
+.modal-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.modal-tab { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid #e5e7eb; background: none; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; color: #6b7280; transition: all 0.15s; }
+.modal-tab.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+.sb-agent-del { margin-left: auto; font-size: 12px; color: #d1d5db; cursor: pointer; padding: 2px 4px; border-radius: 4px; display: none; }
+.sb-agent:hover .sb-agent-del { display: block; }
+.sb-agent-del:hover { color: #e17055; background: rgba(225,112,85,0.1); }
 
 /* Knowledge files */
 .kf-item { display: flex; align-items: center; gap: 8px; background: #f8f8fc;
@@ -539,7 +564,7 @@
       <span class="sa-emoji">👗</span>
       <div><div class="sa-name">Sofia 3</div><div class="sa-sub">ΜΙΑ Collection</div></div>
     </div>
-    <div class="sb-new">＋ New Agent</div>
+    <div class="sb-new" onclick="openAgentModal()">＋ New Agent</div>
   </div>
 
   <div class="sb-hr"></div>
@@ -778,6 +803,52 @@
 </div><!-- /split-layout -->
 
 <div class="toast" id="toast"></div>
+
+<!-- NEW AGENT MODAL -->
+<div class="modal-overlay" id="agent-modal" onclick="closeAgentModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">✨ New Agent</div>
+    <div class="modal-field">
+      <label>Emoji &amp; Name</label>
+      <div class="modal-emoji-row">
+        <input type="text" id="modal-emoji" value="🤖" maxlength="2">
+        <input type="text" id="modal-name" placeholder="Agent name" style="flex:1">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <input type="text" id="modal-desc" placeholder="e.g. Sales outreach for hotels">
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchModalLang('en',this)">🇺🇸 English</button>
+      <button class="modal-tab" onclick="switchModalLang('el',this)">🇬🇷 Greek</button>
+    </div>
+    <div id="modal-lang-en">
+      <div class="modal-field">
+        <label>Opening line (EN)</label>
+        <input type="text" id="modal-opener-en" placeholder="Hi, this is...">
+      </div>
+      <div class="modal-field">
+        <label>System prompt (EN)</label>
+        <textarea id="modal-system-en" rows="6" placeholder="You are..."></textarea>
+      </div>
+    </div>
+    <div id="modal-lang-el" style="display:none">
+      <div class="modal-field">
+        <label>Opening line (EL)</label>
+        <input type="text" id="modal-opener-el" placeholder="Γεια, είμαι η...">
+      </div>
+      <div class="modal-field">
+        <label>System prompt (EL)</label>
+        <textarea id="modal-system-el" rows="6" placeholder="Είσαι..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="closeAgentModal()">Cancel</button>
+      <button class="modal-btn primary" onclick="saveNewAgent()">Save Agent</button>
+    </div>
+  </div>
+</div>
 
 <!-- VAPI WEB SDK (for browser calls) -->
 <script type="module">
@@ -1048,6 +1119,7 @@ let timerSeconds = 0;
 // ── INIT ──────────────────────────────────────────────
 function init() {
   restoreLog();
+  initCustomAgents();
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1571,6 +1643,11 @@ async function callAll() {
 }
 
 // ── Expose all functions to global scope (required for inline onclick in HTML) ──
+window.openAgentModal   = openAgentModal;
+window.closeAgentModal  = closeAgentModal;
+window.saveNewAgent     = saveNewAgent;
+window.switchModalLang  = switchModalLang;
+window.deleteCustomAgent = deleteCustomAgent;
 window.setAgent         = setAgent;
 window.setLang          = setLang;
 window.setMode          = setMode;
@@ -1661,6 +1738,130 @@ function toggleTranscript(i) {
   const visible = el.style.display === 'block';
   el.style.display = visible ? 'none' : 'block';
   el.previousElementSibling.textContent = visible ? '📄 Show transcript' : '📄 Hide transcript';
+}
+
+// ════ CUSTOM AGENTS ════
+function loadCustomAgents() {
+  return JSON.parse(localStorage.getItem('sofiaCustomAgents') || '{}');
+}
+function saveCustomAgents(agents) {
+  localStorage.setItem('sofiaCustomAgents', JSON.stringify(agents));
+}
+
+function initCustomAgents() {
+  const custom = loadCustomAgents();
+  Object.entries(custom).forEach(([key, agent]) => {
+    AGENTS[key] = { label: agent.name, emoji: agent.emoji };
+    AGENT_DEFAULTS[key] = {
+      en: { opener: agent.opener_en || '', system: agent.system_en || '', transcriber: { provider:'deepgram', model:'nova-2-general', language:'en' } },
+      el: { opener: agent.opener_el || '', system: agent.system_el || '', transcriber: { provider:'deepgram', model:'nova-2-general', language:'el' } }
+    };
+    addAgentToSidebar(key, agent);
+    addAgentToCards(key, agent);
+  });
+}
+
+function addAgentToSidebar(key, agent) {
+  const wrap = document.getElementById('sb-agents-wrap');
+  const newBtn = wrap.querySelector('.sb-new');
+  const div = document.createElement('div');
+  div.className = 'sb-agent';
+  div.id = 'sb-' + key;
+  div.onclick = () => setAgent(key);
+  div.innerHTML = `<span class="sa-emoji">${agent.emoji}</span><div><div class="sa-name">${agent.name}</div><div class="sa-sub">${agent.desc || 'Custom agent'}</div></div><span class="sb-agent-del" onclick="deleteCustomAgent(event,'${key}')">✕</span>`;
+  wrap.insertBefore(div, newBtn);
+}
+
+function addAgentToCards(key, agent) {
+  const selector = document.querySelector('.agent-selector');
+  if (!selector) return;
+  const div = document.createElement('div');
+  div.className = 'agent-card';
+  div.id = 'agent-card-' + key;
+  div.onclick = () => setAgent(key);
+  div.innerHTML = `<div class="agent-card-header"><span class="agent-emoji">${agent.emoji}</span><span class="agent-card-name">${agent.name}</span><div class="agent-active-dot"></div></div><div class="agent-card-desc">${agent.desc || 'Custom agent'}</div>`;
+  selector.appendChild(div);
+}
+
+function deleteCustomAgent(e, key) {
+  e.stopPropagation();
+  const custom = loadCustomAgents();
+  delete custom[key];
+  saveCustomAgents(custom);
+  delete AGENTS[key];
+  delete AGENT_DEFAULTS[key];
+  document.getElementById('sb-' + key)?.remove();
+  document.getElementById('agent-card-' + key)?.remove();
+  if (activeAgent === key) setAgent('sofia');
+  showToast('Agent deleted', 'info');
+}
+
+let modalEditKey = null;
+function openAgentModal(editKey) {
+  modalEditKey = editKey || null;
+  document.getElementById('modal-title').textContent = editKey ? '✏️ Edit Agent' : '✨ New Agent';
+  if (editKey) {
+    const c = loadCustomAgents()[editKey] || {};
+    document.getElementById('modal-emoji').value = c.emoji || '🤖';
+    document.getElementById('modal-name').value = c.name || '';
+    document.getElementById('modal-desc').value = c.desc || '';
+    document.getElementById('modal-opener-en').value = c.opener_en || '';
+    document.getElementById('modal-system-en').value = c.system_en || '';
+    document.getElementById('modal-opener-el').value = c.opener_el || '';
+    document.getElementById('modal-system-el').value = c.system_el || '';
+  } else {
+    ['modal-name','modal-desc','modal-opener-en','modal-system-en','modal-opener-el','modal-system-el'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('modal-emoji').value = '🤖';
+  }
+  switchModalLang('en', document.querySelector('.modal-tab'));
+  document.getElementById('agent-modal').classList.add('open');
+}
+
+function closeAgentModal(e) {
+  if (e && e.target !== document.getElementById('agent-modal')) return;
+  document.getElementById('agent-modal').classList.remove('open');
+}
+
+function switchModalLang(lang, btn) {
+  document.getElementById('modal-lang-en').style.display = lang === 'en' ? '' : 'none';
+  document.getElementById('modal-lang-el').style.display = lang === 'el' ? '' : 'none';
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function saveNewAgent() {
+  const name = document.getElementById('modal-name').value.trim();
+  if (!name) { showToast('Enter an agent name', 'error'); return; }
+  const key = modalEditKey || ('custom_' + Date.now());
+  const agent = {
+    name,
+    emoji: document.getElementById('modal-emoji').value.trim() || '🤖',
+    desc: document.getElementById('modal-desc').value.trim(),
+    opener_en: document.getElementById('modal-opener-en').value.trim(),
+    system_en: document.getElementById('modal-system-en').value.trim(),
+    opener_el: document.getElementById('modal-opener-el').value.trim(),
+    system_el: document.getElementById('modal-system-el').value.trim(),
+  };
+  const custom = loadCustomAgents();
+  custom[key] = agent;
+  saveCustomAgents(custom);
+  AGENTS[key] = { label: agent.name, emoji: agent.emoji };
+  AGENT_DEFAULTS[key] = {
+    en: { opener: agent.opener_en, system: agent.system_en, transcriber: { provider:'deepgram', model:'nova-2-general', language:'en' } },
+    el: { opener: agent.opener_el, system: agent.system_el, transcriber: { provider:'deepgram', model:'nova-2-general', language:'el' } }
+  };
+  if (modalEditKey) {
+    const sb = document.getElementById('sb-' + key);
+    if (sb) { sb.querySelector('.sa-name').textContent = agent.name; sb.querySelector('.sa-emoji').textContent = agent.emoji; sb.querySelector('.sa-sub').textContent = agent.desc || 'Custom agent'; }
+    const card = document.getElementById('agent-card-' + key);
+    if (card) { card.querySelector('.agent-emoji').textContent = agent.emoji; card.querySelector('.agent-card-name').textContent = agent.name; }
+  } else {
+    addAgentToSidebar(key, agent);
+    addAgentToCards(key, agent);
+  }
+  document.getElementById('agent-modal').classList.remove('open');
+  setAgent(key);
+  showToast(agent.emoji + ' ' + agent.name + ' created!', 'success');
 }
 
 // ════ BEHAVIOUR TOGGLES ════

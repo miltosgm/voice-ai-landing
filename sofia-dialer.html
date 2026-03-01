@@ -1320,6 +1320,8 @@ function init() {
   renderContacts().catch(console.error);
   renderCRM().catch(console.error);
   initSettingsOnLoad();
+  const talkBtn = document.getElementById('btn-talk');
+  if (talkBtn) talkBtn.innerHTML = '🎙️ &nbsp;Talk to ' + (AGENTS[activeAgent]||{label:'Agent'}).label;
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {

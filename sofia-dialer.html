@@ -335,6 +335,19 @@
   .btn-call-all:hover { transform: translateY(-1px); }
   .btn-call-all:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .queue-empty { text-align: center; color: var(--gray); font-size: 14px; padding: 32px 0; }
+  .contact-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); }
+  .contact-avatar { width:32px; height:32px; border-radius:50%; background:rgba(108,92,231,0.12); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--accent2); flex-shrink:0; }
+  .contact-info { flex:1; min-width:0; }
+  .contact-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .contact-number { font-size:11px; color:var(--gray); margin-top:1px; }
+  .contact-actions { display:flex; gap:6px; flex-shrink:0; }
+  .contact-btn { font-size:11px; padding:4px 10px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; font-weight:600; transition:all 0.15s; }
+  .contact-btn.call { background:var(--green-dim); color:var(--green); }
+  .contact-btn.call:hover { background:var(--green); color:white; }
+  .contact-btn.queue { background:rgba(108,92,231,0.1); color:var(--accent2); }
+  .contact-btn.queue:hover { background:var(--accent); color:white; }
+  .contact-btn.del { background:transparent; color:var(--gray2); }
+  .contact-btn.del:hover { background:var(--red-dim); color:var(--red); }
   .queue-list { display: flex; flex-direction: column; gap: 8px; }
   .queue-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s; }
   .queue-item.calling { border-color: rgba(108,92,231,0.4); background: rgba(108,92,231,0.06); }
@@ -779,6 +792,25 @@
       <div class="queue-list" id="queue-list"></div>
     </div>
 
+  <!-- CONTACT BOOK -->
+  <div class="card" style="margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="card-title" style="margin:0">📒 Contact Book</div>
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('csv-import').click()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--gray);cursor:pointer;font-family:inherit">⬆ Import CSV</button>
+        <button onclick="queueAllContacts()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">+ Queue All</button>
+      </div>
+    </div>
+    <input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(event)">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input type="text" id="cb-name" placeholder="Name" style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <input type="tel" id="cb-number" placeholder="+30..." style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <button onclick="addContact()" style="padding:8px 14px;border-radius:10px;background:var(--accent);border:none;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0">+ Add</button>
+    </div>
+    <div id="contact-book-empty" class="queue-empty" style="padding:16px 0">No contacts yet — add one above or import a CSV</div>
+    <div id="contact-book-list" style="display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+
   </div><!-- /phone-section -->
 
   <!-- LOG (shared) -->
@@ -1120,6 +1152,7 @@ let timerSeconds = 0;
 function init() {
   restoreLog();
   initCustomAgents();
+  renderContacts();
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1643,6 +1676,12 @@ async function callAll() {
 }
 
 // ── Expose all functions to global scope (required for inline onclick in HTML) ──
+window.addContact       = addContact;
+window.deleteContact    = deleteContact;
+window.callContact      = callContact;
+window.queueContact     = queueContact;
+window.queueAllContacts = queueAllContacts;
+window.importCSV        = importCSV;
 window.openAgentModal   = openAgentModal;
 window.closeAgentModal  = closeAgentModal;
 window.saveNewAgent     = saveNewAgent;
@@ -1756,6 +1795,102 @@ function toggleTranscript(i) {
   const visible = el.style.display === 'block';
   el.style.display = visible ? 'none' : 'block';
   el.previousElementSibling.textContent = visible ? '📄 Show transcript' : '📄 Hide transcript';
+}
+
+// ════ CONTACT BOOK ════
+function loadContacts() { return JSON.parse(localStorage.getItem('sofiaContacts') || '[]'); }
+function saveContacts(c) { localStorage.setItem('sofiaContacts', JSON.stringify(c)); }
+
+function renderContacts() {
+  const contacts = loadContacts();
+  const list  = document.getElementById('contact-book-list');
+  const empty = document.getElementById('contact-book-empty');
+  if (!list) return;
+  if (!contacts.length) { empty.style.display = ''; list.innerHTML = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = contacts.map((c, i) => `
+    <div class="contact-item">
+      <div class="contact-avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <div class="contact-info">
+        <div class="contact-name">${c.name}</div>
+        <div class="contact-number">${c.number}</div>
+      </div>
+      <div class="contact-actions">
+        <button class="contact-btn call" onclick="callContact('${c.number}','${c.name.replace(/'/g,"\\'")}')">📞 Call</button>
+        <button class="contact-btn queue" onclick="queueContact('${c.number}','${c.name.replace(/'/g,"\\'")}')">+ Queue</button>
+        <button class="contact-btn del" onclick="deleteContact(${i})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function addContact() {
+  const name   = document.getElementById('cb-name').value.trim();
+  const number = document.getElementById('cb-number').value.trim().replace(/\s+/g,'');
+  if (!number) { showToast('Enter a phone number', 'error'); return; }
+  const contacts = loadContacts();
+  contacts.push({ name: name || number, number });
+  saveContacts(contacts);
+  renderContacts();
+  document.getElementById('cb-name').value = '';
+  document.getElementById('cb-number').value = '';
+  document.getElementById('cb-name').focus();
+  showToast('Contact saved ✓', 'success');
+}
+
+function deleteContact(i) {
+  const contacts = loadContacts();
+  contacts.splice(i, 1);
+  saveContacts(contacts);
+  renderContacts();
+  showToast('Contact removed', 'info');
+}
+
+function callContact(number, name) {
+  document.getElementById('phone-number').value = number;
+  document.getElementById('contact-name').value = name;
+  setMode('phone');
+  callNow();
+}
+
+function queueContact(number, name) {
+  const contacts = loadContacts();
+  const c = contacts.find(c => c.number === number);
+  queue.push({ id: Date.now().toString(), number, name: name || number, status: 'pending' });
+  renderQueue();
+  showToast(name + ' added to queue', 'success');
+}
+
+function queueAllContacts() {
+  const contacts = loadContacts();
+  if (!contacts.length) { showToast('No contacts to queue', 'error'); return; }
+  contacts.forEach(c => queue.push({ id: Date.now().toString(), number: c.number, name: c.name, status: 'pending' }));
+  renderQueue();
+  setMode('phone');
+  showToast(contacts.length + ' contacts queued ✓', 'success');
+}
+
+function importCSV(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const lines = ev.target.result.split('\n').filter(l => l.trim());
+    const contacts = loadContacts();
+    let added = 0;
+    lines.forEach(line => {
+      const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g,''));
+      const number = parts.find(p => /^\+?\d{7,}$/.test(p.replace(/\s/g,'')));
+      if (!number) return;
+      const name = parts.find(p => p && !/^\+?\d/.test(p)) || number;
+      contacts.push({ name, number });
+      added++;
+    });
+    saveContacts(contacts);
+    renderContacts();
+    showToast(added + ' contacts imported ✓', 'success');
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 }
 
 // ════ CUSTOM AGENTS ════

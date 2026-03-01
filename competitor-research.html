@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Voice Dialer — Competitor Research Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fc; color: #1a1a2e; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #6c47ff 0%, #4f32c8 100%); color: white; padding: 48px 32px; text-align: center; }
+  .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .header p { opacity: 0.8; font-size: 15px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6c47ff; margin: 48px 0 20px; }
+  .card { background: white; border-radius: 16px; padding: 28px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #ece8ff; }
+  .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .card-num { width: 36px; height: 36px; border-radius: 10px; background: #6c47ff; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+  .card-name { font-size: 20px; font-weight: 800; }
+  .card-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: #f0edff; color: #6c47ff; font-weight: 600; margin-left: auto; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  .box { background: #f8f9fc; border-radius: 10px; padding: 16px; }
+  .box h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6c47ff; margin-bottom: 10px; }
+  .box ul { list-style: none; }
+  .box ul li { font-size: 13px; color: #4a4a6a; padding: 3px 0; padding-left: 14px; position: relative; }
+  .box ul li::before { content: "·"; position: absolute; left: 0; color: #6c47ff; font-weight: 700; }
+  .missing-box { background: #fff5f5; border: 1px solid #fecaca; border-radius: 10px; padding: 16px; margin-top: 16px; }
+  .missing-box h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #e84c1e; margin-bottom: 10px; }
+  .missing-box ul li::before { color: #e84c1e; }
+  .pricing-box { background: #f0edff; border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
+  .pricing-box h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6c47ff; margin-bottom: 6px; }
+  .pricing-box p { font-size: 13px; color: #4a4a6a; }
+  .summary-card { background: linear-gradient(135deg, #6c47ff 0%, #4f32c8 100%); color: white; border-radius: 16px; padding: 32px; margin-bottom: 20px; }
+  .summary-card h2 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+  .priority-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .priority-item:last-child { border-bottom: none; }
+  .priority-num { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+  .priority-text { font-size: 14px; }
+  .priority-text strong { display: block; margin-bottom: 2px; }
+  .priority-text span { opacity: 0.75; font-size: 13px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 8px; }
+  .badge.high { background: rgba(255,87,51,0.2); color: #ff5733; }
+  .badge.med { background: rgba(255,193,7,0.2); color: #d97706; }
+  .badge.low { background: rgba(108,71,255,0.2); color: #c4b0ff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔍 AI Voice Dialer — Competitor Research</h1>
+  <p>Deep research on 10 competing platforms · March 2026</p>
+</div>
+
+<div class="container">
+
+  <!-- PRIORITY SUMMARY -->
+  <div class="section-title">🎯 Top Features We're Missing (Priority Ranked)</div>
+  <div class="summary-card">
+    <h2>What to build next</h2>
+    <div class="priority-item">
+      <div class="priority-num">1</div>
+      <div class="priority-text"><strong>Voice Cloning <span class="badge high">HIGH</span></strong><span>Every top competitor offers it. Record 2 mins of audio → client's own voice makes calls. Massive conversion boost and key differentiator.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">2</div>
+      <div class="priority-text"><strong>Local Presence Dialing <span class="badge high">HIGH</span></strong><span>Show a local area code number to prospects. JustCall reports significantly higher pick-up rates. Easy to add via Twilio.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">3</div>
+      <div class="priority-text"><strong>Warm Transfer to Human <span class="badge high">HIGH</span></strong><span>When AI gets a hot lead, transfer live to a human rep with full context. Retell, Regal, AirCall all have this. Critical for enterprise.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">4</div>
+      <div class="priority-text"><strong>SMS Follow-up After Call <span class="badge high">HIGH</span></strong><span>Bland, JustCall, Regal all send automatic SMS after calls. "Thanks for speaking with us — here's the info you requested." Easy win.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">5</div>
+      <div class="priority-text"><strong>Pre-call AI Briefing <span class="badge med">MED</span></strong><span>Humanlinker gives reps a vocal/text briefing on each prospect before dialing. Huge for personalization at scale.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">6</div>
+      <div class="priority-text"><strong>Parallel / Predictive Dialer <span class="badge med">MED</span></strong><span>JustCall dials 10-15 lines simultaneously, routes live answers to human. Predictive dials based on agent availability. 3-5x productivity.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">7</div>
+      <div class="priority-text"><strong>Agent Simulation Testing <span class="badge med">MED</span></strong><span>Retell lets you test agents in a simulated conversation before going live. Reduces bad calls, builds client confidence.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">8</div>
+      <div class="priority-text"><strong>Analytics Dashboard <span class="badge med">MED</span></strong><span>Call rate, pick-up rate, conversion rate, average duration — visualized. Every enterprise buyer asks for this.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">9</div>
+      <div class="priority-text"><strong>White-label / Reseller Mode <span class="badge low">LOW</span></strong><span>Synthflow charges $2,000/month for it. Could be a standalone product — agencies resell to their clients under their own brand.</span></div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">10</div>
+      <div class="priority-text"><strong>B2B Contact Database <span class="badge low">LOW</span></strong><span>Artisan (300M contacts), 11x, Humanlinker all include lead discovery. Removes the "bring your own list" requirement.</span></div>
+    </div>
+  </div>
+
+  <!-- COMPETITORS -->
+  <div class="section-title">📊 Competitor Breakdown</div>
+
+  <!-- BLAND -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div class="card-name">Bland.ai</div>
+      <div class="card-tag">Enterprise Infrastructure</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>Up to 1M concurrent calls</li>
+          <li>Custom-trained proprietary LLM (no OpenAI dependency)</li>
+          <li>Omni-channel: calls + SMS + chat</li>
+          <li>Voice cloning / custom brand voice</li>
+          <li>Sentiment analysis + call scoring</li>
+          <li>Dedicated GPU infrastructure per client</li>
+          <li>Warm transfers + IVR replacement</li>
+          <li>Multilingual + multi-region</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Fully proprietary LLM — no data sent to OpenAI</li>
+          <li>Dedicated servers per enterprise client</li>
+          <li>Forward-deployed team builds agents with you</li>
+          <li>True enterprise data privacy</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Build: ~$299/mo · Scale: ~$499/mo · Usage: $0.09/min · Enterprise: custom</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Custom model fine-tuning from call recordings</li>
+        <li>SMS + chat on the same agent (omni-channel)</li>
+        <li>Voice cloning</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RETELL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div class="card-name">Retell AI</div>
+      <div class="card-tag">Low Latency Platform</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>~600ms latency (industry-leading)</li>
+          <li>Drag-and-drop no-code flow builder</li>
+          <li>Real-time function calling mid-call</li>
+          <li>Warm transfers with full context</li>
+          <li>Simulation testing before going live</li>
+          <li>Multi-LLM + multi-voice support</li>
+          <li>Knowledge bases (10 free)</li>
+          <li>Pre-built agent templates</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Proprietary turn-taking AI model</li>
+          <li>Simulation/backtesting before deployment</li>
+          <li>Modular pricing (mix & match everything)</li>
+          <li>Most developer-friendly platform</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Pay-as-you-go: ~$0.07+/min · $10 free credits to start · Enterprise: custom</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Agent simulation testing before live calls</li>
+        <li>No-code drag-and-drop flow builder</li>
+        <li>Pre-built agent template library</li>
+        <li>Proprietary interrupt/turn-taking detection</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SYNTHFLOW -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">3</div>
+      <div class="card-name">Synthflow</div>
+      <div class="card-tag">White-label / Reseller</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>No-code voice agent builder</li>
+          <li>White-label & reseller toolkit</li>
+          <li>BYOT or native telephony</li>
+          <li>SOC2, GDPR, ISO 27001 compliant</li>
+          <li>30+ countries, multilingual</li>
+          <li>Global edge &lt;600ms latency</li>
+          <li>65M+ calls/month volume</li>
+          <li>Unlimited agents</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>White-label infrastructure for agencies</li>
+          <li>Compliance-first (SOC2 + ISO 27001)</li>
+          <li>Geo-based data processing (data stays local)</li>
+          <li>Performance routing for speed</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Free to start · ~$0.08–$0.09/min · White Label: $2,000/mo · Enterprise: custom</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>White-label / reseller mode</li>
+        <li>Global edge network for sub-600ms latency</li>
+        <li>SOC2/ISO27001 compliance</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AIRCALL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">4</div>
+      <div class="card-name">AirCall AI</div>
+      <div class="card-tag">Real-time Coaching</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>Real-time call coaching (SPICED/BANT live prompts)</li>
+          <li>Real-time objection handling suggestions</li>
+          <li>Automated CRM updates post-call</li>
+          <li>AI-generated call summaries</li>
+          <li>Sentiment analysis</li>
+          <li>Automated call scoring</li>
+          <li>Trending topics across all calls</li>
+          <li>22,000+ integrations</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Live coaching during active human calls</li>
+          <li>Largest integration ecosystem</li>
+          <li>Established enterprise brand (22K businesses)</li>
+          <li>AI Voice Agent for autonomous inbound</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Base: from $30/user/mo · AI Assist Pro: $49/license/mo · AI Voice Agent: $0.49–$0.99/min</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Real-time live coaching for human reps during calls</li>
+        <li>Conversation intelligence / trending topics</li>
+        <li>Deep native CRM integration (auto-update on call end)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- JUSTCALL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">5</div>
+      <div class="card-name">JustCall AI</div>
+      <div class="card-tag">Dialer Modes</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>5 dialer modes: Auto, Predictive, Parallel, Power, Dynamic</li>
+          <li>Parallel dialer: 10-15 simultaneous lines</li>
+          <li>Local presence dialing (match area code)</li>
+          <li>Number rotation + spam protection</li>
+          <li>TCPA compliance + DNC scrubbing</li>
+          <li>AI SDR autonomous voice agent</li>
+          <li>Speed-to-lead automation</li>
+          <li>SMS bots + SMS workflows</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Most complete dialer mode variety</li>
+          <li>TCPA/DNC compliance tooling</li>
+          <li>Local presence = higher pick-up rates</li>
+          <li>Speed-to-lead: instant follow-up automation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Essentials: $19/user/mo · Team/Pro: $29–$49/user/mo · AI Dialer: add-on</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Parallel dialer (10-15 simultaneous calls)</li>
+        <li>Predictive dialer (algorithmic multi-line)</li>
+        <li>Local presence dialing</li>
+        <li>Number reputation monitoring + rotation</li>
+        <li>TCPA/DNC compliance scrubbing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HUMANLINKER -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">6</div>
+      <div class="card-name">Humanlinker</div>
+      <div class="card-tag">Personalization</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>700M+ B2B contact database</li>
+          <li>DISC behavioral analysis of prospects</li>
+          <li>Buying signal tracking (LinkedIn, news, hiring)</li>
+          <li>Multichannel: email + LinkedIn + social</li>
+          <li>1-to-1 personalization per lead (AI-written)</li>
+          <li>AI Meeting Prep + vocal pre-call briefing</li>
+          <li>Chrome extension for LinkedIn</li>
+          <li>HubSpot, Salesforce, Dynamics integrations</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>DISC personality profiling of prospects</li>
+          <li>Vocal AI briefing before you dial</li>
+          <li>Buying signal detection as outreach triggers</li>
+          <li>True 1-to-1 personalization (not templates)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Free (30 AI credits) · Pro: €69/mo · Business: custom</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Pre-call AI briefing (vocal summary of prospect before dialing)</li>
+        <li>DISC personality analysis of prospects</li>
+        <li>Buying signal triggers for proactive outreach</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REGAL -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">7</div>
+      <div class="card-name">Regal.io</div>
+      <div class="card-tag">Enterprise / Regulated Industries</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>Lead qualification + booking (autonomous outbound)</li>
+          <li>Inbound support automation (97% containment)</li>
+          <li>Speed-to-lead (0-second answer time)</li>
+          <li>Collections & payment recovery</li>
+          <li>Scheduling + appointment reminders</li>
+          <li>SMS + voice omni-channel</li>
+          <li>Human escalation / warm transfers</li>
+          <li>Branded caller ID</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Purpose-built for regulated industries</li>
+          <li>$5B in collections driven via AI calls</li>
+          <li>4x faster speed-to-lead than human teams</li>
+          <li>Full human-agent handoff infrastructure</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Enterprise custom only · ~$35+/seat/mo on lower end · Annual contracts</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Warm transfer to human rep (mid-call escalation)</li>
+        <li>Branded caller ID management</li>
+        <li>Revenue attribution tied to calls</li>
+        <li>Inbound call handling (we're outbound only)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RELEVANCE AI -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">8</div>
+      <div class="card-name">Relevance AI</div>
+      <div class="card-tag">Multi-agent Orchestration</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>Low-code AI agent builder</li>
+          <li>Phone agent mode (VAPI-powered)</li>
+          <li>Multi-agent workforce (agents managing agents)</li>
+          <li>BDR agent: research + write + call in one</li>
+          <li>Batch calling + surveys + confirmations</li>
+          <li>Connect to any API/tool mid-call</li>
+          <li>Knowledge base per agent</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>Agent boss manages sub-agents autonomously</li>
+          <li>Completely custom-buildable</li>
+          <li>Combines research + writing + calling in one</li>
+          <li>Arbitrary tool/API connections during calls</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Free tier · Business/Team: ~$10,000+/year for serious usage</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Multi-agent orchestration (manager → sub-agents)</li>
+        <li>Arbitrary API connections during live calls</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11X -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">9</div>
+      <div class="card-name">11x.ai (Alice SDR)</div>
+      <div class="card-tag">Autonomous SDR</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>Fully autonomous AI SDR</li>
+          <li>Intelligent buyer targeting beyond databases</li>
+          <li>Real-time lead scoring (highest intent first)</li>
+          <li>Personalized + adaptive email/LinkedIn</li>
+          <li>24/7 prospecting + reply handling + booking</li>
+          <li>CRM enrichment + data cleaning</li>
+          <li>Behavioral signal tracking</li>
+          <li>Self-improving from every interaction</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>True autonomous SDR (fully hands-off)</li>
+          <li>Self-improving AI that learns from outcomes</li>
+          <li>+30% meetings per AE claimed</li>
+          <li>$100M+ revenue generated for customers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Custom enterprise only · ~$2,849+/mo equivalent per SDR replaced</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Self-improving AI (learns from call outcomes)</li>
+        <li>Autonomous reply handling (reads + responds to inbound replies)</li>
+        <li>Lead enrichment + CRM data cleaning</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ARTISAN -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">10</div>
+      <div class="card-name">Artisan AI (Ava BDR)</div>
+      <div class="card-tag">All-in-one Outbound</div>
+    </div>
+    <div class="grid">
+      <div class="box">
+        <h4>Core Features</h4>
+        <ul>
+          <li>300M+ verified B2B contacts database</li>
+          <li>60+ enrichment filters (technographic, hiring, fundraising)</li>
+          <li>Built-in email deliverability suite</li>
+          <li>Personalization waterfall (selects best angle per lead)</li>
+          <li>10+ tone of voice options</li>
+          <li>Multichannel: email + LinkedIn</li>
+          <li>E-commerce + local business data</li>
+          <li>White-glove onboarding</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>What Makes It Unique</h4>
+        <ul>
+          <li>300M contact database included</li>
+          <li>Personalization waterfall selects best angle</li>
+          <li>Email deliverability built in (warmup, rotation)</li>
+          <li>White-glove support on all plans</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-box">
+      <h4>Pricing</h4>
+      <p>Volume-based custom pricing only · White-glove support standard</p>
+    </div>
+    <div class="missing-box">
+      <h4>🔴 Features We're Missing</h4>
+      <ul>
+        <li>Integrated B2B contact database for lead discovery</li>
+        <li>Email deliverability tooling (warmup, inbox rotation)</li>
+        <li>Personalization waterfall logic</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">💡 Our Unique Advantages to Double Down On</div>
+  <div class="card">
+    <div class="grid">
+      <div class="box">
+        <h4>What We Have That Others Don't</h4>
+        <ul>
+          <li>Greek language (EN + EL switching) — nobody else does this</li>
+          <li>Vertical-specific agents (ΜΙΑ Collection is live proof)</li>
+          <li>Done-for-you setup (not DIY infrastructure)</li>
+          <li>Integrated CRM + recordings + call scoring in one UI</li>
+          <li>Supabase backend — real shared data across team</li>
+          <li>Contact book + campaign tags</li>
+          <li>Outcome-based logging (booked/email/follow-up/cold)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>Positioning Statement</h4>
+        <ul>
+          <li>Not infrastructure — a ready-to-run sales agent</li>
+          <li>Greek market is an untapped moat</li>
+          <li>Industry packs = faster time-to-value for clients</li>
+          <li>Voice cloning = their voice, their brand</li>
+          <li>Outcome-based pricing = aligned incentives</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

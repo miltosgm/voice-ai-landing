@@ -2036,8 +2036,8 @@ function speakAgentElevenLabs(text) {
 
     var modelId = (cfg.voice && cfg.voice.model) ? cfg.voice.model : ((activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2');
 
-    var voiceSettings = { stability: stability, similarity_boost: 0.75 };
-    if (speed && speed >= 0.7) voiceSettings.speed = speed;
+    if (!speed || speed < 0.7) speed = 1.0; // default if agent has no speed set
+    var voiceSettings = { stability: stability, similarity_boost: 0.75, speed: speed };
 
     var ctx = getSimAudioCtx();
 

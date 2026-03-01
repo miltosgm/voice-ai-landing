@@ -2108,58 +2108,26 @@ var SIM_SCENARIOS = [
   {
     name: 'Interested Buyer',
     emoji: '😊',
-    persona: 'You are a curious potential customer who received a cold call. You are open and friendly. Ask what the company sells, show mild interest, ask how it works, and eventually agree to hear more or schedule a follow-up. Keep replies short (1-2 sentences max). Do not reveal you are AI.',
-    turns: [
-      'Hello?',
-      'Oh hi — who is this?',
-      'ΜΙΑ Collection? What is that exactly?',
-      'Interesting — European brands? Like what kind of clothes?',
-      'And how does it work, do I order online or visit a store?',
-      'Okay, that sounds interesting. What would be the next step?',
-      'Alright, sure. I can take a look.'
-    ]
+    persona: 'You are receiving an unexpected sales call. You are open and friendly. You know nothing about the caller yet — wait for them to introduce themselves and their company before reacting. Ask natural follow-up questions based on what they tell you. Show mild interest and eventually agree to hear more or schedule a follow-up. Keep replies short (1-2 sentences). Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Hello?'
   },
   {
     name: 'The Objector',
     emoji: '🤔',
-    persona: 'You are a skeptical customer on a cold call. You are polite but reluctant. Say you already have a place you shop, say you need to think about it, ask "why should I switch?", say you are busy. Let the agent try to win you over. Keep replies short.',
-    turns: [
-      'Yes, hello?',
-      'I already have brands I buy from, I\'m not really looking for anything new.',
-      'I don\'t know... I need to think about it.',
-      'Why should I choose you over what I already use?',
-      'I\'m quite busy these days.',
-      'Maybe some other time.',
-      'Fine, you can send me some information.'
-    ]
+    persona: 'You are receiving an unexpected sales call. You are polite but skeptical and reluctant. You already have suppliers you are happy with. Push back — say you need to think about it, ask why you should switch, say you are busy. Only warm up slightly if the agent gives a very compelling reason. Keep replies short. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Yes, hello?'
   },
   {
     name: 'Price Shopper',
     emoji: '💶',
-    persona: 'You are a customer focused entirely on price and deals. Ask "how much does it cost?" immediately. Ask about discounts, free shipping, and how it compares to cheaper options. Be direct and deal-focused. Keep replies short.',
-    turns: [
-      'Hi, how much does it cost?',
-      'Is there a minimum order or anything like that?',
-      'Do you have any discounts or promotions?',
-      'What about shipping, is it free?',
-      'How does that compare to other stores?',
-      'Okay and what\'s the return policy?',
-      'Alright, let me think about it.'
-    ]
+    persona: 'You are receiving a sales call. You are very focused on price and value. After the agent introduces themselves, immediately ask about pricing, discounts, minimum orders, and how they compare to cheaper alternatives. Be direct and deal-focused. Keep replies short. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Hi, yes?'
   },
   {
     name: 'Wrong Number / Hostile',
     emoji: '📵',
-    persona: 'You are an annoyed person who did not ask to be called. Start hostile — "who gave you my number?", "I\'m not interested", "stop calling me". If the agent is very polite and professional, gradually soften slightly by the end. Keep replies short and sharp.',
-    turns: [
-      'Who is this? I didn\'t ask for any call.',
-      'I\'m not interested. Please don\'t call me.',
-      'How did you even get my number?',
-      'I said I\'m NOT interested.',
-      'This is harassment. I\'m going to report this.',
-      'Fine — what exactly are you selling? Make it quick.',
-      'Okay. Whatever. Don\'t call again.'
-    ]
+    persona: 'You did not ask to be called and you are annoyed. Start hostile — ask who gave them your number, say you are not interested, tell them to stop calling. If the agent stays very polite and professional, gradually soften a little by the end. Keep replies short and sharp. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Who is this? I did not ask for any call.'
   }
 ];
 
@@ -2239,6 +2207,32 @@ function removeTypingIndicator() {
   if (el) el.remove();
 }
 
+// Generate next customer reply based on conversation history
+async function customerChat(persona, conversationHistory) {
+  var payload = {
+    assistant: {
+      model: {
+        provider: 'openai',
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'system', content: persona + '\n\nRespond with ONLY your spoken reply — no stage directions, no quotes, no labels. 1-2 sentences maximum.' }]
+      }
+    },
+    input: conversationHistory
+  };
+  var res = await fetch('https://api.vapi.ai/chat', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Customer chat error');
+  var output = data.output || [];
+  for (var i = 0; i < output.length; i++) {
+    if (output[i].role === 'assistant') return output[i].content;
+  }
+  return '';
+}
+
 async function vapiChat(messages) {
   var cfg = buildAssistantConfig();
   var systemMsg = '';
@@ -2294,22 +2288,33 @@ async function startSimCall() {
   appendSimLine(null, '— Simulation started: ' + scenario.name + ' —', true);
   addLog('Auto-simulation started (' + scenario.name + ')', '#7c3aed');
 
+  // customerHistory tracks conversation from customer's POV (roles flipped)
+  var customerHistory = [];
+  var NUM_TURNS = 7;
+
   try {
-    for (var t = 0; t < scenario.turns.length; t++) {
+    for (var t = 0; t < NUM_TURNS; t++) {
       if (!simRunning) break;
 
-      var customerLine = scenario.turns[t];
+      // Generate or use opening line
+      var customerLine;
+      if (t === 0) {
+        customerLine = scenario.openingLine;
+      } else {
+        showTypingIndicator('User');
+        customerLine = await customerChat(scenario.persona, customerHistory.slice());
+        removeTypingIndicator();
+        if (!customerLine) customerLine = 'I see.';
+      }
 
-      // Show customer typing then speak
-      await sleep(400);
-      showTypingIndicator('User');
-      await sleep(500 + customerLine.length * 10);
-      removeTypingIndicator();
+      // Show + speak customer
+      await sleep(300);
       appendSimLine('User', customerLine);
       await speakSimLine(customerLine, 'User');
 
-      // Add to history
+      // Add to both histories
       simChatHistory.push({ role: 'user', content: customerLine });
+      customerHistory.push({ role: 'user', content: customerLine });
 
       // Get agent response
       await sleep(300);
@@ -2320,10 +2325,11 @@ async function startSimCall() {
       if (!agentReply) agentReply = '[No response]';
       appendSimLine('AI', agentReply);
       simChatHistory.push({ role: 'assistant', content: agentReply });
+      // From customer POV, agent reply is the "assistant" turn (flipped)
+      customerHistory.push({ role: 'assistant', content: agentReply });
       await speakSimLine(agentReply, 'AI');
 
-      // Natural pause between turns
-      await sleep(500);
+      await sleep(400);
     }
 
     if (simRunning) {

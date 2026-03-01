@@ -1996,6 +1996,15 @@ function toggleSimMute() {
 }
 
 var EL_API_KEY = '12cb98753027013e75c93813effeaac5';
+var simAudioCtx = null;
+
+function getSimAudioCtx() {
+  if (!simAudioCtx || simAudioCtx.state === 'closed') {
+    simAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (simAudioCtx.state === 'suspended') simAudioCtx.resume();
+  return simAudioCtx;
+}
 
 // Load browser voices for customer side
 function loadSimVoices() {
@@ -2030,6 +2039,8 @@ function speakAgentElevenLabs(text) {
     var voiceSettings = { stability: stability, similarity_boost: 0.75 };
     if (speed && speed >= 0.7) voiceSettings.speed = speed;
 
+    var ctx = getSimAudioCtx();
+
     fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
       method: 'POST',
       headers: {
@@ -2045,19 +2056,21 @@ function speakAgentElevenLabs(text) {
     })
     .then(function(res) {
       if (!res.ok) return res.text().then(function(t) { throw new Error('EL ' + res.status + ': ' + t); });
-      return res.blob();
+      return res.arrayBuffer();
     })
-    .then(function(blob) {
-      var url = URL.createObjectURL(blob);
-      var audio = new Audio(url);
-      audio.onended = function() { URL.revokeObjectURL(url); resolve(); };
-      audio.onerror = function(e) { console.warn('Audio playback error', e); URL.revokeObjectURL(url); resolve(); };
-      var playPromise = audio.play();
-      if (playPromise) playPromise.catch(function(e) { console.warn('Audio play() blocked:', e); resolve(); });
+    .then(function(buffer) {
+      return ctx.decodeAudioData(buffer);
+    })
+    .then(function(audioBuffer) {
+      var source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(ctx.destination);
+      source.onended = resolve;
+      source.start(0);
     })
     .catch(function(e) {
       console.warn('ElevenLabs TTS error:', e.message);
-      appendSimLine(null, '⚠️ EL voice error: ' + e.message, true);
+      appendSimLine(null, '⚠️ EL error: ' + e.message, true);
       speakBrowser(text, 'AI').then(resolve);
     });
   });
@@ -2258,6 +2271,9 @@ async function vapiChat(messages) {
 function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
 async function startSimCall() {
+  // Unlock AudioContext on user gesture
+  getSimAudioCtx();
+
   var scenario = SIM_SCENARIOS[activeScenarioIdx];
   var btn = document.getElementById('sim-start-btn');
   btn.disabled = true;

@@ -1070,24 +1070,15 @@
     <button onclick="closeSettings()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--gray)">✕</button>
   </div>
 
-  <!-- HubSpot -->
-  <div class="sdrawer-section">
-    <div class="sdrawer-label">🔗 HubSpot Webhook</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
-      <div class="tog" id="tog-hubspot" onclick="toggleSetting('hubspot',this)"></div>
-    </div>
-    <input type="url" id="s-hubspot-url" placeholder="https://api.hubspot.com/webhooks/..." class="sdrawer-input" oninput="saveSetting('hubspotUrl',this.value)">
+  <!-- Coming Soon -->
+  <div class="sdrawer-section" style="opacity:0.5;pointer-events:none;">
+    <div class="sdrawer-label">🔗 HubSpot Webhook <span style="font-size:10px;background:rgba(124,58,237,0.2);color:#c4b5fd;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:600;">COMING SOON</span></div>
+    <div style="font-size:11px;color:var(--gray);line-height:1.5;">Auto-send call data to HubSpot CRM after every call.</div>
   </div>
 
-  <!-- Google Sheets -->
-  <div class="sdrawer-section">
-    <div class="sdrawer-label">📊 Google Sheets Webhook</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
-      <div class="tog" id="tog-gsheets" onclick="toggleSetting('gsheets',this)"></div>
-    </div>
-    <input type="url" id="s-gsheets-url" placeholder="https://script.google.com/macros/..." class="sdrawer-input" oninput="saveSetting('gsheetsUrl',this.value)">
+  <div class="sdrawer-section" style="opacity:0.5;pointer-events:none;">
+    <div class="sdrawer-label">📊 Google Sheets Webhook <span style="font-size:10px;background:rgba(124,58,237,0.2);color:#c4b5fd;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:600;">COMING SOON</span></div>
+    <div style="font-size:11px;color:var(--gray);line-height:1.5;">Log every call as a row in a shared Google Sheet.</div>
   </div>
 
   <!-- Email Follow-up -->

@@ -2036,8 +2036,8 @@ function speakAgentElevenLabs(text) {
 
     var modelId = (cfg.voice && cfg.voice.model) ? cfg.voice.model : ((activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2');
 
-    if (!speed || speed < 0.7) speed = 1.0; // default if agent has no speed set
-    var voiceSettings = { stability: stability, similarity_boost: 0.75, speed: speed };
+    if (!speed || speed < 0.7) speed = 1.0;
+    var voiceSettings = { stability: stability, similarity_boost: 0.75 };
 
     var ctx = getSimAudioCtx();
 
@@ -2064,6 +2064,11 @@ function speakAgentElevenLabs(text) {
     .then(function(audioBuffer) {
       var source = ctx.createBufferSource();
       source.buffer = audioBuffer;
+      // Map VAPI speed (0.7–1.0) to playbackRate (1.0–1.3)
+      // ElevenLabs default is slightly slow, so minimum playbackRate is 1.1
+      var playbackRate = 1.1;
+      if (speed && speed >= 0.7) playbackRate = 1.1 + ((speed - 0.7) / 0.3) * 0.2;
+      source.playbackRate.value = playbackRate;
       source.connect(ctx.destination);
       source.onended = resolve;
       source.start(0);

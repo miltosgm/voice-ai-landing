@@ -1580,7 +1580,7 @@ function buildAssistantConfig() {
   if (activeAgent === 'sofia3') {
     config.backchannelingEnabled = true;
     config.silenceTimeoutSeconds = 20;
-    config.responseDelaySeconds = 1.5;
+    config.responseDelaySeconds = 0.5;
   }
 
   return config;
@@ -2553,7 +2553,7 @@ window.submitOutcome  = submitOutcome;
     const b = loadB();
     if (b.backchannel) cfg.backchannelingEnabled = true;
     else delete cfg.backchannelingEnabled;
-    if (b.delay) cfg.responseDelaySeconds = activeAgent === 'sofia3' ? 1.5 : 0.5;
+    if (b.delay) cfg.responseDelaySeconds = 0.5;
     else delete cfg.responseDelaySeconds;
     if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
       let sys = cfg.model.messages[0].content;

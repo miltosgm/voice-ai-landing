@@ -376,6 +376,27 @@
   .log-item .log-time { color: var(--gray2); font-size: 11px; margin-left: auto; flex-shrink: 0; }
   .log-empty { color: var(--gray); font-size: 13px; text-align: center; padding: 16px 0; }
 
+  /* Call score badges */
+  .score-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .score-hot  { background: rgba(255,87,51,0.12); color: #e84c1e; }
+  .score-warm { background: rgba(217,119,6,0.12); color: #d97706; }
+  .score-cold { background: rgba(107,114,128,0.1); color: #6b7280; }
+
+  /* CRM */
+  .crm-item { border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--surface); }
+  .crm-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .crm-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(108,92,231,0.12); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
+  .crm-info { flex: 1; }
+  .crm-name { font-size: 14px; font-weight: 600; }
+  .crm-meta { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .crm-summary { font-size: 12px; color: var(--gray); background: rgba(108,92,231,0.05); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; line-height: 1.5; }
+  .crm-audio { width: 100%; height: 32px; border-radius: 8px; margin-bottom: 8px; }
+  .crm-notes { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; color: var(--white); background: var(--surface); resize: none; outline: none; }
+  .crm-notes:focus { border-color: var(--accent); }
+  .crm-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .crm-btn { font-size: 11px; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-family: inherit; font-weight: 600; color: var(--gray); transition: all 0.15s; }
+  .crm-btn:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+
   /* Recent Calls */
   .call-item { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .call-item:last-child { border-bottom: none; }
@@ -830,6 +851,16 @@
     <div id="calls-list"><div class="log-empty">Press Refresh to load calls</div></div>
   </div>
 
+  <!-- CRM -->
+  <div class="card" id="crm-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="card-title" style="margin:0">🏆 CRM — Hot Leads</div>
+      <button onclick="exportCRM()" style="font-size:11px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">⬇ Export CSV</button>
+    </div>
+    <div id="crm-empty" class="log-empty">No leads yet — positive calls get added here</div>
+    <div id="crm-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
   </div><!-- /inner-page -->
 </div><!-- /mp -->
 </div><!-- /split-layout -->
@@ -1153,6 +1184,7 @@ function init() {
   restoreLog();
   initCustomAgents();
   renderContacts();
+  renderCRM();
   // Load saved agent edits from localStorage
   const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
   for (const [agentKey, edits] of Object.entries(agentEdits)) {
@@ -1676,6 +1708,10 @@ async function callAll() {
 }
 
 // ── Expose all functions to global scope (required for inline onclick in HTML) ──
+window.addToCRM         = addToCRM;
+window.removeCRMLead    = removeCRMLead;
+window.saveCRMNote      = saveCRMNote;
+window.exportCRM        = exportCRM;
 window.addContact       = addContact;
 window.deleteContact    = deleteContact;
 window.callContact      = callContact;
@@ -1755,15 +1791,20 @@ async function loadRecentCalls() {
       const recording = c.recordingUrl || (c.artifact && c.artifact.recordingUrl) || (c.stereoRecordingUrl) || null;
       const transcript = c.transcript || (c.artifact && c.artifact.transcript) || null;
       const summary = c.summary || (c.artifact && c.artifact.summary) || null;
+      const score = scoreCall(transcript, summary);
+      const crmLead = { callId: c.id, name: number, number: number, agent: (AGENTS[activeAgent]||{}).label||activeAgent, date: started, summary, recording, scoreLabel: score.label, scoreCls: score.cls, notes: '' };
+      const crmDataStr = encodeURIComponent(JSON.stringify(crmLead));
       return `<div class="call-item">
         <div class="call-row">
           <span class="call-status ${statusClass}">${status}</span>
           <span class="call-number">${number}</span>
           <span class="call-duration">${dur}</span>
+          <span class="score-badge score-${score.cls}">${score.label}</span>
         </div>
         <div class="call-time">${started}</div>
         ${recording ? `<audio class="call-audio" controls src="${recording}"></audio>` : '<div style="font-size:11px;color:var(--gray)">No recording available</div>'}
         ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">💬 Show conversation</button><div class="call-transcript" id="transcript-${i}">${summary ? '<div class="ct-summary"><strong>📋 Summary</strong><p>' + summary + '</p></div>' : ''}${transcript ? '<div class="ct-convo">' + formatTranscript(transcript) + '</div>' : ''}</div>` : ''}
+        ${score.rank >= 1 ? `<button onclick='addToCRM(${JSON.stringify(crmLead)})' style="margin-top:6px;width:100%;padding:6px;border-radius:8px;border:none;background:rgba(5,150,105,0.1);color:#059669;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">✅ Add to CRM</button>` : ''}
       </div>`;
     }).join('');
   } catch(e) {
@@ -1795,6 +1836,81 @@ function toggleTranscript(i) {
   const visible = el.style.display === 'block';
   el.style.display = visible ? 'none' : 'block';
   el.previousElementSibling.textContent = visible ? '📄 Show transcript' : '📄 Hide transcript';
+}
+
+// ════ CALL SCORING & CRM ════
+function scoreCall(transcript, summary) {
+  const text = ((transcript || '') + ' ' + (summary || '')).toLowerCase();
+  const hot  = ['demo', 'send email', 'send info', 'more information', 'schedule', 'video call', 'meeting', 'interested', 'yes', 'sounds good', 'tell me more', 'when can', 'how much', 'pricing', 'price', 'περισσότερες', 'ενδιαφέρομαι', 'στείλτε', 'demo', 'ναι'];
+  const cold = ['not interested', 'no thank', 'don\'t call', 'remove', 'busy', 'wrong number', 'δεν ενδιαφέρομαι', 'όχι ευχαριστώ'];
+  const hotScore  = hot.filter(k => text.includes(k)).length;
+  const coldScore = cold.filter(k => text.includes(k)).length;
+  if (coldScore > 0) return { label: '❌ Cold', cls: 'cold', rank: 0 };
+  if (hotScore >= 2) return { label: '🔥 Hot', cls: 'hot', rank: 2 };
+  if (hotScore >= 1) return { label: '⭐ Warm', cls: 'warm', rank: 1 };
+  return { label: '❄️ Cold', cls: 'cold', rank: 0 };
+}
+
+function loadCRM() { return JSON.parse(localStorage.getItem('sofiaCRM') || '[]'); }
+function saveCRM(leads) { localStorage.setItem('sofiaCRM', JSON.stringify(leads)); }
+
+function addToCRM(lead) {
+  const leads = loadCRM();
+  if (leads.find(l => l.callId === lead.callId)) { showToast('Already in CRM', 'info'); return; }
+  leads.unshift(lead);
+  saveCRM(leads);
+  renderCRM();
+  showToast('✅ Added to CRM', 'success');
+}
+
+function removeCRMLead(callId) {
+  const leads = loadCRM().filter(l => l.callId !== callId);
+  saveCRM(leads);
+  renderCRM();
+}
+
+function saveCRMNote(callId, note) {
+  const leads = loadCRM();
+  const lead = leads.find(l => l.callId === callId);
+  if (lead) { lead.notes = note; saveCRM(leads); }
+}
+
+function renderCRM() {
+  const leads = loadCRM();
+  const list  = document.getElementById('crm-list');
+  const empty = document.getElementById('crm-empty');
+  if (!list) return;
+  if (!leads.length) { empty.style.display = ''; list.innerHTML = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = leads.map(l => `
+    <div class="crm-item">
+      <div class="crm-header">
+        <div class="crm-avatar">${(l.name||'?').charAt(0).toUpperCase()}</div>
+        <div class="crm-info">
+          <div class="crm-name">${l.name || l.number || 'Unknown'}</div>
+          <div class="crm-meta">${l.number || ''} · ${l.agent || ''} · ${l.date || ''} · <span class="score-badge score-${l.scoreCls}">${l.scoreLabel}</span></div>
+        </div>
+      </div>
+      ${l.summary ? `<div class="crm-summary">📋 ${l.summary}</div>` : ''}
+      ${l.recording ? `<audio class="crm-audio" controls src="${l.recording}"></audio>` : ''}
+      <textarea class="crm-notes" rows="2" placeholder="Add follow-up notes..." onchange="saveCRMNote('${l.callId}',this.value)">${l.notes || ''}</textarea>
+      <div class="crm-actions">
+        <button class="crm-btn" onclick="removeCRMLead('${l.callId}')">✕ Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function exportCRM() {
+  const leads = loadCRM();
+  if (!leads.length) { showToast('No leads to export', 'error'); return; }
+  const rows = [['Name','Number','Agent','Score','Date','Summary','Notes','Recording']];
+  leads.forEach(l => rows.push([l.name||'', l.number||'', l.agent||'', l.scoreLabel||'', l.date||'', (l.summary||'').replace(/,/g,' '), (l.notes||'').replace(/,/g,' '), l.recording||'']));
+  const csv = rows.map(r => r.map(v => '"'+v+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'mia-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('Exported ✓', 'success');
 }
 
 // ════ CONTACT BOOK ════

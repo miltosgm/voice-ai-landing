@@ -3,602 +3,591 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sofia Dialer — Design Concepts</title>
+<title>Sofia Dialer — Light UI Variations</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #0a0a0f; color: #e2e0ff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 24px 20px 80px; }
 
-/* ── PAGE CHROME ── */
-.page-header { text-align: center; padding: 60px 20px 40px; }
-.page-header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-.page-header p { font-size: 14px; color: #555; }
-.concepts { display: flex; flex-direction: column; gap: 80px; padding: 0 20px 100px; }
-.concept { max-width: 1100px; margin: 0 auto; width: 100%; }
-.concept-label { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-.concept-num { width: 32px; height: 32px; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
-.concept-name { font-size: 18px; font-weight: 800; color: #fff; }
-.concept-desc { font-size: 13px; color: #666; margin-top: 2px; }
-.mockup-frame { border-radius: 16px; overflow: hidden; border: 1px solid #2a1a5a; box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
-.pick-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 16px; text-decoration: none; }
-.pick-btn:hover { opacity: .88; }
+  h1 { text-align: center; font-size: 22px; font-weight: 800; color: #111; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 13px; color: #888; margin-bottom: 36px; }
 
-/* ══════════════════════════════════════════
-   CONCEPT 1 — COMMAND CENTER
-══════════════════════════════════════════ */
-.c1 { background: #070710; min-height: 580px; display: grid; grid-template-columns: 260px 1fr; }
-.c1-sidebar { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.06); padding: 24px 16px; display: flex; flex-direction: column; gap: 8px; }
-.c1-logo { font-size: 13px; font-weight: 800; color: #fff; padding: 0 8px 20px; letter-spacing: .05em; display: flex; align-items: center; gap: 8px; }
-.c1-logo-dot { width: 8px; height: 8px; background: #7c3aed; border-radius: 50%; box-shadow: 0 0 12px #7c3aed; }
-.c1-agent { border-radius: 10px; padding: 12px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
-.c1-agent.active { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.4); }
-.c1-agent:not(.active) { border: 1px solid transparent; }
-.c1-agent:not(.active):hover { background: rgba(255,255,255,0.04); }
-.c1-agent-name { font-size: 13px; font-weight: 700; color: #e2e0ff; margin-bottom: 2px; }
-.c1-agent-sub { font-size: 11px; color: #555; }
-.c1-pulse { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
-.c1-pulse::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(2.5); } }
-.c1-main { padding: 28px 32px; display: flex; flex-direction: column; gap: 20px; }
-.c1-statsbar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.c1-stat { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 14px 16px; }
-.c1-stat-num { font-size: 22px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
-.c1-stat-label { font-size: 11px; color: #555; }
-.c1-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.c1-panel { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
-.c1-panel-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #444; margin-bottom: 14px; }
-.c1-prompt-text { font-size: 11px; color: #666; line-height: 1.7; }
-.c1-btn-group { display: flex; gap: 8px; margin-top: 16px; }
-.c1-btn { flex: 1; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; }
-.c1-btn-primary { background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; }
-.c1-btn-secondary { background: rgba(255,255,255,0.05); color: #888; border: 1px solid rgba(255,255,255,0.08) !important; }
-.c1-nav { display: flex; gap: 4px; margin-bottom: 4px; }
-.c1-nav-item { font-size: 11px; padding: 5px 12px; border-radius: 6px; cursor: pointer; color: #666; }
-.c1-nav-item.active { background: rgba(124,58,237,0.2); color: #c4b5fd; }
-.c1-mesh { position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%); pointer-events: none; }
+  .concept { background: white; border: 1px solid #e5e7eb; border-radius: 20px; margin-bottom: 48px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+  .concept-label { background: #fafafa; border-bottom: 1px solid #e5e7eb; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .concept-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; color: white; }
+  .concept-title { font-size: 15px; font-weight: 700; color: #111; }
+  .concept-desc { font-size: 12px; color: #999; margin-top: 2px; }
+  .concept-body { padding: 24px; }
 
-/* ══════════════════════════════════════════
-   CONCEPT 2 — DARK PRO
-══════════════════════════════════════════ */
-.c2 { background: #0d0d14; min-height: 580px; display: flex; flex-direction: column; }
-.c2-topbar { background: #0a0a0f; border-bottom: 1px solid #1a1a2e; padding: 0 28px; display: flex; align-items: center; height: 52px; gap: 0; }
-.c2-logo { font-size: 14px; font-weight: 800; color: #fff; margin-right: 32px; display: flex; align-items: center; gap: 8px; }
-.c2-nav { display: flex; height: 100%; }
-.c2-nav-item { padding: 0 16px; font-size: 13px; color: #555; display: flex; align-items: center; cursor: pointer; border-bottom: 2px solid transparent; }
-.c2-nav-item.active { color: #e2e0ff; border-bottom-color: #7c3aed; }
-.c2-nav-item:hover:not(.active) { color: #888; }
-.c2-nav-sep { margin-left: auto; }
-.c2-avatar { width: 28px; height: 28px; background: linear-gradient(135deg,#7c3aed,#3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-.c2-body { display: grid; grid-template-columns: 300px 1fr; flex: 1; }
-.c2-left { border-right: 1px solid #1a1a2e; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.c2-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #333; margin-bottom: 6px; }
-.c2-agent-card { background: #131320; border: 1px solid #1e1e35; border-radius: 10px; padding: 14px; cursor: pointer; }
-.c2-agent-card.active { border-color: #7c3aed; background: rgba(124,58,237,0.08); }
-.c2-agent-row { display: flex; align-items: center; gap: 10px; }
-.c2-agent-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.c2-agent-info strong { display: block; font-size: 13px; color: #e2e0ff; margin-bottom: 2px; }
-.c2-agent-info span { font-size: 11px; color: #555; }
-.c2-score-badge { margin-left: auto; font-size: 11px; font-weight: 700; background: rgba(34,197,94,0.1); color: #22c55e; border-radius: 20px; padding: 2px 8px; }
-.c2-right { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; }
-.c2-agent-header { display: flex; align-items: center; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid #1a1a2e; }
-.c2-agent-title { font-size: 20px; font-weight: 800; color: #fff; }
-.c2-lang-toggle { display: flex; background: #131320; border-radius: 8px; padding: 3px; margin-left: auto; }
-.c2-lang-btn { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: none; color: #555; }
-.c2-lang-btn.active { background: #7c3aed; color: #fff; }
-.c2-tabs { display: flex; gap: 0; border-bottom: 1px solid #1a1a2e; }
-.c2-tab { padding: 8px 16px; font-size: 12px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
-.c2-tab.active { color: #c4b5fd; border-bottom-color: #7c3aed; }
-.c2-content { background: #131320; border: 1px solid #1e1e35; border-radius: 10px; padding: 16px; flex: 1; }
-.c2-prompt-preview { font-size: 11.5px; color: #666; line-height: 1.8; }
-.c2-actions { display: flex; gap: 10px; }
-.c2-call-btn { flex: 1; padding: 12px; background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
-.c2-sim-btn { padding: 12px 18px; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); color: #c4b5fd; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  /* ---------- CONCEPT W1: Clean White Card ---------- */
+  .w1-wrap { max-width: 520px; margin: 0 auto; }
+  .w1-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .w1-logo { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #888; }
+  .w1-logo span { color: #6c47ff; }
+  .w1-status { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 12px; }
+  .w1-status::before { content: ''; width: 6px; height: 6px; background: #059669; border-radius: 50%; animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
 
-/* ══════════════════════════════════════════
-   CONCEPT 3 — NEON NOIR
-══════════════════════════════════════════ */
-.c3 { background: #050508; min-height: 580px; display: grid; grid-template-columns: 72px 1fr; }
-.c3-icons { background: #060609; border-right: 1px solid rgba(124,58,237,0.15); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 8px; }
-.c3-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; color: #333; }
-.c3-icon.active { background: rgba(124,58,237,0.2); color: #a78bfa; box-shadow: 0 0 20px rgba(124,58,237,0.2); }
-.c3-icon:hover:not(.active) { color: #555; background: rgba(255,255,255,0.03); }
-.c3-sep { width: 30px; height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0; }
-.c3-main { display: grid; grid-template-columns: 220px 1fr; }
-.c3-agents { border-right: 1px solid rgba(124,58,237,0.1); padding: 20px 14px; display: flex; flex-direction: column; gap: 6px; }
-.c3-agent { padding: 10px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
-.c3-agent.active { border-color: rgba(124,58,237,0.5); background: rgba(124,58,237,0.08); }
-.c3-agent-name { font-size: 12px; font-weight: 700; color: #a78bfa; }
-.c3-agent-tag { font-size: 10px; color: #444; margin-top: 1px; }
-.c3-agent-score { font-size: 11px; color: #22c55e; margin-top: 4px; }
-.c3-content { padding: 24px; display: flex; flex-direction: column; gap: 18px; }
-.c3-header { display: flex; align-items: flex-start; justify-content: space-between; }
-.c3-title { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #c4b5fd, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.c3-subtitle { font-size: 12px; color: #444; margin-top: 3px; }
-.c3-call-btn { background: transparent; border: 1px solid #7c3aed; color: #c4b5fd; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 0 20px rgba(124,58,237,0.2), inset 0 0 20px rgba(124,58,237,0.05); }
-.c3-call-btn:hover { box-shadow: 0 0 30px rgba(124,58,237,0.4), inset 0 0 20px rgba(124,58,237,0.1); }
-.c3-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.c3-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(124,58,237,0.12); border-radius: 10px; padding: 16px; }
-.c3-card-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #444; margin-bottom: 10px; }
-.c3-prompt-text { font-size: 11px; color: #555; line-height: 1.7; }
-.c3-stat-num { font-size: 28px; font-weight: 800; color: #a78bfa; }
-.c3-stat-label { font-size: 11px; color: #444; margin-top: 2px; }
-.c3-call-log { display: flex; flex-direction: column; gap: 6px; }
-.c3-log-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #555; }
-.c3-log-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .w1-agent-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .w1-atab { flex: 1; padding: 14px 12px; border-radius: 14px; border: 1.5px solid #e5e7eb; background: white; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .w1-atab.active { border-color: #6c47ff; background: #f5f3ff; }
+  .w1-atab .emo { font-size: 22px; }
+  .w1-atab .nm { font-size: 12px; font-weight: 700; margin-top: 4px; color: #111; }
+  .w1-atab .tl { font-size: 10px; color: #999; margin-top: 2px; }
+  .w1-atab.active .nm { color: #6c47ff; }
 
-/* ══════════════════════════════════════════
-   CONCEPT 4 — AURORA GLASS
-══════════════════════════════════════════ */
-.c4-wrap { background: #060612; min-height: 580px; position: relative; overflow: hidden; }
-.c4-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 10% 30%, rgba(124,58,237,0.18) 0%, transparent 50%), radial-gradient(ellipse at 90% 70%, rgba(59,130,246,0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 90%, rgba(236,72,153,0.08) 0%, transparent 40%); }
-.c4 { position: relative; min-height: 580px; display: grid; grid-template-columns: 260px 1fr; }
-.c4-sidebar { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-right: 1px solid rgba(255,255,255,0.06); padding: 24px 16px; }
-.c4-logo { font-size: 13px; font-weight: 800; color: #fff; padding: 0 8px 24px; display: flex; align-items: center; gap: 8px; }
-.c4-logo-icon { width: 28px; height: 28px; background: linear-gradient(135deg,#7c3aed,#ec4899); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-.c4-agent-pill { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
-.c4-agent-pill.active { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); }
-.c4-agent-pill-name { font-size: 13px; font-weight: 700; color: #e2e0ff; }
-.c4-agent-pill-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
-.c4-main { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
-.c4-hero { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 28px; display: flex; align-items: center; gap: 24px; }
-.c4-hero-icon { width: 56px; height: 56px; background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(236,72,153,0.2)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid rgba(124,58,237,0.3); flex-shrink: 0; }
-.c4-hero-name { font-size: 22px; font-weight: 800; color: #fff; }
-.c4-hero-desc { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
-.c4-hero-btn { margin-left: auto; background: linear-gradient(135deg,#7c3aed,#ec4899); color: #fff; border: none; border-radius: 12px; padding: 14px 24px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 32px rgba(124,58,237,0.3); flex-shrink: 0; }
-.c4-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-.c4-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px; }
-.c4-card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,0.25); margin-bottom: 8px; }
-.c4-card-val { font-size: 24px; font-weight: 800; color: #fff; }
-.c4-card-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
-.c4-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.c4-panel { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; }
-.c4-panel-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,0.2); margin-bottom: 12px; }
-.c4-prompt-text { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.7; }
+  .w1-card { background: white; border: 1.5px solid #e5e7eb; border-radius: 18px; padding: 24px; margin-bottom: 16px; }
+  .w1-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .w1-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #6c47ff, #a78bfa); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .w1-name { font-size: 18px; font-weight: 800; color: #111; }
+  .w1-role { font-size: 12px; color: #888; margin-top: 2px; }
+  .w1-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .w1-tag { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #f5f3ff; color: #6c47ff; border: 1px solid #ddd6fe; }
 
-/* ══════════════════════════════════════════
-   CONCEPT 5 — WARM MINIMALIST
-══════════════════════════════════════════ */
-.c5 { background: #0c0c10; min-height: 580px; }
-.c5-topbar { display: flex; align-items: center; padding: 0 32px; height: 56px; border-bottom: 1px solid #16161e; }
-.c5-logo { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
-.c5-logo-badge { background: #7c3aed; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: .05em; }
-.c5-agents-toggle { display: flex; background: #0f0f14; border: 1px solid #1e1e28; border-radius: 10px; padding: 3px; margin: 0 auto; }
-.c5-agent-tab { padding: 7px 18px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; color: #555; border: none; background: none; }
-.c5-agent-tab.active { background: #7c3aed; color: #fff; }
-.c5-icons { display: flex; gap: 6px; margin-left: auto; }
-.c5-icon-btn { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid #1e1e28; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; color: #555; }
-.c5-body { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; }
-.c5-center { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 24px; border-right: 1px solid #16161e; }
-.c5-agent-display { text-align: center; }
-.c5-agent-avatar-big { width: 72px; height: 72px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px; box-shadow: 0 16px 40px rgba(124,58,237,0.25); }
-.c5-agent-name-big { font-size: 24px; font-weight: 800; color: #fff; }
-.c5-agent-status { font-size: 12px; color: #555; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.c5-status-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
-.c5-big-btn { width: 100%; max-width: 280px; padding: 16px; background: #7c3aed; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; letter-spacing: .01em; box-shadow: 0 8px 32px rgba(124,58,237,0.3); }
-.c5-lang-row { display: flex; gap: 8px; }
-.c5-lang-pill { padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
-.c5-lang-pill.active { background: rgba(124,58,237,0.2); color: #c4b5fd; border: 1px solid rgba(124,58,237,0.4); }
-.c5-lang-pill:not(.active) { background: rgba(255,255,255,0.04); color: #555; border: 1px solid #1e1e28; }
-.c5-quick-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; width: 100%; max-width: 320px; }
-.c5-qstat { text-align: center; background: rgba(255,255,255,0.03); border: 1px solid #1e1e28; border-radius: 10px; padding: 12px 8px; }
-.c5-qstat-num { font-size: 18px; font-weight: 800; color: #e2e0ff; }
-.c5-qstat-label { font-size: 10px; color: #444; margin-top: 2px; }
-.c5-right { padding: 24px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
-.c5-section { }
-.c5-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #333; margin-bottom: 10px; }
-.c5-call-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.02); border: 1px solid #16161e; border-radius: 8px; margin-bottom: 6px; }
-.c5-call-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.c5-call-name { font-size: 12px; font-weight: 600; color: #c4b5fd; }
-.c5-call-num { font-size: 11px; color: #444; }
-.c5-call-score { margin-left: auto; font-size: 11px; font-weight: 700; }
-.c5-prompt-box { background: rgba(255,255,255,0.02); border: 1px solid #16161e; border-radius: 8px; padding: 12px; font-size: 11px; color: #555; line-height: 1.7; }
-.c5-prompt-link { display: block; font-size: 11px; color: #7c3aed; text-decoration: none; margin-top: 8px; }
+  .w1-lang-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .w1-lang-btn { flex: 1; padding: 9px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; background: white; color: #555; transition: all 0.2s; }
+  .w1-lang-btn.active { border-color: #6c47ff; background: #6c47ff; color: white; }
+
+  .w1-actions { display: flex; gap: 10px; }
+  .w1-btn { flex: 1; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
+  .w1-btn-primary { background: linear-gradient(135deg, #6c47ff, #9b7fff); color: white; box-shadow: 0 4px 16px rgba(108,71,255,0.35); }
+  .w1-btn-ghost { background: white; border: 1.5px solid #e5e7eb; color: #555; }
+
+  .w1-stat-row { display: flex; gap: 12px; margin-top: 16px; }
+  .w1-stat { flex: 1; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; text-align: center; }
+  .w1-stat .val { font-size: 22px; font-weight: 800; color: #111; }
+  .w1-stat .lbl { font-size: 11px; color: #999; margin-top: 2px; }
+
+  /* ---------- CONCEPT W2: Sidebar Layout ---------- */
+  .w2-shell { display: flex; gap: 0; border-radius: 18px; overflow: hidden; border: 1.5px solid #e5e7eb; min-height: 520px; }
+  .w2-sidebar { width: 220px; background: #fafafa; border-right: 1px solid #e5e7eb; flex-shrink: 0; display: flex; flex-direction: column; }
+  .w2-sb-top { padding: 20px 16px 12px; border-bottom: 1px solid #e5e7eb; }
+  .w2-sb-brand { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #999; margin-bottom: 16px; }
+  .w2-sb-brand span { color: #6c47ff; }
+  .w2-sb-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
+  .w2-sb-card:hover { background: #f0eeff; }
+  .w2-sb-card.active { background: #ede9ff; border: 1px solid #ddd6fe; }
+  .w2-sb-emo { font-size: 24px; }
+  .w2-sb-nm { font-size: 13px; font-weight: 700; color: #111; }
+  .w2-sb-tl { font-size: 10px; color: #999; }
+  .w2-sb-card.active .w2-sb-nm { color: #6c47ff; }
+  .w2-sb-bottom { padding: 12px 16px; border-top: 1px solid #e5e7eb; margin-top: auto; }
+  .w2-sb-bottom-btn { width: 100%; padding: 8px; border-radius: 10px; border: 1px solid #e5e7eb; background: white; font-size: 11px; font-weight: 600; color: #888; cursor: pointer; margin-bottom: 6px; text-align: center; }
+
+  .w2-main { flex: 1; padding: 24px; background: white; overflow: auto; }
+  .w2-main-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .w2-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; margin-bottom: 10px; }
+  .w2-textarea { width: 100%; background: #fafafa; border: 1.5px solid #e5e7eb; border-radius: 12px; color: #333; font-size: 12px; padding: 12px 14px; resize: vertical; line-height: 1.6; font-family: inherit; min-height: 90px; }
+  .w2-textarea:focus { outline: none; border-color: #6c47ff; background: white; }
+  .w2-preset-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .w2-preset { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1.5px solid #e5e7eb; background: white; color: #666; cursor: pointer; }
+  .w2-preset.active { border-color: #6c47ff; background: #f5f3ff; color: #6c47ff; }
+  .w2-cta-row { display: flex; gap: 10px; margin-top: 20px; }
+  .w2-btn { padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; }
+  .w2-btn-primary { background: linear-gradient(135deg, #6c47ff, #9b7fff); color: white; flex: 1; box-shadow: 0 4px 16px rgba(108,71,255,0.3); }
+  .w2-btn-ghost { background: white; border: 1.5px solid #e5e7eb; color: #555; }
+  .w2-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+  /* ---------- CONCEPT W3: App-style with Purple Accent Bar ---------- */
+  .w3-wrap { max-width: 520px; margin: 0 auto; }
+  .w3-topbar { display: flex; align-items: center; justify-content: space-between; background: #6c47ff; border-radius: 16px 16px 0 0; padding: 16px 20px; }
+  .w3-topbar-brand { color: white; font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+  .w3-topbar-live { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.8); font-size: 11px; font-weight: 600; }
+  .w3-topbar-live::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: blink 2s infinite; }
+  .w3-body { background: white; border: 1.5px solid #e5e7eb; border-top: none; border-radius: 0 0 16px 16px; padding: 20px; }
+
+  .w3-agent-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 20px; }
+  .w3-achip { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 30px; border: 1.5px solid #e5e7eb; background: white; cursor: pointer; white-space: nowrap; font-size: 12px; font-weight: 600; color: #555; transition: all 0.2s; }
+  .w3-achip.active { border-color: #6c47ff; background: #6c47ff; color: white; }
+  .w3-achip .emo { font-size: 16px; }
+
+  .w3-hero { display: flex; align-items: center; gap: 16px; padding: 16px; background: #fafafa; border-radius: 14px; margin-bottom: 16px; border: 1px solid #f0f0f5; }
+  .w3-av { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #6c47ff, #a78bfa); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .w3-info h2 { font-size: 16px; font-weight: 800; color: #111; }
+  .w3-info p { font-size: 12px; color: #999; }
+  .w3-info-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .w3-chip-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #f5f3ff; color: #6c47ff; }
+
+  .w3-mode-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .w3-mode { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid #e5e7eb; background: white; font-size: 11px; font-weight: 700; text-align: center; cursor: pointer; transition: all 0.2s; color: #555; }
+  .w3-mode.active { border-color: #6c47ff; background: linear-gradient(135deg, #6c47ff, #9b7fff); color: white; }
+  .w3-mode .ic { display: block; font-size: 18px; margin-bottom: 4px; }
+
+  .w3-cta { display: flex; gap: 10px; }
+  .w3-cta-main { flex: 2; padding: 16px; background: linear-gradient(135deg, #6c47ff, #9b7fff); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(108,71,255,0.4); }
+  .w3-cta-sec { flex: 1; padding: 16px; background: white; border: 1.5px solid #e5e7eb; border-radius: 14px; font-size: 13px; font-weight: 700; color: #555; cursor: pointer; }
+
+  .w3-stats-row { display: flex; gap: 10px; margin-top: 16px; }
+  .w3-stat { flex: 1; text-align: center; padding: 14px 10px; background: #fafafa; border: 1px solid #f0f0f5; border-radius: 12px; }
+  .w3-stat .v { font-size: 24px; font-weight: 900; color: #111; }
+  .w3-stat .l { font-size: 10px; color: #aaa; margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ---------- CONCEPT W4: Minimal / Zen ---------- */
+  .w4-wrap { max-width: 420px; margin: 0 auto; }
+  .w4-brand { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #bbb; font-weight: 700; margin-bottom: 32px; text-align: center; }
+  .w4-brand span { color: #6c47ff; }
+  .w4-agent-row { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; }
+  .w4-dot { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+  .w4-dot-circle { width: 52px; height: 52px; border-radius: 50%; border: 2px solid #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.2s; background: white; }
+  .w4-dot.active .w4-dot-circle { border-color: #6c47ff; background: #f5f3ff; box-shadow: 0 0 0 4px rgba(108,71,255,0.1); }
+  .w4-dot-nm { font-size: 11px; font-weight: 700; color: #aaa; }
+  .w4-dot.active .w4-dot-nm { color: #6c47ff; }
+
+  .w4-center { text-align: center; margin-bottom: 36px; }
+  .w4-center h2 { font-size: 28px; font-weight: 900; color: #111; margin-bottom: 4px; }
+  .w4-center p { font-size: 13px; color: #aaa; }
+  .w4-center .live-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 12px; margin-top: 10px; }
+  .w4-center .live-pill::before { content: ''; width: 6px; height: 6px; background: #059669; border-radius: 50%; animation: blink 2s infinite; }
+
+  .w4-cta { display: flex; flex-direction: column; gap: 10px; }
+  .w4-btn-main { width: 100%; padding: 18px; background: #111; color: white; border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; letter-spacing: 0.5px; }
+  .w4-btn-main:hover { background: #6c47ff; }
+  .w4-btn-sub { width: 100%; padding: 12px; background: white; border: 1.5px solid #e5e7eb; border-radius: 16px; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; font-family: inherit; }
+  .w4-lang-row { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+  .w4-lang { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #e5e7eb; background: white; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: all 0.2s; }
+  .w4-lang.active { border-color: #6c47ff; background: #f5f3ff; }
+
+  /* ---------- CONCEPT W5: CRM Dashboard ---------- */
+  .w5-shell { border-radius: 16px; overflow: hidden; border: 1.5px solid #e5e7eb; }
+  .w5-topbar { background: white; border-bottom: 1px solid #e5e7eb; padding: 14px 20px; display: flex; align-items: center; gap: 16px; }
+  .w5-topbar-brand { font-size: 14px; font-weight: 800; color: #111; margin-right: auto; }
+  .w5-topbar-brand span { color: #6c47ff; }
+  .w5-tab-nav { display: flex; gap: 0; }
+  .w5-tab-link { padding: 6px 14px; font-size: 12px; font-weight: 600; color: #aaa; border-radius: 8px; cursor: pointer; }
+  .w5-tab-link.active { background: #f5f3ff; color: #6c47ff; }
+  .w5-main-row { display: flex; min-height: 360px; background: #fafafa; }
+  .w5-left { width: 200px; padding: 16px; border-right: 1px solid #e5e7eb; flex-shrink: 0; background: white; }
+  .w5-agent-mini { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; cursor: pointer; margin-bottom: 4px; }
+  .w5-agent-mini.active { background: #f5f3ff; }
+  .w5-agent-mini .emo { font-size: 20px; }
+  .w5-agent-mini .nm { font-size: 12px; font-weight: 700; color: #111; }
+  .w5-agent-mini.active .nm { color: #6c47ff; }
+  .w5-agent-mini .sc { font-size: 10px; color: #aaa; }
+  .w5-content { flex: 1; padding: 20px; overflow: auto; }
+
+  .w5-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .w5-kpi { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; }
+  .w5-kpi .val { font-size: 24px; font-weight: 900; color: #111; }
+  .w5-kpi .lbl { font-size: 11px; color: #aaa; margin-top: 2px; font-weight: 600; }
+  .w5-kpi .trend { font-size: 10px; color: #059669; font-weight: 700; margin-top: 4px; }
+  .w5-kpi.red .trend { color: #e11d48; }
+
+  .w5-leads-table { width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+  .w5-leads-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaa; padding: 10px 14px; background: #fafafa; border-bottom: 1px solid #e5e7eb; text-align: left; }
+  .w5-leads-table td { font-size: 12px; padding: 10px 14px; border-bottom: 1px solid #f5f5f5; color: #333; }
+  .w5-leads-table tr:last-child td { border-bottom: none; }
+  .score-hot { background: #fef2f2; color: #dc2626; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .score-warm { background: #fffbeb; color: #d97706; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .score-cold { background: #f5f5f5; color: #888; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+
+  /* ---------- CONCEPT W6: Mobile-first Card Stack ---------- */
+  .w6-wrap { max-width: 380px; margin: 0 auto; }
+  .w6-status-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .w6-brand { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #6c47ff; }
+  .w6-status-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #059669; }
+  .w6-status-dot::before { content: ''; width: 7px; height: 7px; background: #059669; border-radius: 50%; animation: blink 2s infinite; }
+
+  .w6-agent-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 12px; border: 1.5px solid #e5e7eb; cursor: pointer; transition: all 0.2s; }
+  .w6-agent-card.active { border-color: #6c47ff; box-shadow: 0 4px 20px rgba(108,71,255,0.15); }
+  .w6-agent-top { display: flex; align-items: center; gap: 14px; }
+  .w6-emo { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #ede9ff, #ddd6fe); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .w6-agent-card.active .w6-emo { background: linear-gradient(135deg, #6c47ff, #9b7fff); }
+  .w6-nm { font-size: 16px; font-weight: 800; color: #111; }
+  .w6-tl { font-size: 12px; color: #aaa; }
+  .w6-pill { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+  .w6-agent-card.active .w6-pill { background: #f5f3ff; color: #6c47ff; border-color: #ddd6fe; }
+
+  .w6-lang-toggle { display: flex; background: #f5f5fa; border-radius: 12px; padding: 4px; margin: 14px 0; }
+  .w6-lang-opt { flex: 1; padding: 8px; border-radius: 9px; font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; color: #aaa; }
+  .w6-lang-opt.active { background: white; color: #6c47ff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  .w6-expanded { padding-top: 14px; border-top: 1px solid #f0f0f5; margin-top: 14px; }
+  .w6-ctrl-row { display: flex; gap: 10px; margin-top: 4px; }
+  .w6-ctrl { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #e5e7eb; background: white; font-size: 12px; font-weight: 700; text-align: center; cursor: pointer; color: #555; }
+  .w6-ctrl.prim { background: linear-gradient(135deg, #6c47ff, #9b7fff); border-color: transparent; color: white; box-shadow: 0 4px 14px rgba(108,71,255,0.35); }
+
+  /* Nav selector at bottom */
+  .mockup-nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
+  .mockup-nav a { padding: 6px 16px; border-radius: 20px; border: 1.5px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #555; text-decoration: none; background: white; }
+  .mockup-nav a:hover { border-color: #6c47ff; color: #6c47ff; }
+
 </style>
 </head>
 <body>
 
-<div class="page-header">
-  <h1>Sofia Dialer — 5 Design Concepts</h1>
-  <p>Click "Pick this one" to let me build it</p>
+<h1>Sofia Dialer — Light UI Variations</h1>
+<p class="subtitle">6 white-background designs — pick your favorite or mix elements</p>
+
+<div class="mockup-nav">
+  <a href="#w1">W1 — Clean Cards</a>
+  <a href="#w2">W2 — Sidebar</a>
+  <a href="#w3">W3 — Purple Bar</a>
+  <a href="#w4">W4 — Zen</a>
+  <a href="#w5">W5 — CRM Dashboard</a>
+  <a href="#w6">W6 — Mobile Stack</a>
 </div>
 
-<div class="concepts">
-
-  <!-- ══ CONCEPT 1 ══ -->
-  <div class="concept">
-    <div class="concept-label">
-      <div class="concept-num">1</div>
-      <div>
-        <div class="concept-name">Command Center</div>
-        <div class="concept-desc">Deep dark + glassmorphism · Animated pulse rings · Stats bar · Mesh gradient background</div>
-      </div>
+<!-- ===================== CONCEPT W1 ===================== -->
+<div class="concept" id="w1">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#6c47ff">W1</span>
+    <div>
+      <div class="concept-title">Clean White Cards</div>
+      <div class="concept-desc">Minimal, airy. Each agent is a card. Purple accents only where it matters.</div>
     </div>
-    <div class="mockup-frame">
-      <div class="c1" style="position:relative;">
-        <div class="c1-mesh"></div>
-        <div class="c1-sidebar">
-          <div class="c1-logo"><div class="c1-logo-dot"></div>SOFIA DIALER</div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#333;padding:0 8px;margin-bottom:6px;">Agents</div>
-          <div class="c1-agent active">
-            <div class="c1-agent-name">Maria</div>
-            <div class="c1-agent-sub">Growth-onomics · Fintech</div>
-            <div class="c1-pulse"></div>
-          </div>
-          <div class="c1-agent">
-            <div class="c1-agent-name">Elena</div>
-            <div class="c1-agent-sub">AISquad · AI Marketing</div>
-          </div>
-          <div class="c1-agent">
-            <div class="c1-agent-name">Sofia 3</div>
-            <div class="c1-agent-sub">ΜΙΑ Collection · Fashion</div>
-          </div>
-          <div style="margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05);">
-            <div class="c1-nav">
-              <div class="c1-nav-item active">📋 Calls</div>
-              <div class="c1-nav-item">🏆 CRM</div>
-            </div>
-            <div class="c1-nav">
-              <div class="c1-nav-item">📒 Contacts</div>
-              <div class="c1-nav-item">⚙️</div>
-            </div>
-          </div>
-        </div>
-        <div class="c1-main">
-          <div class="c1-statsbar">
-            <div class="c1-stat"><div class="c1-stat-num" style="color:#22c55e;">12</div><div class="c1-stat-label">Calls Today</div></div>
-            <div class="c1-stat"><div class="c1-stat-num" style="color:#a78bfa;">87%</div><div class="c1-stat-label">Avg Score</div></div>
-            <div class="c1-stat"><div class="c1-stat-num" style="color:#f59e0b;">4</div><div class="c1-stat-label">Hot Leads</div></div>
-            <div class="c1-stat"><div class="c1-stat-num" style="color:#60a5fa;">EN</div><div class="c1-stat-label">Language</div></div>
-          </div>
-          <div class="c1-body">
-            <div class="c1-panel">
-              <div class="c1-panel-title">System Prompt — Maria / EN</div>
-              <div class="c1-prompt-text">You are Maria, a business development representative at Growth-onomics. Your job is to qualify fintech prospects and book 20-minute strategy calls. Be warm, confident, and direct. Never reveal you are an AI...</div>
-              <div class="c1-btn-group">
-                <button class="c1-btn c1-btn-primary">🎙️ Talk to Maria</button>
-                <button class="c1-btn c1-btn-secondary">📞 Dial</button>
-              </div>
-            </div>
-            <div class="c1-panel">
-              <div class="c1-panel-title">Recent Activity</div>
-              <div style="display:flex;flex-direction:column;gap:8px;">
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#555;">
-                  <div style="width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-                  <span style="color:#888;">+30 621 234 567</span><span style="margin-left:auto;color:#22c55e;font-weight:700;">🔥 Hot</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#555;">
-                  <div style="width:6px;height:6px;background:#f59e0b;border-radius:50%;flex-shrink:0;"></div>
-                  <span style="color:#888;">+44 7911 123456</span><span style="margin-left:auto;color:#f59e0b;font-weight:700;">⭐ Warm</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#555;">
-                  <div style="width:6px;height:6px;background:#555;border-radius:50%;flex-shrink:0;"></div>
-                  <span style="color:#888;">+49 30 1234567</span><span style="margin-left:auto;color:#555;font-weight:700;">❌ Cold</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a class="pick-btn" href="mailto:?subject=Pick Concept 1">✅ Pick this one</a>
   </div>
-
-  <!-- ══ CONCEPT 2 ══ -->
-  <div class="concept">
-    <div class="concept-label">
-      <div class="concept-num">2</div>
-      <div>
-        <div class="concept-name">Dark Pro</div>
-        <div class="concept-desc">Top nav bar · Agent cards with scores · Tab-based content · Feels like Linear or Vercel</div>
+  <div class="concept-body">
+    <div class="w1-wrap">
+      <div class="w1-header">
+        <div class="w1-logo">Growth<span>·</span>onomics</div>
+        <div class="w1-status">Live</div>
       </div>
-    </div>
-    <div class="mockup-frame">
-      <div class="c2">
-        <div class="c2-topbar">
-          <div class="c2-logo">🎙️ Sofia Dialer</div>
-          <div class="c2-nav">
-            <div class="c2-nav-item active">Dialer</div>
-            <div class="c2-nav-item">CRM</div>
-            <div class="c2-nav-item">Contacts</div>
-            <div class="c2-nav-item">Simulations</div>
-          </div>
-          <div class="c2-nav-sep"></div>
-          <div class="c2-avatar">M</div>
-        </div>
-        <div class="c2-body">
-          <div class="c2-left">
-            <div class="c2-section-label">Agents</div>
-            <div class="c2-agent-card active">
-              <div class="c2-agent-row">
-                <div class="c2-agent-avatar" style="background:rgba(124,58,237,0.2);">🧑‍💼</div>
-                <div class="c2-agent-info"><strong>Maria</strong><span>Growth-onomics</span></div>
-                <div class="c2-score-badge">100%</div>
-              </div>
-            </div>
-            <div class="c2-agent-card">
-              <div class="c2-agent-row">
-                <div class="c2-agent-avatar" style="background:rgba(59,130,246,0.15);">🧑‍💼</div>
-                <div class="c2-agent-info"><strong>Elena</strong><span>AISquad</span></div>
-                <div class="c2-score-badge" style="color:#f59e0b;background:rgba(245,158,11,0.1);">74%</div>
-              </div>
-            </div>
-            <div class="c2-agent-card">
-              <div class="c2-agent-row">
-                <div class="c2-agent-avatar" style="background:rgba(236,72,153,0.15);">👗</div>
-                <div class="c2-agent-info"><strong>Sofia 3</strong><span>ΜΙΑ Collection</span></div>
-                <div class="c2-score-badge" style="color:#a78bfa;background:rgba(167,139,250,0.1);">88%</div>
-              </div>
-            </div>
-            <div style="margin-top:auto;">
-              <a href="agent-prompts.html" target="_blank" style="font-size:11px;color:#7c3aed;text-decoration:none;opacity:0.7;">📄 View all prompts →</a>
-            </div>
-          </div>
-          <div class="c2-right">
-            <div class="c2-agent-header">
-              <div>
-                <div class="c2-agent-title">Maria</div>
-                <div style="font-size:12px;color:#555;margin-top:2px;">Growth-onomics · Fintech BDR</div>
-              </div>
-              <div class="c2-lang-toggle">
-                <button class="c2-lang-btn active">EN</button>
-                <button class="c2-lang-btn">EL</button>
-              </div>
-            </div>
-            <div class="c2-tabs">
-              <div class="c2-tab active">Prompt</div>
-              <div class="c2-tab">Opener</div>
-              <div class="c2-tab">Recent Calls</div>
-              <div class="c2-tab">🧪 Simulate</div>
-            </div>
-            <div class="c2-content">
-              <div class="c2-prompt-preview">You are Maria, a business development representative at Growth-onomics — a fintech growth agency. Your job is to qualify prospects and book them for a 20-minute strategy call with the team.
 
-Your personality: warm, confident, sharp. You sound like a real person, not a bot...</div>
-            </div>
-            <div class="c2-actions">
-              <button class="c2-call-btn">🎙️ Talk to Maria</button>
-              <button class="c2-sim-btn">🧪 Simulate</button>
-              <button class="c2-sim-btn">📞 Dial</button>
+      <div class="w1-agent-tabs">
+        <div class="w1-atab active">
+          <div class="emo">👩</div>
+          <div class="nm">Maria</div>
+          <div class="tl">BDR</div>
+        </div>
+        <div class="w1-atab">
+          <div class="emo">👩‍💼</div>
+          <div class="nm">Elena</div>
+          <div class="tl">Marketing</div>
+        </div>
+        <div class="w1-atab">
+          <div class="emo">💎</div>
+          <div class="nm">Sofia 3</div>
+          <div class="tl">ΜΙΑ</div>
+        </div>
+      </div>
+
+      <div class="w1-card">
+        <div class="w1-card-header">
+          <div class="w1-avatar">👩</div>
+          <div>
+            <div class="w1-name">Maria</div>
+            <div class="w1-role">Business Development · Growth-onomics</div>
+            <div class="w1-tags">
+              <span class="w1-tag">AI Powered</span>
+              <span class="w1-tag">Books Calls</span>
+              <span class="w1-tag">Multilingual</span>
             </div>
           </div>
         </div>
+        <div class="w1-lang-row">
+          <div class="w1-lang-btn active">🇬🇧 English</div>
+          <div class="w1-lang-btn">🇬🇷 Ελληνικά</div>
+        </div>
+        <div class="w1-actions">
+          <button class="w1-btn w1-btn-primary">📞 Talk to Maria</button>
+          <button class="w1-btn w1-btn-ghost">🧪 Simulate</button>
+        </div>
+        <div class="w1-stat-row">
+          <div class="w1-stat"><div class="val">94%</div><div class="lbl">Success Rate</div></div>
+          <div class="w1-stat"><div class="val">2.4m</div><div class="lbl">Avg Duration</div></div>
+          <div class="w1-stat"><div class="val">24</div><div class="lbl">Calls Today</div></div>
+        </div>
       </div>
     </div>
-    <a class="pick-btn" href="mailto:?subject=Pick Concept 2">✅ Pick this one</a>
   </div>
-
-  <!-- ══ CONCEPT 3 ══ -->
-  <div class="concept">
-    <div class="concept-label">
-      <div class="concept-num">3</div>
-      <div>
-        <div class="concept-name">Neon Noir</div>
-        <div class="concept-desc">Icon sidebar · Purple gradient headings · Glowing call button · High contrast dark</div>
-      </div>
-    </div>
-    <div class="mockup-frame">
-      <div class="c3">
-        <div class="c3-icons">
-          <div class="c3-icon active">🎙️</div>
-          <div class="c3-icon">🏆</div>
-          <div class="c3-icon">📒</div>
-          <div class="c3-sep"></div>
-          <div class="c3-icon">🧪</div>
-          <div style="margin-top:auto;"></div>
-          <div class="c3-icon">⚙️</div>
-        </div>
-        <div class="c3-main">
-          <div class="c3-agents">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#333;margin-bottom:8px;">Agents</div>
-            <div class="c3-agent active">
-              <div class="c3-agent-name">Maria</div>
-              <div class="c3-agent-tag">Growth-onomics</div>
-              <div class="c3-agent-score">sim: 100%</div>
-            </div>
-            <div class="c3-agent">
-              <div class="c3-agent-name" style="color:#666;">Elena</div>
-              <div class="c3-agent-tag">AISquad</div>
-              <div class="c3-agent-score" style="color:#f59e0b;">sim: 74%</div>
-            </div>
-            <div class="c3-agent">
-              <div class="c3-agent-name" style="color:#666;">Sofia 3</div>
-              <div class="c3-agent-tag">ΜΙΑ Collection</div>
-              <div class="c3-agent-score" style="color:#a78bfa;">sim: 88%</div>
-            </div>
-            <div style="margin-top:auto;">
-              <a href="agent-prompts.html" target="_blank" style="font-size:11px;color:#7c3aed;text-decoration:none;opacity:0.6;">📄 Prompts →</a>
-            </div>
-          </div>
-          <div class="c3-content">
-            <div class="c3-header">
-              <div>
-                <div class="c3-title">Maria</div>
-                <div class="c3-subtitle">Growth-onomics · EN · Simulation score: 100%</div>
-              </div>
-              <button class="c3-call-btn">🎙️ Talk to Maria</button>
-            </div>
-            <div class="c3-grid">
-              <div class="c3-card" style="grid-column:span 2;">
-                <div class="c3-card-title">System Prompt</div>
-                <div class="c3-prompt-text">You are Maria, a business development representative at Growth-onomics — a fintech growth agency. Your job is to qualify prospects and book them for a 20-minute strategy call. Warm, confident, sharp. Never reveal you are an AI...</div>
-                <a href="agent-prompts.html" target="_blank" style="font-size:11px;color:#7c3aed;text-decoration:none;display:block;margin-top:8px;opacity:0.7;">View full prompt →</a>
-              </div>
-              <div class="c3-card">
-                <div class="c3-card-title">Today</div>
-                <div class="c3-stat-num">12</div>
-                <div class="c3-stat-label">Calls made</div>
-                <div class="c3-stat-num" style="font-size:20px;margin-top:8px;color:#22c55e;">4</div>
-                <div class="c3-stat-label">Hot leads</div>
-              </div>
-              <div class="c3-card">
-                <div class="c3-card-title">Recent Calls</div>
-                <div class="c3-call-log">
-                  <div class="c3-log-item"><div class="c3-log-dot" style="background:#22c55e;"></div>+30 621 ···<span style="margin-left:auto;color:#22c55e;font-size:10px;font-weight:700;">HOT</span></div>
-                  <div class="c3-log-item"><div class="c3-log-dot" style="background:#f59e0b;"></div>+44 791 ···<span style="margin-left:auto;color:#f59e0b;font-size:10px;font-weight:700;">WARM</span></div>
-                  <div class="c3-log-item"><div class="c3-log-dot" style="background:#555;"></div>+49 301 ···<span style="margin-left:auto;color:#555;font-size:10px;font-weight:700;">COLD</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a class="pick-btn" href="mailto:?subject=Pick Concept 3">✅ Pick this one</a>
-  </div>
-
-  <!-- ══ CONCEPT 4 ══ -->
-  <div class="concept">
-    <div class="concept-label">
-      <div class="concept-num">4</div>
-      <div>
-        <div class="concept-name">Aurora Glass</div>
-        <div class="concept-desc">Frosted glass panels · Purple + pink + blue gradient background · Premium / luxury feel</div>
-      </div>
-    </div>
-    <div class="mockup-frame">
-      <div class="c4-wrap">
-        <div class="c4-bg"></div>
-        <div class="c4">
-          <div class="c4-sidebar">
-            <div class="c4-logo"><div class="c4-logo-icon">🎙️</div>Sofia Dialer</div>
-            <div class="c4-agent-pill active">
-              <div class="c4-agent-pill-name">Maria</div>
-              <div class="c4-agent-pill-sub">Growth-onomics · Fintech</div>
-            </div>
-            <div class="c4-agent-pill">
-              <div class="c4-agent-pill-name">Elena</div>
-              <div class="c4-agent-pill-sub">AISquad · AI Marketing</div>
-            </div>
-            <div class="c4-agent-pill">
-              <div class="c4-agent-pill-name">Sofia 3</div>
-              <div class="c4-agent-pill-sub">ΜΙΑ Collection · Fashion</div>
-            </div>
-            <div style="margin-top:auto;padding-top:20px;">
-              <a href="agent-prompts.html" target="_blank" style="font-size:11px;color:rgba(196,181,253,0.5);text-decoration:none;">📄 View prompts →</a>
-            </div>
-          </div>
-          <div class="c4-main">
-            <div class="c4-hero">
-              <div class="c4-hero-icon">🧑‍💼</div>
-              <div>
-                <div class="c4-hero-name">Maria</div>
-                <div class="c4-hero-desc">Growth-onomics · Business Development · EN · Sim score 100%</div>
-              </div>
-              <button class="c4-hero-btn">🎙️ Talk to Maria</button>
-            </div>
-            <div class="c4-cards">
-              <div class="c4-card"><div class="c4-card-label">Calls Today</div><div class="c4-card-val">12</div><div class="c4-card-sub">↑ 3 from yesterday</div></div>
-              <div class="c4-card"><div class="c4-card-label">Sim Score</div><div class="c4-card-val" style="color:#a78bfa;">100%</div><div class="c4-card-sub">🏆 Excellent</div></div>
-              <div class="c4-card"><div class="c4-card-label">Hot Leads</div><div class="c4-card-val" style="color:#22c55e;">4</div><div class="c4-card-sub">in CRM</div></div>
-            </div>
-            <div class="c4-bottom">
-              <div class="c4-panel">
-                <div class="c4-panel-title">System Prompt</div>
-                <div class="c4-prompt-text">You are Maria, a business development representative at Growth-onomics. Qualify fintech prospects and book 20-minute strategy calls. Warm, confident, sharp. Never reveal you are AI...</div>
-                <a href="agent-prompts.html" target="_blank" style="font-size:11px;color:rgba(124,58,237,0.7);text-decoration:none;display:block;margin-top:8px;">View full prompt →</a>
-              </div>
-              <div class="c4-panel">
-                <div class="c4-panel-title">Recent Calls</div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
-                    <div style="width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-                    <span style="color:rgba(255,255,255,0.4);">+30 621 ···</span><span style="margin-left:auto;color:#22c55e;font-weight:700;font-size:10px;">HOT</span>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
-                    <div style="width:6px;height:6px;background:#f59e0b;border-radius:50%;flex-shrink:0;"></div>
-                    <span style="color:rgba(255,255,255,0.4);">+44 791 ···</span><span style="margin-left:auto;color:#f59e0b;font-weight:700;font-size:10px;">WARM</span>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
-                    <div style="width:6px;height:6px;background:rgba(255,255,255,0.15);border-radius:50%;flex-shrink:0;"></div>
-                    <span style="color:rgba(255,255,255,0.25);">+49 301 ···</span><span style="margin-left:auto;color:rgba(255,255,255,0.2);font-weight:700;font-size:10px;">COLD</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a class="pick-btn" href="mailto:?subject=Pick Concept 4">✅ Pick this one</a>
-  </div>
-
-  <!-- ══ CONCEPT 5 ══ -->
-  <div class="concept">
-    <div class="concept-label">
-      <div class="concept-num">5</div>
-      <div>
-        <div class="concept-name">Warm Minimal</div>
-        <div class="concept-desc">Centered agent display · Pill agent switcher · Big call button · Clean two-column · Vercel-inspired</div>
-      </div>
-    </div>
-    <div class="mockup-frame">
-      <div class="c5">
-        <div class="c5-topbar">
-          <div class="c5-logo">🎙️ Sofia <div class="c5-logo-badge">DIALER</div></div>
-          <div class="c5-agents-toggle">
-            <button class="c5-agent-tab active">Maria</button>
-            <button class="c5-agent-tab">Elena</button>
-            <button class="c5-agent-tab">Sofia 3</button>
-            <button class="c5-agent-tab">+</button>
-          </div>
-          <div class="c5-icons">
-            <div class="c5-icon-btn">🧪</div>
-            <div class="c5-icon-btn">📒</div>
-            <div class="c5-icon-btn">⚙️</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 360px;min-height:520px;">
-          <div class="c5-center">
-            <div class="c5-agent-display">
-              <div class="c5-agent-avatar-big">🧑‍💼</div>
-              <div class="c5-agent-name-big">Maria</div>
-              <div class="c5-agent-status"><div class="c5-status-dot"></div>Ready · Growth-onomics · Fintech</div>
-            </div>
-            <div class="c5-lang-row">
-              <div class="c5-lang-pill active">🇬🇧 English</div>
-              <div class="c5-lang-pill">🇬🇷 Greek</div>
-            </div>
-            <button class="c5-big-btn">🎙️ &nbsp;Talk to Maria</button>
-            <div class="c5-quick-stats">
-              <div class="c5-qstat"><div class="c5-qstat-num">12</div><div class="c5-qstat-label">Calls</div></div>
-              <div class="c5-qstat"><div class="c5-qstat-num" style="color:#a78bfa;">100%</div><div class="c5-qstat-label">Sim</div></div>
-              <div class="c5-qstat"><div class="c5-qstat-num" style="color:#22c55e;">4</div><div class="c5-qstat-label">Hot</div></div>
-            </div>
-            <div style="font-size:11px;color:#333;margin-top:4px;">
-              <a href="agent-prompts.html" target="_blank" style="color:#7c3aed;text-decoration:none;opacity:0.6;">📄 View prompt →</a>
-            </div>
-          </div>
-          <div class="c5-right" style="border-left:1px solid #16161e;">
-            <div class="c5-section">
-              <div class="c5-section-title">Recent Calls</div>
-              <div class="c5-call-item">
-                <div class="c5-call-dot" style="background:#22c55e;"></div>
-                <div><div class="c5-call-name">Nikos P.</div><div class="c5-call-num">+30 621 234 567</div></div>
-                <div class="c5-call-score" style="color:#22c55e;">🔥 Hot</div>
-              </div>
-              <div class="c5-call-item">
-                <div class="c5-call-dot" style="background:#f59e0b;"></div>
-                <div><div class="c5-call-name">James W.</div><div class="c5-call-num">+44 7911 123456</div></div>
-                <div class="c5-call-score" style="color:#f59e0b;">⭐ Warm</div>
-              </div>
-              <div class="c5-call-item">
-                <div class="c5-call-dot" style="background:#444;"></div>
-                <div><div class="c5-call-name">Unknown</div><div class="c5-call-num">+49 30 1234567</div></div>
-                <div class="c5-call-score" style="color:#444;">❌ Cold</div>
-              </div>
-            </div>
-            <div class="c5-section">
-              <div class="c5-section-title">Prompt Preview</div>
-              <div class="c5-prompt-box">You are Maria, a business development representative at Growth-onomics. Qualify fintech prospects and book 20-minute strategy calls. Warm, confident, sharp...</div>
-              <a href="agent-prompts.html" target="_blank" class="c5-prompt-link">View full prompts →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a class="pick-btn" href="mailto:?subject=Pick Concept 5">✅ Pick this one</a>
-  </div>
-
 </div>
+
+<!-- ===================== CONCEPT W2 ===================== -->
+<div class="concept" id="w2">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#0ea5e9">W2</span>
+    <div>
+      <div class="concept-title">Sidebar Split Panel</div>
+      <div class="concept-desc">Agent list on left, prompt editor + controls on right. Pro tool feel.</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="w2-shell">
+      <div class="w2-sidebar">
+        <div class="w2-sb-top">
+          <div class="w2-sb-brand">Dialer <span>Pro</span></div>
+          <div class="w2-sb-card active">
+            <div class="w2-sb-emo">👩</div>
+            <div><div class="w2-sb-nm">Maria</div><div class="w2-sb-tl">Growth-onomics</div></div>
+          </div>
+          <div class="w2-sb-card">
+            <div class="w2-sb-emo">👩‍💼</div>
+            <div><div class="w2-sb-nm">Elena</div><div class="w2-sb-tl">Marketing AI</div></div>
+          </div>
+          <div class="w2-sb-card">
+            <div class="w2-sb-emo">💎</div>
+            <div><div class="w2-sb-nm">Sofia 3</div><div class="w2-sb-tl">ΜΙΑ Collection</div></div>
+          </div>
+          <div class="w2-sb-card" style="border: 1.5px dashed #e5e7eb; justify-content: center; color: #bbb; font-size: 12px; font-weight: 600;">
+            + New Agent
+          </div>
+        </div>
+        <div class="w2-sb-bottom">
+          <div class="w2-sb-bottom-btn">📒 Contacts</div>
+          <div class="w2-sb-bottom-btn">🏆 CRM</div>
+          <div class="w2-sb-bottom-btn">⚙️ Settings</div>
+        </div>
+      </div>
+      <div class="w2-main">
+        <div class="w2-main-header">
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#111">Maria</div>
+            <div style="font-size:12px;color:#aaa">Business Development · AISquad</div>
+          </div>
+          <span class="w2-badge" style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0">● Live</span>
+        </div>
+
+        <div class="w2-section-label">Language</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <div style="padding:7px 16px;border-radius:20px;border:1.5px solid #6c47ff;background:#f5f3ff;color:#6c47ff;font-size:12px;font-weight:700;cursor:pointer">🇬🇧 English</div>
+          <div style="padding:7px 16px;border-radius:20px;border:1.5px solid #e5e7eb;font-size:12px;font-weight:700;color:#aaa;cursor:pointer">🇬🇷 Greek</div>
+        </div>
+
+        <div class="w2-section-label">Preset Tone</div>
+        <div class="w2-preset-row">
+          <div class="w2-preset active">🤝 Warm</div>
+          <div class="w2-preset">⚡ Confident</div>
+          <div class="w2-preset">✏️ Custom</div>
+        </div>
+
+        <div class="w2-section-label">System Prompt</div>
+        <textarea class="w2-textarea" rows="4">You are Maria, a Business Development Representative at Growth-onomics. Your goal is to qualify fintech companies and book a 20-minute strategy call with the decision maker. Be warm, professional, and direct...</textarea>
+
+        <div class="w2-section-label" style="margin-top:14px">Opening Line</div>
+        <textarea class="w2-textarea" rows="2">Hi, this is Maria calling from Growth-onomics. Is this a good time to talk about your fintech marketing?</textarea>
+
+        <div class="w2-cta-row">
+          <button class="w2-btn w2-btn-primary">📞 Talk Now</button>
+          <button class="w2-btn w2-btn-ghost">🧪 Simulate</button>
+          <button class="w2-btn w2-btn-ghost">💾 Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT W3 ===================== -->
+<div class="concept" id="w3">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#7c3aed">W3</span>
+    <div>
+      <div class="concept-title">Purple Top Bar + White Body</div>
+      <div class="concept-desc">Bold branded header in purple, clean white content area below.</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="w3-wrap">
+      <div class="w3-topbar">
+        <div class="w3-topbar-brand">⚡ DIALER PRO</div>
+        <div class="w3-topbar-live">System Live</div>
+      </div>
+      <div class="w3-body">
+        <div class="w3-agent-strip">
+          <div class="w3-achip active"><span class="emo">👩</span> Maria</div>
+          <div class="w3-achip"><span class="emo">👩‍💼</span> Elena</div>
+          <div class="w3-achip"><span class="emo">💎</span> Sofia 3</div>
+          <div class="w3-achip" style="color:#bbb;border-style:dashed">+ New</div>
+        </div>
+
+        <div class="w3-hero">
+          <div class="w3-av">👩</div>
+          <div class="w3-info">
+            <h2>Maria</h2>
+            <p>Business Development · Growth-onomics</p>
+            <div class="w3-info-tags">
+              <span class="w3-chip-tag">Fintech</span>
+              <span class="w3-chip-tag">Books Meetings</span>
+              <span class="w3-chip-tag">EN / EL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-mode-row">
+          <div class="w3-mode active"><span class="ic">📞</span>Browser Call</div>
+          <div class="w3-mode"><span class="ic">📱</span>Phone Call</div>
+          <div class="w3-mode"><span class="ic">🧪</span>Simulate</div>
+        </div>
+
+        <div class="w3-cta">
+          <button class="w3-cta-main">📞 Talk to Maria</button>
+          <button class="w3-cta-sec">🇬🇷 EL</button>
+        </div>
+
+        <div class="w3-stats-row">
+          <div class="w3-stat"><div class="v">94%</div><div class="l">Success</div></div>
+          <div class="w3-stat"><div class="v">2.4m</div><div class="l">Avg Call</div></div>
+          <div class="w3-stat"><div class="v">🔥12</div><div class="l">Hot Leads</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT W4 ===================== -->
+<div class="concept" id="w4">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#111">W4</span>
+    <div>
+      <div class="concept-title">Zen Minimal</div>
+      <div class="concept-desc">Maximum whitespace, zero clutter. Almost no chrome. Pure function.</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="w4-wrap">
+      <div class="w4-brand">Growth<span>·</span>onomics</div>
+
+      <div class="w4-agent-row">
+        <div class="w4-dot active">
+          <div class="w4-dot-circle">👩</div>
+          <div class="w4-dot-nm">Maria</div>
+        </div>
+        <div class="w4-dot">
+          <div class="w4-dot-circle">👩‍💼</div>
+          <div class="w4-dot-nm">Elena</div>
+        </div>
+        <div class="w4-dot">
+          <div class="w4-dot-circle">💎</div>
+          <div class="w4-dot-nm">Sofia 3</div>
+        </div>
+      </div>
+
+      <div class="w4-center">
+        <h2>Maria</h2>
+        <p>Business Development · Growth-onomics</p>
+        <div class="live-pill">System Online</div>
+      </div>
+
+      <div class="w4-cta">
+        <button class="w4-btn-main">📞 Talk to Maria</button>
+        <button class="w4-btn-sub">🧪 Run Simulation</button>
+      </div>
+
+      <div class="w4-lang-row">
+        <div class="w4-lang active">🇬🇧</div>
+        <div class="w4-lang">🇬🇷</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT W5 ===================== -->
+<div class="concept" id="w5">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#0891b2">W5</span>
+    <div>
+      <div class="concept-title">CRM Dashboard View</div>
+      <div class="concept-desc">Full analytics panel. KPIs, lead table, agent selector. Power-user layout.</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="w5-shell">
+      <div class="w5-topbar">
+        <div class="w5-topbar-brand">Dialer <span>Pro</span></div>
+        <div class="w5-tab-nav">
+          <div class="w5-tab-link">📞 Dialer</div>
+          <div class="w5-tab-link active">🏆 CRM</div>
+          <div class="w5-tab-link">📒 Contacts</div>
+          <div class="w5-tab-link">⚙️ Settings</div>
+        </div>
+      </div>
+      <div class="w5-main-row">
+        <div class="w5-left">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:10px">Agents</div>
+          <div class="w5-agent-mini active"><div class="emo">👩</div><div><div class="nm">Maria</div><div class="sc">24 calls</div></div></div>
+          <div class="w5-agent-mini"><div class="emo">👩‍💼</div><div><div class="nm">Elena</div><div class="sc">18 calls</div></div></div>
+          <div class="w5-agent-mini"><div class="emo">💎</div><div><div class="nm">Sofia 3</div><div class="sc">31 calls</div></div></div>
+        </div>
+        <div class="w5-content">
+          <div class="w5-kpi-row">
+            <div class="w5-kpi"><div class="val">73</div><div class="lbl">Total Calls</div><div class="trend">↑ 12% vs yesterday</div></div>
+            <div class="w5-kpi"><div class="val">🔥12</div><div class="lbl">Hot Leads</div><div class="trend">↑ 3 new</div></div>
+            <div class="w5-kpi"><div class="val">2.4m</div><div class="lbl">Avg Duration</div><div class="trend">↑ better</div></div>
+            <div class="w5-kpi red"><div class="val">94%</div><div class="lbl">Score</div><div class="trend" style="color:#059669">↑ improving</div></div>
+          </div>
+          <table class="w5-leads-table">
+            <thead>
+              <tr><th>Name</th><th>Number</th><th>Agent</th><th>Score</th><th>Summary</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Nikos P.</strong></td><td>+30 697…</td><td>Maria</td><td><span class="score-hot">🔥 Hot</span></td><td>Very interested, wants demo</td></tr>
+              <tr><td><strong>Katerina M.</strong></td><td>+30 694…</td><td>Sofia 3</td><td><span class="score-warm">⭐ Warm</span></td><td>Asked for brochure first</td></tr>
+              <tr><td><strong>Yiannis A.</strong></td><td>+30 698…</td><td>Elena</td><td><span class="score-cold">❌ Cold</span></td><td>Not interested right now</td></tr>
+              <tr><td><strong>Maria S.</strong></td><td>+30 693…</td><td>Maria</td><td><span class="score-hot">🔥 Hot</span></td><td>Booked strategy call</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT W6 ===================== -->
+<div class="concept" id="w6">
+  <div class="concept-label">
+    <span class="concept-badge" style="background:#10b981">W6</span>
+    <div>
+      <div class="concept-title">Mobile-First Card Stack</div>
+      <div class="concept-desc">Expandable agent cards. Tap to open. Optimized for phone screens.</div>
+    </div>
+  </div>
+  <div class="concept-body">
+    <div class="w6-wrap">
+      <div class="w6-status-bar">
+        <div class="w6-brand">Dialer Pro</div>
+        <div class="w6-status-dot">System Live</div>
+      </div>
+
+      <!-- Active agent card expanded -->
+      <div class="w6-agent-card active">
+        <div class="w6-agent-top">
+          <div class="w6-emo">👩</div>
+          <div>
+            <div class="w6-nm">Maria</div>
+            <div class="w6-tl">Business Development</div>
+          </div>
+          <div class="w6-pill">Active</div>
+        </div>
+        <div class="w6-expanded">
+          <div class="w6-lang-toggle">
+            <div class="w6-lang-opt active">🇬🇧 English</div>
+            <div class="w6-lang-opt">🇬🇷 Ελληνικά</div>
+          </div>
+          <div class="w6-ctrl-row">
+            <div class="w6-ctrl prim">📞 Talk Now</div>
+            <div class="w6-ctrl">📱 Phone</div>
+            <div class="w6-ctrl">🧪 Sim</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsed cards -->
+      <div class="w6-agent-card">
+        <div class="w6-agent-top">
+          <div class="w6-emo">👩‍💼</div>
+          <div>
+            <div class="w6-nm">Elena</div>
+            <div class="w6-tl">Marketing AI</div>
+          </div>
+          <div class="w6-pill">Ready</div>
+        </div>
+      </div>
+      <div class="w6-agent-card">
+        <div class="w6-agent-top">
+          <div class="w6-emo">💎</div>
+          <div>
+            <div class="w6-nm">Sofia 3</div>
+            <div class="w6-tl">ΜΙΑ Collection</div>
+          </div>
+          <div class="w6-pill">Ready</div>
+        </div>
+      </div>
+      <div class="w6-agent-card" style="border-style:dashed;color:#bbb;text-align:center;padding:14px">
+        <span style="font-size:20px">+</span> <span style="font-size:13px;font-weight:700">Add Agent</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;color:#bbb;font-size:12px;margin-top:20px">Sofia Dialer — Light UI Variations · miltosgm.github.io</p>
 
 </body>
 </html>

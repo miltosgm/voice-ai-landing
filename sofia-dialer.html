@@ -2514,44 +2514,40 @@ async function startSimCall() {
 
 function scoreSimulation(lines) {
   var aiLines = lines.filter(function(l) { return l.role === 'AI'; });
+  var userLines = lines.filter(function(l) { return l.role === 'User'; });
   var fullText = lines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
   var aiText = aiLines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
+  var userText = userLines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
   
-  var criteria = [
+  return [
     {
-      label: 'Introduced itself by name',
-      pass: /sofia|maria|elena|γεια|hello|speaking|this is|i am|i\'m/.test(aiText)
+      label: 'Introduced itself clearly',
+      pass: /this is|i am|i\'m|hello|hi|my name|γεια|καλησπέρα|καλημέρα/.test(aiText)
     },
     {
-      label: 'Gave substantive replies (not one-liners)',
-      pass: aiLines.filter(function(l) { return l.text.split(' ').length > 10; }).length >= 3
+      label: 'Asked qualifying questions',
+      pass: /what|how|tell me|can you|do you|have you|are you|interested|challenge|problem|need|goal|πως|τι|ποια|ενδιαφέρ/.test(aiText)
     },
     {
-      label: 'Guided towards a next step',
-      pass: /interested|appointment|ραντεβού|schedule|book|send|website|follow|πότε|when|learn more|call|meeting/.test(aiText)
+      label: 'Gave substantive replies',
+      pass: aiLines.filter(function(l) { return l.text.split(' ').length >= 8; }).length >= 3
     },
     {
-      label: 'Handled pushback professionally',
-      pass: !/sorry|apologize|excuse/.test(aiText) || aiLines.length >= 4
+      label: 'Guided towards next step',
+      pass: /meet|call|schedule|book|appointment|email|send|follow|week|time|πότε|ραντεβού|κλήση|σχεδιάσ/.test(aiText)
+    },
+    {
+      label: 'Sounded natural & engaging',
+      pass: /yeah|sure|great|perfect|exactly|understand|interested|sounds|absolutely|χμμ|σίγουρα|σωστά|τέλεια/.test(aiText) && aiLines.length >= 4
+    },
+    {
+      label: 'Handled objections gracefully',
+      pass: aiLines.filter(function(l) { 
+        var txt = l.text.toLowerCase();
+        return /know|understand|totally|makes sense|fair|appreciate|helpful|useful|think about/.test(txt);
+      }).length >= 1 || userLines.length <= 3
     }
   ];
-  
-  // Add brand-specific criteria based on activeAgent
-  if(activeAgent === 'sofia' || activeAgent === 'sofia2') {
-    // Growth-onomics and AI Marketing: pitch-focused
-    criteria.splice(1, 0, {
-      label: 'Explained the service offering',
-      pass: /growth|revenue|seo|paid|acquisition|ai search|geo|fintech|marketing|optimization|visibility|campaign/.test(aiText)
-    });
-  } else if(activeAgent === 'sofia3') {
-    // MIA Collection: brand-focused
-    criteria.splice(1, 0, {
-      label: 'Mentioned MIA Collection brand',
-      pass: /μια|mia|collection|greece|greek|boutique|premium|evening|resort|fashion|ρούχα|brand/.test(aiText)
-    });
-  }
-  
-  return criteria;
 }
 
 function showSimScore() {

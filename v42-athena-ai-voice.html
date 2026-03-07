@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athena AI Voice Agent — Real Stories From Winning Teams</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9fafb; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; background: white; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .logo-sub { font-size: 11px; color: #999; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .nav-btn { background: #10b981; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #059669; }
+    
+    .hero { text-align: center; padding: 100px 20px; max-width: 900px; margin: 0 auto; background: white; }
+    .hero h1 { font-size: 56px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .green { color: #10b981; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 12px; }
+    .hero-subtext { font-size: 14px; color: #999; margin-bottom: 48px; }
+    .hero-badge { display: inline-block; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 20px; font-size: 12px; color: #10b981; font-weight: 600; margin-bottom: 24px; }
+    
+    .cta-button { background: #10b981; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #059669; transform: translateY(-2px); transition: all 0.2s; }
+    
+    .stories-section { max-width: 1400px; margin: 100px auto; padding: 0 20px; }
+    .stories-section h2 { text-align: center; font-size: 48px; font-weight: 900; margin-bottom: 20px; }
+    .stories-subtitle { text-align: center; font-size: 16px; color: #666; margin-bottom: 80px; }
+    
+    .stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; }
+    
+    .story-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); transition: all 0.3s; }
+    .story-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(16, 185, 129, 0.12); }
+    
+    .story-header-section { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 48px 32px; text-align: center; }
+    .story-number { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 12px; opacity: 0.9; }
+    .story-name { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .story-role { font-size: 13px; opacity: 0.95; font-weight: 500; }
+    
+    .story-body { padding: 40px; }
+    .story-text { font-size: 15px; color: #666; line-height: 1.8; margin-bottom: 32px; }
+    
+    .metrics-showcase { display: flex; flex-direction: column; gap: 20px; }
+    
+    .metric-highlight { background: linear-gradient(135deg, #f0fdf4 0%, #e0f7ef 100%); padding: 24px; border-radius: 12px; border: 1px solid #bbf7d0; }
+    .metric-label { font-size: 11px; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
+    .metric-values { display: flex; align-items: center; gap: 16px; }
+    .metric-before { font-size: 18px; color: #666; font-weight: 600; min-width: 60px; }
+    .metric-arrow { font-size: 24px; color: #10b981; font-weight: 900; }
+    .metric-after { font-size: 32px; font-weight: 900; color: #10b981; }
+    .metric-outcome { font-size: 12px; color: #666; margin-top: 8px; }
+    
+    .testimonials-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; background: white; margin-top: 60px; }
+    .testimonials-section h2 { text-align: center; font-size: 44px; font-weight: 900; margin-bottom: 60px; }
+    
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+    .testimonial-card { background: linear-gradient(135deg, #f0fdf4 0%, #e0f7ef 100%); padding: 32px; border-radius: 12px; border: 1px solid #bbf7d0; }
+    
+    .testimonial-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .testimonial-avatar { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #10b981, #059669); flex-shrink: 0; border: 3px solid white; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2); }
+    .testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .testimonial-meta { flex: 1; }
+    .testimonial-author { font-weight: 800; font-size: 13px; color: #1a1a1a; display: block; }
+    .testimonial-role { font-size: 12px; color: #10b981; font-weight: 600; margin-top: 2px; }
+    
+    .testimonial-text { font-size: 15px; color: #1a1a1a; line-height: 1.7; }
+    
+    .pricing-section { padding: 100px 20px; background: #f9fafb; margin-top: 60px; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-header p { color: #666; }
+    
+    .pricing-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #10b981; box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15); }
+    .price-card.featured { border: 2px solid #10b981; box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15); background: linear-gradient(135deg, #f0fdf4, white); }
+    
+    .price-badge { display: inline-block; background: #10b981; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #10b981; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(16, 185, 129, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #10b981; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; background: white; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Athena<div class="logo-sub">AI Voice Agent</div></div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">🎙️ AI-Powered Voice Calling Platform</div>
+  <h1>Make 1,000+ <span class="green">Qualified Calls</span> Per Month</h1>
+  <p>The intelligent voice agent that books meetings while you sleep.</p>
+  <div class="hero-subtext">100+ companies. 1M+ calls. 4.9★ rating. Zero hiring required.</div>
+  <button class="cta-button">Read Their Stories</button>
+</section>
+
+<section class="stories-section">
+  <h2>How Teams Transformed</h2>
+  <div class="stories-subtitle">Real results from Athena AI Voice Agent.</div>
+  
+  <div class="stories-grid">
+    
+    <div class="story-card">
+      <div class="story-header-section">
+        <div class="story-number">01</div>
+        <div class="story-name">Sarah's SaaS</div>
+        <div class="story-role">VP Sales, 5 SDRs</div>
+      </div>
+      <div class="story-body">
+        <div class="story-text">Sarah deployed Athena AI Voice Agent to her sales team. The AI agent made 1,000+ calls per week across her target list. By week 4, her meeting pipeline tripled.</div>
+        
+        <div class="metrics-showcase">
+          <div class="metric-highlight">
+            <div class="metric-label">Meetings/Month</div>
+            <div class="metric-values">
+              <span class="metric-before">50</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">150</span>
+            </div>
+            <div class="metric-outcome">3x growth. Same team. Athena does the calling.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Cost Per Meeting</div>
+            <div class="metric-values">
+              <span class="metric-before">$800+</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">$6</span>
+            </div>
+            <div class="metric-outcome">AI voice replaces expensive hiring.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Time to Scale</div>
+            <div class="metric-values">
+              <span class="metric-before">6 months</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">Week 1</span>
+            </div>
+            <div class="metric-outcome">Instant outbound capacity with AI.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-header-section">
+        <div class="story-number">02</div>
+        <div class="story-name">Marcus's Enterprise</div>
+        <div class="story-role">Sales Director, 200 team</div>
+      </div>
+      <div class="story-body">
+        <div class="story-text">Marcus needed to scale outbound fast. Instead of hiring 2 more SDRs ($130K/year), he deployed Athena AI Voice Agent. The AI agent makes consistent, intelligent calls 24/7.</div>
+        
+        <div class="metrics-showcase">
+          <div class="metric-highlight">
+            <div class="metric-label">Annual Cost</div>
+            <div class="metric-values">
+              <span class="metric-before">$130K</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">$10.8K</span>
+            </div>
+            <div class="metric-outcome">Replace SDRs with AI voice agent.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Scaling Speed</div>
+            <div class="metric-values">
+              <span class="metric-before">Months</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">Days</span>
+            </div>
+            <div class="metric-outcome">No hiring. No training. Just AI.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Consistency</div>
+            <div class="metric-values">
+              <span class="metric-before">Variable</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">100%</span>
+            </div>
+            <div class="metric-outcome">Same pitch. Every call. Perfect tone.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-header-section">
+        <div class="story-number">03</div>
+        <div class="story-name">Lisa's FinTech</div>
+        <div class="story-role">Founder, bootstrapped</div>
+      </div>
+      <div class="story-body">
+        <div class="story-text">Lisa's startup couldn't afford SDRs. Athena AI Voice Agent gave her instant outbound capacity. The AI calls, qualifies, books. She just closes.</div>
+        
+        <div class="metrics-showcase">
+          <div class="metric-highlight">
+            <div class="metric-label">SDR Cost</div>
+            <div class="metric-values">
+              <span class="metric-before">$60K+</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">$299/mo</span>
+            </div>
+            <div class="metric-outcome">AI voice for the price of coffee.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Competitive</div>
+            <div class="metric-values">
+              <span class="metric-before">No outbound</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">Full pipeline</span>
+            </div>
+            <div class="metric-outcome">Competes with teams 10x bigger.</div>
+          </div>
+          
+          <div class="metric-highlight">
+            <div class="metric-label">Time to Deal</div>
+            <div class="metric-values">
+              <span class="metric-before">Stuck</span>
+              <span class="metric-arrow">→</span>
+              <span class="metric-after">30 days</span>
+            </div>
+            <div class="metric-outcome">First $50K deal from AI calls.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <h2>What Teams Are Saying About Athena</h2>
+  <div class="testimonials-grid">
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=1" alt="Sarah Chen">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">Sarah Chen</span>
+          <span class="testimonial-role">VP Sales, SaaS</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"Athena's AI voice agent made 1,000+ calls. We got 150 meetings. It's like hiring 3 SDRs instantly."</div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=2" alt="Marcus Johnson">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">Marcus Johnson</span>
+          <span class="testimonial-role">Sales Director, Enterprise</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"Replaced 2 SDRs with Athena AI. Freed $100K. The AI voice is better at qualifying than humans."</div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=3" alt="Lisa Rodriguez">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">Lisa Rodriguez</span>
+          <span class="testimonial-role">Founder, FinTech</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"Athena AI Voice Agent made outbound possible for us. No hiring. No training. Just call."</div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=4" alt="David Kim">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">David Kim</span>
+          <span class="testimonial-role">COO, Real Estate</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"5-minute setup. Athena starts calling instantly. Best sales tool we've bought."</div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=5" alt="Emma Thompson">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">Emma Thompson</span>
+          <span class="testimonial-role">Head of Sales, Tech</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"Athena handles prospecting. My team handles closing. Efficiency is 10x better."</div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">
+          <img src="https://i.pravatar.cc/56?img=6" alt="James Wilson">
+        </div>
+        <div class="testimonial-meta">
+          <span class="testimonial-author">James Wilson</span>
+          <span class="testimonial-role">VP Revenue, SaaS</span>
+        </div>
+      </div>
+      <div class="testimonial-text">"Athena AI Voice Agent: $299/month. Pipeline impact: $2,500+. ROI is insane."</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Try Athena AI Voice Agent Free</h2>
+    <p>14 days free. No credit card. Full feature access.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">STARTER</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 AI agent</div>
+      <ul class="features-list">
+        <li>Custom AI voice agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 AI agents</div>
+      <ul class="features-list">
+        <li>3 custom AI voices</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited AI agents</li>
+        <li>All integrations</li>
+        <li>White-label option</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Athena AI Voice Agent</p>
+</footer>
+
+</body>
+</html>

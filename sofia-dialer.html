@@ -2516,18 +2516,11 @@ function scoreSimulation(lines) {
   var aiLines = lines.filter(function(l) { return l.role === 'AI'; });
   var fullText = lines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
   var aiText = aiLines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
-  return [
+  
+  var criteria = [
     {
       label: 'Introduced itself by name',
       pass: /sofia|maria|elena|γεια|hello|speaking|this is|i am|i\'m/.test(aiText)
-    },
-    {
-      label: 'Mentioned ΜΙΑ Collection brand',
-      pass: /μια|mia|collection/.test(aiText)
-    },
-    {
-      label: 'Explained what the brand offers',
-      pass: /fashion|ρούχα|clothes|γυναικεία|european|brands|style|στυλ|collection|wear/.test(aiText)
     },
     {
       label: 'Gave substantive replies (not one-liners)',
@@ -2535,13 +2528,30 @@ function scoreSimulation(lines) {
     },
     {
       label: 'Guided towards a next step',
-      pass: /interested|appointment|ραντεβού|schedule|book|send|website|follow|πότε|when|learn more/.test(aiText)
+      pass: /interested|appointment|ραντεβού|schedule|book|send|website|follow|πότε|when|learn more|call|meeting/.test(aiText)
     },
     {
       label: 'Handled pushback professionally',
-      pass: !/sorry|apologize/.test(aiText) || aiLines.length >= 4
+      pass: !/sorry|apologize|excuse/.test(aiText) || aiLines.length >= 4
     }
   ];
+  
+  // Add brand-specific criteria based on activeAgent
+  if(activeAgent === 'sofia' || activeAgent === 'sofia2') {
+    // Growth-onomics and AI Marketing: pitch-focused
+    criteria.splice(1, 0, {
+      label: 'Explained the service offering',
+      pass: /growth|revenue|seo|paid|acquisition|ai search|geo|fintech|marketing|optimization|visibility|campaign/.test(aiText)
+    });
+  } else if(activeAgent === 'sofia3') {
+    // MIA Collection: brand-focused
+    criteria.splice(1, 0, {
+      label: 'Mentioned MIA Collection brand',
+      pass: /μια|mia|collection|greece|greek|boutique|premium|evening|resort|fashion|ρούχα|brand/.test(aiText)
+    });
+  }
+  
+  return criteria;
 }
 
 function showSimScore() {

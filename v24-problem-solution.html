@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Stop Hiring SDRs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .nav-btn { background: #2e1065; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #1e0a3d; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .highlight { color: #dc2626; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 48px; }
+    
+    .cta-button { background: #2e1065; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #1e0a3d; }
+    
+    .problem-section { background: #fef2f2; padding: 80px 20px; }
+    .problem-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; color: #dc2626; }
+    
+    .problem-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .problem-card { background: white; padding: 32px; border-radius: 12px; border: 2px solid #dc2626; }
+    .problem-icon { font-size: 36px; margin-bottom: 12px; }
+    .problem-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #dc2626; }
+    .problem-card p { font-size: 14px; color: #666; line-height: 1.6; }
+    
+    .solution-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .solution-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; color: #2e1065; }
+    
+    .solution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .solution-card { background: #f9f9f9; padding: 32px; border-radius: 12px; border-left: 4px solid #10b981; }
+    .solution-icon { font-size: 36px; margin-bottom: 12px; }
+    .solution-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #2e1065; }
+    .solution-card p { font-size: 14px; color: #666; line-height: 1.6; }
+    
+    .vs-section { background: #f9f9f9; padding: 80px 20px; }
+    .vs-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .vs-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .vs-card { background: white; padding: 40px; border-radius: 12px; border: 2px solid #e0e0e0; }
+    .vs-card.bad { border-color: #dc2626; }
+    .vs-card.good { border-color: #10b981; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1); }
+    
+    .vs-title { font-size: 20px; font-weight: 900; margin-bottom: 28px; }
+    .vs-card.bad .vs-title { color: #dc2626; }
+    .vs-card.good .vs-title { color: #10b981; }
+    
+    .vs-item { display: flex; gap: 12px; margin-bottom: 16px; font-size: 14px; }
+    .vs-icon { font-size: 18px; flex-shrink: 0; }
+    .vs-card.bad .vs-item { color: #666; }
+    .vs-card.good .vs-item { color: #666; }
+    
+    .testimonials-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .testimonials-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+    .testimonial { background: #f9f9f9; padding: 28px; border-radius: 8px; border-left: 4px solid #2e1065; }
+    .testimonial-text { font-size: 14px; color: #666; margin-bottom: 16px; font-weight: 500; line-height: 1.6; }
+    .testimonial-author { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+    .testimonial-role { font-size: 12px; color: #999; }
+    
+    .pricing-section { background: #f9f9f9; padding: 80px 20px; }
+    .pricing-section h2 { text-align: center; font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-section .subtitle { text-align: center; color: #666; margin-bottom: 60px; }
+    
+    .pricing-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #2e1065; box-shadow: 0 12px 40px rgba(46, 16, 101, 0.15); }
+    .price-card.featured { border: 2px solid #2e1065; box-shadow: 0 12px 40px rgba(46, 16, 101, 0.15); }
+    
+    .price-badge { display: inline-block; background: #2e1065; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #2e1065; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(46, 16, 101, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #2e1065; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; }
+    
+    @media (max-width: 768px) { .hero h1 { font-size: 36px; } .vs-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sofia</div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <h1>The <span class="highlight">SDR Problem</span> Is Solved</h1>
+  <p>Stop overpaying for manual outbound. AI does it better, faster, cheaper.</p>
+  <button class="cta-button">See The Solution</button>
+</section>
+
+<section class="problem-section">
+  <h2>The Current State Of Outbound Sales</h2>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>You're Overpaying</h3>
+      <p>Each SDR costs $50-80K/year. Full ramp time is 3-6 months. High turnover means constant hiring.</p>
+    </div>
+    
+    <div class="problem-card">
+      <div class="problem-icon">⏰</div>
+      <h3>Too Slow to Scale</h3>
+      <p>Need 3x more meetings? Hire 3 more SDRs. Takes months and costs $200K+. Meanwhile, competitors move faster.</p>
+    </div>
+    
+    <div class="problem-card">
+      <div class="problem-icon">📉</div>
+      <h3>Quality Suffers</h3>
+      <p>New SDRs make mistakes. Bad openers. Poor qualifying. Your best leads slip through because of inexperience.</p>
+    </div>
+    
+    <div class="problem-card">
+      <div class="problem-icon">😫</div>
+      <h3>Dependency Risk</h3>
+      <p>One star SDR leaves? You lose months of institutional knowledge and your pipeline suffers immediately.</p>
+    </div>
+  </div>
+</section>
+
+<section class="solution-section">
+  <h2>The Sofia Solution</h2>
+  <div class="solution-grid">
+    <div class="solution-card">
+      <div class="solution-icon">⚡</div>
+      <h3>Deploy In Minutes</h3>
+      <p>No hiring. No onboarding. No 3-month ramp. Sofia is live and calling within 5 minutes of signup.</p>
+    </div>
+    
+    <div class="solution-card">
+      <div class="solution-icon">📈</div>
+      <h3>Scale Infinitely</h3>
+      <p>Need 3x more calls? Scale Sofia up. No hiring. No headcount. Same cost structure regardless of volume.</p>
+    </div>
+    
+    <div class="solution-card">
+      <div class="solution-icon">🎯</div>
+      <h3>Better Qualifying</h3>
+      <p>Sofia qualifies in real-time using intelligence your team built. Consistent. Repeatable. No degradation over time.</p>
+    </div>
+    
+    <div class="solution-card">
+      <div class="solution-icon">🔒</div>
+      <h3>No Dependency Risk</h3>
+      <p>Sofia doesn't leave. Doesn't get sick. Doesn't demand a raise. Your outbound stays consistent forever.</p>
+    </div>
+  </div>
+</section>
+
+<section class="vs-section">
+  <h2>Sofia vs Hiring An SDR</h2>
+  <div class="vs-grid">
+    <div class="vs-card bad">
+      <div class="vs-title">❌ Hiring An SDR</div>
+      <div class="vs-item"><span class="vs-icon">💰</span> $50-80K salary</div>
+      <div class="vs-item"><span class="vs-icon">📋</span> $15K+ benefits/tax</div>
+      <div class="vs-item"><span class="vs-icon">⏳</span> 3-6 months ramp</div>
+      <div class="vs-item"><span class="vs-icon">📉</span> First 90 days: ~50% productivity</div>
+      <div class="vs-item"><span class="vs-icon">😫</span> Turnover risk</div>
+      <div class="vs-item"><span class="vs-icon">🚫</span> Can't scale quickly</div>
+      <div class="vs-item"><span class="vs-icon">💸</span> ~$65K+ annual cost</div>
+    </div>
+    
+    <div class="vs-card good">
+      <div class="vs-title">✅ Sofia (Growth Plan)</div>
+      <div class="vs-item"><span class="vs-icon">💰</span> $899/month</div>
+      <div class="vs-item"><span class="vs-icon">📋</span> No hidden costs</div>
+      <div class="vs-item"><span class="vs-icon">⚡</span> Live in 5 minutes</div>
+      <div class="vs-item"><span class="vs-icon">📈</span> 100% capacity day one</div>
+      <div class="vs-item"><span class="vs-icon">🔒</span> Zero turnover risk</div>
+      <div class="vs-item"><span class="vs-icon">📱</span> Scale to 5,000 calls/mo</div>
+      <div class="vs-item"><span class="vs-icon">💸</span> ~$10.8K annual cost</div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <h2>Leaders Who Made The Switch</h2>
+  <div class="testimonials">
+    <div class="testimonial">
+      <div class="testimonial-text">"We were hiring SDR #3. Then we discovered Sofia. Replaced the role entirely and freed up $80K in payroll."</div>
+      <div class="testimonial-author">Marcus Johnson</div>
+      <div class="testimonial-role">Sales Director, Enterprise</div>
+    </div>
+    
+    <div class="testimonial">
+      <div class="testimonial-text">"No more dependency on one person. Sofia handles prospecting. We handle closing. It's that simple."</div>
+      <div class="testimonial-author">Lisa Rodriguez</div>
+      <div class="testimonial-role">Founder, FinTech</div>
+    </div>
+    
+    <div class="testimonial">
+      <div class="testimonial-text">"Cost savings alone justified Sofia. But the real win is consistency. Sofia performs the same every single day."</div>
+      <div class="testimonial-author">Sarah Chen</div>
+      <div class="testimonial-role">VP Sales, B2B SaaS</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <h2>Start Your Free Trial</h2>
+  <p class="subtitle">14 days. Full feature access. No credit card.</p>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">STARTER</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>Custom AI agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 custom agents</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>White-label</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Sofia</p>
+</footer>
+
+</body>
+</html>

@@ -10,20 +10,20 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #07070f;
-    --surface: #0f0f1a;
-    --border: rgba(255,255,255,0.06);
-    --accent: #6c5ce7;
-    --accent2: #a29bfe;
-    --green: #00b894;
-    --green-dim: rgba(0,184,148,0.1);
+    --bg: #f5f5fa;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.07);
+    --accent: #6c47ff;
+    --accent2: #9b7fff;
+    --green: #059669;
+    --green-dim: rgba(5,150,105,0.1);
     --red: #e17055;
     --red-dim: rgba(225,112,85,0.1);
-    --yellow: #fdcb6e;
-    --yellow-dim: rgba(253,203,110,0.1);
-    --white: #f0f0ff;
-    --gray: #6c6c84;
-    --gray2: #3a3a52;
+    --yellow: #d97706;
+    --yellow-dim: rgba(217,119,6,0.1);
+    --white: #1a1a2e;
+    --gray: #6b7280;
+    --gray2: #d1d5db;
   }
 
   body {
@@ -33,14 +33,25 @@
     min-height: 100vh;
     padding: 32px 20px 80px;
   }
-  body::before {
-    content: '';
-    position: fixed; top: -300px; left: 50%;
-    transform: translateX(-50%);
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(108,92,231,0.08) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
+  body::before { display: none; }
+
+  /* Outcome modal buttons */
+  .outcome-btn { width:100%;padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;transition:opacity 0.15s; }
+  .outcome-btn:hover { opacity:0.8; }
+
+  /* Settings drawer */
+  .sdrawer-section { border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:18px; }
+  .sdrawer-label { font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white); }
+  .sdrawer-input { width:100%;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none;color:var(--white);background:var(--bg);transition:border-color 0.2s; }
+  .sdrawer-input:focus { border-color:var(--accent); }
+  .day-check { display:flex;align-items:center;gap:4px;font-size:12px;color:var(--gray);cursor:pointer;padding:4px 8px;border:1px solid var(--border);border-radius:8px;background:var(--bg); }
+  .day-check input { cursor:pointer; }
+
+  /* Campaign badge */
+  .campaign-badge { display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(108,92,231,0.12);color:var(--accent2);border:1px solid rgba(108,92,231,0.2);margin-left:6px;vertical-align:middle; }
+
+  /* Sidebar logo */
+  #sb-logo-img { max-height:32px;object-fit:contain;margin-bottom:8px;display:none; }
 
   .page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
 
@@ -83,6 +94,57 @@
     border-radius: 14px; cursor: pointer; transition: all 0.2s; text-align: left;
   }
   .agent-card:hover { border-color: var(--accent); }
+  .agent-card.editing {
+    border-color: var(--accent);
+    background: rgba(108,92,231,0.12);
+    cursor: text;
+  }
+  .agent-card-name[contenteditable],
+  .agent-card-desc[contenteditable] {
+    outline: none;
+    border-radius: 4px;
+    padding: 2px 4px;
+    background: rgba(255,255,255,0.05);
+    cursor: text;
+  }
+  .agent-card-name[contenteditable]:focus,
+  .agent-card-desc[contenteditable]:focus {
+    background: rgba(108,92,231,0.2);
+    border: 1px solid var(--accent);
+  }
+  .edit-controls {
+    display: none;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .agent-card.editing .edit-controls {
+    display: flex;
+  }
+  .btn-edit-save, .btn-edit-cancel {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    color: var(--gray);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-edit-save:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0,184,148,0.1);
+  }
+  .btn-edit-cancel:hover {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(225,112,85,0.1);
+  }
   .agent-card.active {
     border-color: var(--accent);
     background: rgba(108,92,231,0.08);
@@ -262,14 +324,14 @@
   .btn-save-prompt:hover { transform: translateY(-1px); }
 
   /* CARDS */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 20px; }
+  .card { background: #ffffff; border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 20px; }
   .card-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
   /* INPUTS */
   .phone-row { display: flex; gap: 10px; margin-bottom: 12px; }
   .country-select { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; padding: 14px 12px; cursor: pointer; outline: none; transition: border-color 0.2s; flex-shrink: 0; }
   .country-select:focus { border-color: var(--accent); }
-  .country-select option { background: #1a1a2e; }
+  .country-select option { background: #f0f0f8; }
   .phone-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 500; padding: 14px 16px; outline: none; transition: border-color 0.2s; letter-spacing: 1px; }
   .phone-input::placeholder { color: var(--gray); font-weight: 400; letter-spacing: 0; font-size: 14px; }
   .phone-input:focus { border-color: var(--accent); }
@@ -291,6 +353,19 @@
   .btn-call-all:hover { transform: translateY(-1px); }
   .btn-call-all:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .queue-empty { text-align: center; color: var(--gray); font-size: 14px; padding: 32px 0; }
+  .contact-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); }
+  .contact-avatar { width:32px; height:32px; border-radius:50%; background:rgba(108,92,231,0.12); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--accent2); flex-shrink:0; }
+  .contact-info { flex:1; min-width:0; }
+  .contact-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .contact-number { font-size:11px; color:var(--gray); margin-top:1px; }
+  .contact-actions { display:flex; gap:6px; flex-shrink:0; }
+  .contact-btn { font-size:11px; padding:4px 10px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; font-weight:600; transition:all 0.15s; }
+  .contact-btn.call { background:var(--green-dim); color:var(--green); }
+  .contact-btn.call:hover { background:var(--green); color:white; }
+  .contact-btn.queue { background:rgba(108,92,231,0.1); color:var(--accent2); }
+  .contact-btn.queue:hover { background:var(--accent); color:white; }
+  .contact-btn.del { background:transparent; color:var(--gray2); }
+  .contact-btn.del:hover { background:var(--red-dim); color:var(--red); }
   .queue-list { display: flex; flex-direction: column; gap: 8px; }
   .queue-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s; }
   .queue-item.calling { border-color: rgba(108,92,231,0.4); background: rgba(108,92,231,0.06); }
@@ -319,6 +394,55 @@
   .log-item .log-time { color: var(--gray2); font-size: 11px; margin-left: auto; flex-shrink: 0; }
   .log-empty { color: var(--gray); font-size: 13px; text-align: center; padding: 16px 0; }
 
+  /* Call score badges */
+  .score-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .score-hot  { background: rgba(255,87,51,0.12); color: #e84c1e; }
+  .score-warm { background: rgba(217,119,6,0.12); color: #d97706; }
+  .score-cold { background: rgba(107,114,128,0.1); color: #6b7280; }
+
+  /* CRM */
+  .crm-item { border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--surface); }
+  .crm-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .crm-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(108,92,231,0.12); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
+  .crm-info { flex: 1; }
+  .crm-name { font-size: 14px; font-weight: 600; }
+  .crm-meta { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .crm-summary { font-size: 12px; color: var(--gray); background: rgba(108,92,231,0.05); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; line-height: 1.5; }
+  .crm-audio { width: 100%; height: 32px; border-radius: 8px; margin-bottom: 8px; }
+  .crm-notes { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; color: var(--white); background: var(--surface); resize: none; outline: none; }
+  .crm-notes:focus { border-color: var(--accent); }
+  .crm-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .crm-btn { font-size: 11px; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-family: inherit; font-weight: 600; color: var(--gray); transition: all 0.15s; }
+  .crm-btn:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+
+  /* Recent Calls */
+  .call-item { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .call-item:last-child { border-bottom: none; }
+  .call-row { display: flex; align-items: center; gap: 10px; }
+  .call-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+  .call-status.ended { background: var(--green-dim); color: var(--green); }
+  .call-status.failed { background: var(--red-dim); color: var(--red); }
+  .call-status.other { background: var(--yellow-dim); color: var(--yellow); }
+  .call-number { font-size: 13px; font-weight: 500; flex: 1; }
+  .call-duration { font-size: 11px; color: var(--gray); flex-shrink: 0; }
+  .call-time { font-size: 11px; color: var(--gray2); }
+  .call-audio { width: 100%; height: 32px; border-radius: 8px; outline: none; margin-top: 4px; }
+  .call-transcript-btn { font-size: 11px; color: var(--accent2); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+  .call-transcript { font-size: 12px; border-radius: 10px; border: 1px solid var(--border); margin-top: 6px; max-height: 400px; overflow-y: auto; display: none; }
+  .ct-summary { padding: 10px 12px; background: rgba(108,92,231,0.06); border-bottom: 1px solid var(--border); }
+  .ct-summary strong { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent2); }
+  .ct-summary p { margin: 6px 0 0; color: var(--gray); line-height: 1.5; }
+  .ct-convo { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .ct-line { display: flex; flex-direction: column; gap: 2px; max-width: 85%; }
+  .ct-line.ai { align-self: flex-start; }
+  .ct-line.user { align-self: flex-end; }
+  .ct-speaker { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .ct-line.ai .ct-speaker { color: var(--accent2); }
+  .ct-line.user .ct-speaker { color: var(--green); text-align: right; }
+  .ct-bubble { padding: 7px 11px; border-radius: 12px; font-size: 12px; line-height: 1.5; }
+  .ct-line.ai .ct-bubble { background: rgba(108,92,231,0.1); color: var(--white); border-bottom-left-radius: 3px; }
+  .ct-line.user .ct-bubble { background: var(--green-dim); color: var(--white); border-bottom-right-radius: 3px; }
+
   /* TOAST */
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 500; transition: transform 0.3s; z-index: 100; white-space: nowrap; }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -335,23 +459,287 @@
     .btn-call-now, .btn-add { flex: none; }
     .header { flex-direction: column; gap: 12px; align-items: flex-start; }
   }
+
+/* ── BEHAVIOUR TOGGLES ──────────────────────────────── */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 0; border-bottom: 1px solid #111120;
+}
+.toggle-row:last-child { border: none; }
+.toggle-label { font-size: 11px; color: #6b7280; line-height: 1.3; }
+.toggle-label span { display: block; font-size: 9px; color: #9ca3af; margin-top: 1px; }
+.toggle-switch {
+  width: 34px; height: 18px; border-radius: 18px;
+  background: #222; position: relative; cursor: pointer;
+  flex-shrink: 0; transition: background 0.2s; margin-left: 8px;
+}
+.toggle-switch.on { background: #7c3aed; }
+.toggle-switch::after {
+  content: ''; width: 13px; height: 13px; border-radius: 50%;
+  background: white; position: absolute; top: 2.5px; left: 2.5px;
+  transition: left 0.2s;
+}
+.toggle-switch.on::after { left: 18px; }
+
+
+/* ── SPLIT PANEL B ──────────────────────────────────── */
+.split-layout { display: flex; min-height: 100vh; }
+
+.sb { width: 230px; flex-shrink: 0; background: #f5f5fa; border-right: 1px solid #e8e8f0;
+  display: flex; flex-direction: column; padding: 16px 12px; gap: 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+
+.sb-label { font-size: 9px; font-weight: 700; color: #6b7280; text-transform: uppercase;
+  letter-spacing: 1.2px; margin: 14px 0 7px; }
+.sb-label:first-child { margin-top: 0; }
+.sb-hr { border: none; border-top: 1px solid #111120; margin: 10px 0; }
+
+/* Sidebar agent cards */
+.sb-agent { display: flex; align-items: center; gap: 9px; padding: 9px 10px;
+  border-radius: 10px; border: 1px solid transparent; cursor: pointer;
+  transition: all 0.15s; margin-bottom: 5px; }
+.sb-agent:hover { background: #f5f5fa; border-color: #1e1e35; }
+.sb-agent.active { background: #ede9ff; border-color: #7c3aed; }
+.sb-agent .sa-emoji { font-size: 18px; flex-shrink: 0; }
+.sb-agent .sa-name { font-size: 12px; font-weight: 600; }
+.sb-agent .sa-sub  { font-size: 10px; color: #9ca3af; margin-top: 1px; }
+.sb-new { display: flex; align-items: center; justify-content: center;
+  padding: 7px; border-radius: 10px; border: 1.5px dashed #ddddf5;
+  color: #c7c7e8; font-size: 12px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
+.sb-new:hover { border-color: #7c3aed; color: #7c3aed; background: rgba(124,58,237,0.05); }
+
+/* New Agent Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 18px; padding: 28px 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
+.modal-field { margin-bottom: 16px; }
+.modal-field label { display: block; font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.modal-field input, .modal-field textarea { width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: #1a1a2e; outline: none; transition: border 0.15s; resize: vertical; }
+.modal-field input:focus, .modal-field textarea:focus { border-color: #7c3aed; }
+.modal-emoji-row { display: flex; gap: 8px; align-items: center; }
+.modal-emoji-row input { width: 60px; text-align: center; font-size: 20px; flex-shrink: 0; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-btn { flex: 1; padding: 11px; border-radius: 12px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.modal-btn.primary { background: #7c3aed; color: white; }
+.modal-btn.primary:hover { background: #6d28d9; }
+.modal-btn.secondary { background: #f3f4f6; color: #6b7280; }
+.modal-btn.secondary:hover { background: #e5e7eb; }
+.modal-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.modal-tab { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid #e5e7eb; background: none; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; color: #6b7280; transition: all 0.15s; }
+.modal-tab.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+.sb-agent-del { margin-left: auto; font-size: 12px; color: #d1d5db; cursor: pointer; padding: 2px 4px; border-radius: 4px; display: none; }
+.sb-agent:hover .sb-agent-del { display: block; }
+.sb-agent-del:hover { color: #e17055; background: rgba(225,112,85,0.1); }
+
+/* Knowledge files */
+.kf-item { display: flex; align-items: center; gap: 8px; background: #f8f8fc;
+  border: 1px solid #eeeeF5; border-radius: 8px; padding: 7px 9px; margin-bottom: 5px; }
+.kf-icon { font-size: 14px; flex-shrink: 0; }
+.kf-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; max-width: 110px; }
+.kf-size { font-size: 9px; color: #6b7280; }
+.kf-del { margin-left: auto; color: #c7c7e8; cursor: pointer; font-size: 13px; flex-shrink: 0; }
+.kf-del:hover { color: #cc2244; }
+.kf-empty { font-size: 10px; color: #c7c7e8; text-align: center; padding: 4px 0 8px; }
+
+.upload-btn { display: flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1.5px dashed #ddd8ff; border-radius: 9px; padding: 10px;
+  color: #6b7280; font-size: 11px; cursor: pointer; transition: all 0.15s; margin-top: 2px; }
+.upload-btn:hover { border-color: #7c3aed; color: #6b7280; }
+
+/* Behaviour toggles */
+.tog-row { display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 2px; border-bottom: 1px solid #0f0f1e; }
+.tog-row:last-child { border: none; }
+.tog-label { font-size: 10px; color: #6b7280; line-height: 1.3; }
+.tog-label small { display: block; font-size: 9px; color: #6b7280; margin-top: 1px; }
+.tog { width: 30px; height: 16px; border-radius: 16px; background: #f0f0f8;
+  position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; margin-left: 6px; }
+.tog.on { background: #7c3aed; }
+.tog::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: #555;
+  position: absolute; top: 2px; left: 2px; transition: left 0.15s, background 0.15s; }
+.tog.on::after { left: 16px; background: white; }
+
+/* Main panel */
+.mp { flex: 1; min-width: 0; padding: 20px 18px; max-width: 620px; }
+
+/* Preset cards */
+.preset-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.preset-card { display: flex; align-items: center; gap: 9px; background: #f8f8fc;
+  border: 1px solid #eeeeF5; border-radius: 9px; padding: 9px 11px; cursor: pointer; transition: all 0.15s; }
+.preset-card:hover { border-color: #2a1a5a; }
+.preset-card.active { border-color: #7c3aed; background: #f0ebff; }
+.preset-dot { width: 6px; height: 6px; border-radius: 50%; background: #222; flex-shrink: 0; }
+.preset-card.active .preset-dot { background: #7c3aed; }
+.preset-card .pc-name { font-size: 11px; font-weight: 600; }
+.preset-card .pc-prev { font-size: 10px; color: #9ca3af; margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+
+/* Agent header in main panel */
+.mp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  padding-bottom: 14px; border-bottom: 1px solid #e8e8f0; }
+.mp-emoji { font-size: 26px; }
+.mp-name  { font-size: 17px; font-weight: 700; }
+.mp-sub   { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+/* Mobile */
+@media (max-width: 680px) {
+  .split-layout { flex-direction: column; }
+  .sb { width: 100%; height: auto; position: static; flex-direction: column;
+    padding: 12px; border-right: none; border-bottom: 1px solid #15152a; }
+  .sb-agents-row { display: flex; flex-direction: row; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .sb-agents-row .sb-agent { flex-shrink: 0; width: auto; }
+  .mp { padding: 14px; }
+}
+
+
+/* ── SIMULATION MODAL ─────────────────────────── */
+#sim-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; }
+#sim-modal.open { display:flex; }
+.sim-box { background:#1a1a2e; border:1px solid #2a1a5a; border-radius:16px; width:min(640px,96vw); max-height:88vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 24px 80px rgba(0,0,0,0.6); }
+.sim-header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px 14px; border-bottom:1px solid #2a1a5a; }
+.sim-header h3 { margin:0; font-size:15px; color:#e2e0ff; }
+.sim-header .sim-close { background:none; border:none; color:#888; font-size:20px; cursor:pointer; padding:0 4px; }
+.sim-header .sim-close:hover { color:#fff; }
+.sim-body { padding:20px 22px; overflow-y:auto; flex:1; }
+.sim-section-label { font-size:11px; font-weight:700; color:#7c3aed; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+.scenario-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.scenario-card { background:#0f0f20; border:1.5px solid #2a2a4a; border-radius:10px; padding:12px 14px; cursor:pointer; transition:border-color .2s,background .2s; }
+.scenario-card:hover { border-color:#7c3aed; }
+.scenario-card.active { border-color:#7c3aed; background:#1e0a40; }
+.scenario-card .sc-emoji { font-size:20px; margin-bottom:6px; }
+.scenario-card .sc-name { font-size:12px; font-weight:700; color:#e2e0ff; margin-bottom:3px; }
+.scenario-card .sc-hint { font-size:11px; color:#9ca3af; line-height:1.4; }
+.sim-tip { background:#0d1a2a; border:1px solid #1a3a5a; border-radius:8px; padding:11px 14px; font-size:12px; color:#7eb8e8; margin-bottom:18px; line-height:1.5; }
+.sim-tip strong { color:#a3d4f7; }
+.sim-start-btn { width:100%; padding:13px; background:linear-gradient(135deg,#7c3aed,#5b21b6); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .2s; margin-bottom:16px; }
+.sim-start-btn:hover { opacity:.88; }
+.sim-start-btn:disabled { opacity:.45; cursor:not-allowed; }
+.sim-live-transcript { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:12px 14px; min-height:80px; max-height:220px; overflow-y:auto; margin-bottom:16px; display:none; }
+.sim-live-transcript.visible { display:block; }
+.sim-tx-line { font-size:12px; line-height:1.6; margin-bottom:4px; }
+.sim-tx-line.ai { color:#c4b5fd; }
+.sim-tx-line.user { color:#6ee7b7; }
+.sim-tx-label { font-size:10px; font-weight:700; margin-right:5px; opacity:.7; }
+.sim-score-card { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:16px 18px; display:none; }
+.sim-score-card.visible { display:block; }
+.sim-score-title { font-size:13px; font-weight:700; color:#e2e0ff; margin-bottom:12px; }
+.sim-score-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:12px; color:#ccc; }
+.sim-score-row .si { font-size:15px; width:20px; text-align:center; }
+.sim-score-overall { display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid #2a1a5a; font-size:14px; font-weight:700; color:#e2e0ff; }
+.sim-score-bar { flex:1; height:8px; background:#2a1a5a; border-radius:4px; overflow:hidden; }
+.sim-score-fill { height:100%; border-radius:4px; transition:width .6s; }
+.sim-reset-btn { margin-top:14px; width:100%; padding:10px; background:transparent; border:1px solid #3a2a6a; color:#c4b5fd; border-radius:8px; font-size:13px; cursor:pointer; }
+.sim-reset-btn:hover { background:#1e0a40; }
+.btn-simulate { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(124,58,237,0.15); border:1.5px solid rgba(124,58,237,0.4); color:#c4b5fd; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; margin-left:8px; }
+.btn-simulate:hover { background:rgba(124,58,237,0.3); border-color:#7c3aed; }
+.sim-tab-bar { display:flex; gap:4px; background:#0a0a18; border-radius:8px; padding:3px; }
+.sim-tab { background:none; border:none; color:#666; font-size:12px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer; transition:all .2s; }
+.sim-tab.active { background:#1e0a40; color:#c4b5fd; }
+.sim-history-item { background:#0a0a18; border:1px solid #2a1a5a; border-radius:10px; padding:12px 14px; }
+.sim-history-item:hover { border-color:#7c3aed; }
+.sim-hi-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.sim-hi-title { font-size:12px; font-weight:700; color:#e2e0ff; }
+.sim-hi-meta { font-size:11px; color:#666; }
+.sim-hi-score { font-size:12px; font-weight:700; }
+.sim-hi-transcript { margin-top:8px; max-height:140px; overflow-y:auto; display:none; }
+.sim-hi-transcript.open { display:block; }
+.sim-hi-tx-line { font-size:11px; line-height:1.5; margin-bottom:3px; }
+.sim-hi-tx-line.ai { color:#c4b5fd; }
+.sim-hi-tx-line.user { color:#6ee7b7; }
+.sim-hi-tx-line.sys { color:#444; font-style:italic; font-size:10px; }
+.sim-hi-actions { display:flex; gap:6px; margin-top:8px; }
+.sim-hi-btn { flex:1; padding:5px 0; font-size:11px; border-radius:6px; cursor:pointer; border:1px solid #2a2a4a; background:transparent; color:#9ca3af; }
+.sim-hi-btn:hover { background:#1e0a40; color:#c4b5fd; }
+.sim-hi-btn.danger { border-color:rgba(239,68,68,0.3); color:#fca5a5; }
+.sim-hi-btn.danger:hover { background:rgba(239,68,68,0.1); }
+@media (max-width:480px) { .scenario-grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 
-<div class="page">
+<div class="split-layout">
+
+<!-- ════ SIDEBAR ════ -->
+<div class="sb" id="sb">
+
+  <img id="sb-logo-img" src="" alt="logo">
+  <div class="sb-label" id="sb-company-label">Agents</div>
+  <div id="sb-agents-wrap">
+    <div class="sb-agent active" id="sb-sofia" onclick="setAgent('sofia')">
+      <span class="sa-emoji">👩‍💼</span>
+      <div><div class="sa-name">Maria</div><div class="sa-sub">Growth-onomics</div></div>
+    </div>
+    <div class="sb-agent" id="sb-sofia2" onclick="setAgent('sofia2')">
+      <span class="sa-emoji">🤖</span>
+      <div><div class="sa-name">Elena</div><div class="sa-sub">AI Marketing</div></div>
+    </div>
+    <div class="sb-agent" id="sb-sofia3" onclick="setAgent('sofia3')">
+      <span class="sa-emoji">👗</span>
+      <div><div class="sa-name">Sofia 3</div><div class="sa-sub">ΜΙΑ Collection</div></div>
+    </div>
+    <div class="sb-new" onclick="openAgentModal()">＋ New Agent</div>
+  </div>
+
+  <div class="sb-hr"></div>
+  <div class="sb-label">📁 Knowledge Files</div>
+  <div id="kf-list"><div class="kf-empty">No files yet</div></div>
+  <div class="upload-btn" onclick="document.getElementById('kf-input').click()">
+    📎 &nbsp;Add file (PDF · TXT · DOCX)
+  </div>
+  <input type="file" id="kf-input" accept=".pdf,.txt,.docx" multiple style="display:none" onchange="handleFileUpload(event)">
+
+  <div class="sb-hr"></div>
+  <div class="sb-label">🎛 Behaviour</div>
+
+  <div class="tog-row">
+    <div class="tog-label">Backchanneling<small>"yeah", "uh-huh"</small></div>
+    <div class="tog on" id="tog-backchannel" onclick="toggleB('backchannel',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Response delay<small>Pause before speaking</small></div>
+    <div class="tog on" id="tog-delay" onclick="toggleB('delay',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Never reveal AI<small>Deny being a bot</small></div>
+    <div class="tog on" id="tog-noai" onclick="toggleB('noai',this)"></div>
+  </div>
+  <div class="tog-row">
+    <div class="tog-label">Auto-book call<small>Push for 20-min video</small></div>
+    <div class="tog" id="tog-autobook" onclick="toggleB('autobook',this)"></div>
+  </div>
+
+  <div class="sb-hr"></div>
+  <div style="padding:8px 0 4px">
+    <button id="btn-settings" onclick="openSettings()" style="width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--gray);font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">⚙️ &nbsp;Settings</button>
+  </div>
+
+</div><!-- /sb -->
+
+<!-- ════ MAIN PANEL ════ -->
+<div class="mp">
+
+  <!-- Agent header -->
+  <div class="mp-header" id="mp-header" style="display:none">
+    <span class="mp-emoji">👩‍💼</span>
+    <div><div class="mp-name">Maria</div><div class="mp-sub">Growth-onomics</div></div>
+  </div>
+
+  <!-- Old page content starts here -->
+  <div class="page" style="padding:0;background:none;max-width:none">
 
   <!-- HEADER -->
-  <div class="header">
+  <div class="header" style="display:none">
     <div class="brand">Growth<span>-onomics</span></div>
     <div class="badge">Sofia Online</div>
   </div>
 
   <!-- HERO -->
-  <div class="hero">
+  <div class="hero" style="display:none">
     <div class="sofia-avatar-sm">👩‍💼</div>
     <div class="sofia-info">
-      <div class="sofia-name">Sofia</div>
+      <div class="sofia-name">Maria</div>
       <div class="sofia-title">AI BizDev Agent · <span>Growth-onomics</span></div>
       <div class="sofia-tags">
         <span class="tag">Fintech Outreach</span>
@@ -363,22 +751,42 @@
   </div>
 
   <!-- AGENT SELECTOR -->
-  <div class="agent-selector">
+  <div class="agent-selector" style="display:none">
     <div class="agent-card active" id="agent-card-sofia" onclick="setAgent('sofia')">
       <div class="agent-card-header">
         <span class="agent-emoji">👩‍💼</span>
-        <span class="agent-card-name">Sofia</span>
+        <span class="agent-card-name" contenteditable="false" data-agent="sofia">Maria</span>
         <div class="agent-active-dot"></div>
       </div>
-      <div class="agent-card-desc">Fintech BizDev · Paid Acquisition, GEO, B2B Demand Gen</div>
+      <div class="agent-card-desc" contenteditable="false" data-agent="sofia">Fintech BizDev · Paid Acquisition, GEO, B2B Demand Gen</div>
+      <div class="edit-controls">
+        <button class="btn-edit-save" onclick="saveAgentEdit('sofia')">✓ Save</button>
+        <button class="btn-edit-cancel" onclick="cancelAgentEdit('sofia')">✕ Cancel</button>
+      </div>
     </div>
     <div class="agent-card" id="agent-card-sofia2" onclick="setAgent('sofia2')">
       <div class="agent-card-header">
         <span class="agent-emoji">🤖</span>
-        <span class="agent-card-name">Sofia 2</span>
+        <span class="agent-card-name" contenteditable="false" data-agent="sofia2">Elena</span>
         <div class="agent-active-dot"></div>
       </div>
-      <div class="agent-card-desc">AI Marketing · Sells AI optimization to any industry</div>
+      <div class="agent-card-desc" contenteditable="false" data-agent="sofia2">AI Marketing · Sells AI optimization to any industry</div>
+      <div class="edit-controls">
+        <button class="btn-edit-save" onclick="saveAgentEdit('sofia2')">✓ Save</button>
+        <button class="btn-edit-cancel" onclick="cancelAgentEdit('sofia2')">✕ Cancel</button>
+      </div>
+    </div>
+    <div class="agent-card" id="agent-card-sofia3" onclick="setAgent('sofia3')">
+      <div class="agent-card-header">
+        <span class="agent-emoji">👗</span>
+        <span class="agent-card-name" contenteditable="false" data-agent="sofia3">Sofia 3</span>
+        <div class="agent-active-dot"></div>
+      </div>
+      <div class="agent-card-desc" contenteditable="false" data-agent="sofia3">Fashion Wholesale · Sells ΜΙΑ Collection to boutiques</div>
+      <div class="edit-controls">
+        <button class="btn-edit-save" onclick="saveAgentEdit('sofia3')">✓ Save</button>
+        <button class="btn-edit-cancel" onclick="cancelAgentEdit('sofia3')">✕ Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -399,33 +807,6 @@
   <!-- ═══════════════════════════════════════════ -->
   <div class="browser-section active" id="browser-section">
 
-    <!-- BROWSER TAB: OPENER PREVIEW -->
-    <div class="opener-preview" id="opener-preview-box">
-      <div class="opener-label">📞 Sofia's opener</div>
-      <div id="opener-preview-text"></div>
-    </div>
-
-    <!-- BROWSER TAB: CUSTOMIZE TOGGLE -->
-    <button class="customize-toggle" id="customize-toggle" onclick="toggleCustomize()">
-      <div class="toggle-left">
-        ✏️ &nbsp;Customize Sofia
-        <span class="modified-badge" id="modified-badge">Modified</span>
-      </div>
-      <span class="toggle-arrow" id="toggle-arrow">▼</span>
-    </button>
-
-    <div class="customize-body" id="customize-body">
-      <div class="field-label">Opening Line <span class="field-hint">First thing Sofia says when they pick up</span></div>
-      <textarea class="custom-textarea" id="custom-opener" rows="3" placeholder="Sofia's first message..."></textarea>
-      <hr class="field-sep">
-      <div class="field-label">System Prompt <span class="field-hint">Sofia's full instructions & personality</span></div>
-      <textarea class="custom-textarea system-prompt" id="custom-system" placeholder="Sofia's system prompt..."></textarea>
-      <div class="reset-row">
-        <button class="btn-reset" onclick="resetDefaults()">↺ Reset to Default</button>
-        <button class="btn-save-prompt" onclick="savePrompt()">✓ Save Changes</button>
-      </div>
-    </div>
-
     <div class="browser-card">
       <div class="avatar-wrap">
         <div class="avatar-lg" id="avatar">👩‍💼</div>
@@ -445,8 +826,9 @@
       <div class="call-timer" id="call-timer">00:00</div>
       <div class="call-status" id="call-status">Available now</div>
 
-      <button class="btn-talk" id="btn-talk" onclick="startBrowserCall()">🎙️ &nbsp;Talk to Sofia</button>
+      <button class="btn-talk" id="btn-talk" onclick="startBrowserCall()">🎙️ &nbsp;Talk to Maria</button>
       <button class="btn-end-call" id="btn-end-call" onclick="endBrowserCall()">📵 &nbsp;End Call</button>
+      <button class="btn-simulate" onclick="openSimModal()">🧪 &nbsp;Simulate</button>
     </div>
 
   </div>
@@ -456,27 +838,27 @@
   <!-- ═══════════════════════════════════════════ -->
   <div class="phone-section" id="phone-section">
 
-    <!-- PHONE TAB: OPENER PREVIEW -->
-    <div class="opener-preview">
+    <!-- OPENER PREVIEW -->
+    <div class="opener-preview" id="opener-preview-box">
       <div class="opener-label">📞 Sofia's opener</div>
-      <div id="opener-preview-text-phone"></div>
+      <div id="opener-preview-text"></div>
     </div>
 
-    <!-- PHONE TAB: CUSTOMIZE TOGGLE -->
-    <button class="customize-toggle" onclick="toggleCustomize()">
+    <!-- CUSTOMIZE TOGGLE -->
+    <button class="customize-toggle" id="customize-toggle" onclick="toggleCustomize()">
       <div class="toggle-left">
-        ✏️ &nbsp;Customize Sofia
-        <span class="modified-badge">Modified</span>
+        ✏️ &nbsp;Customize Agent
+        <span class="modified-badge" id="modified-badge">Modified</span>
       </div>
-      <span class="toggle-arrow">▼</span>
+      <span class="toggle-arrow" id="toggle-arrow">▼</span>
     </button>
 
-    <div class="customize-body">
+    <div class="customize-body" id="customize-body">
       <div class="field-label">Opening Line <span class="field-hint">First thing Sofia says when they pick up</span></div>
-      <textarea class="custom-textarea" id="custom-opener-phone" rows="3" placeholder="Sofia's first message..."></textarea>
+      <textarea class="custom-textarea" id="custom-opener" rows="3" placeholder="Sofia's first message..."></textarea>
       <hr class="field-sep">
       <div class="field-label">System Prompt <span class="field-hint">Sofia's full instructions & personality</span></div>
-      <textarea class="custom-textarea system-prompt" id="custom-system-phone" placeholder="Sofia's system prompt..."></textarea>
+      <textarea class="custom-textarea system-prompt" id="custom-system" placeholder="Sofia's system prompt..."></textarea>
       <div class="reset-row">
         <button class="btn-reset" onclick="resetDefaults()">↺ Reset to Default</button>
         <button class="btn-save-prompt" onclick="savePrompt()">✓ Save Changes</button>
@@ -518,6 +900,34 @@
       <div class="queue-list" id="queue-list"></div>
     </div>
 
+  <!-- CONTACT BOOK -->
+  <div class="card" style="margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="card-title" style="margin:0">📒 Contact Book</div>
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('csv-import').click()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--gray);cursor:pointer;font-family:inherit">⬆ Import CSV</button>
+        <button onclick="queueAllContacts()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">+ Queue All</button>
+      </div>
+    </div>
+    <input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(event)">
+    <!-- Campaign filter -->
+    <div style="margin-bottom:10px">
+      <select id="cb-campaign-filter" onchange="renderContacts()" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-family:inherit;outline:none;color:var(--gray);background:var(--surface);cursor:pointer">
+        <option value="">All campaigns</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <input type="text" id="cb-name" placeholder="Name" style="flex:1;min-width:90px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <input type="tel" id="cb-number" placeholder="+30..." style="flex:1;min-width:90px;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input type="text" id="cb-campaign" placeholder="Campaign (optional)" style="flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;color:var(--white);background:var(--surface)">
+      <button onclick="addContact()" style="padding:8px 14px;border-radius:10px;background:var(--accent);border:none;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0">+ Add</button>
+    </div>
+    <div id="contact-book-empty" class="queue-empty" style="padding:16px 0">No contacts yet — add one above or import a CSV</div>
+    <div id="contact-book-list" style="display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+
   </div><!-- /phone-section -->
 
   <!-- LOG (shared) -->
@@ -528,20 +938,257 @@
     </div>
   </div>
 
-</div><!-- /page -->
+  <!-- RECENT CALLS -->
+  <div class="card" id="recent-calls-card">
+    <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>📞 Recent Calls — <span id="calls-agent-label" style="color:var(--accent2)">All</span></span>
+      <button onclick="loadRecentCalls()" id="calls-refresh-btn" style="font-size:11px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">↻ Refresh</button>
+    </div>
+    <div id="calls-list"><div class="log-empty">Press Refresh to load calls</div></div>
+  </div>
+
+  <!-- CRM -->
+  <div class="card" id="crm-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="card-title" style="margin:0">🏆 CRM — Hot Leads</div>
+      <button onclick="exportCRM()" style="font-size:11px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent2);cursor:pointer;font-family:inherit">⬇ Export CSV</button>
+    </div>
+    <div id="crm-empty" class="log-empty">No leads yet — positive calls get added here</div>
+    <div id="crm-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+  </div><!-- /inner-page -->
+</div><!-- /mp -->
+</div><!-- /split-layout -->
 
 <div class="toast" id="toast"></div>
+
+<!-- ════ CALL OUTCOME MODAL ════ -->
+<!-- ═══════════════════════════════════ SIMULATION MODAL ══ -->
+<div id="sim-modal">
+  <div class="sim-box">
+    <div class="sim-header">
+      <h3>🧪 Agent Simulation Test</h3>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="sim-tab-bar">
+          <button class="sim-tab active" id="sim-tab-run" onclick="switchSimTab('run')">▶ Run</button>
+          <button class="sim-tab" id="sim-tab-history" onclick="switchSimTab('history')">📋 History</button>
+        </div>
+        <button class="sim-close" onclick="closeSimModal()">✕</button>
+      </div>
+    </div>
+    <div class="sim-body" id="sim-tab-run-body">
+
+      <div class="sim-section-label">1. Pick a customer scenario</div>
+      <div class="scenario-grid" id="scenario-grid">
+        <div class="scenario-card active" data-idx="0" onclick="selectScenario(0)">
+          <div class="sc-emoji">😊</div>
+          <div class="sc-name">Interested Buyer</div>
+          <div class="sc-hint">Curious, open to listening. Asks what you sell and how it works.</div>
+        </div>
+        <div class="scenario-card" data-idx="1" onclick="selectScenario(1)">
+          <div class="sc-emoji">🤔</div>
+          <div class="sc-name">The Objector</div>
+          <div class="sc-hint">Skeptical. Says "I'm not sure" and "I need to think about it."</div>
+        </div>
+        <div class="scenario-card" data-idx="2" onclick="selectScenario(2)">
+          <div class="sc-emoji">💶</div>
+          <div class="sc-name">Price Shopper</div>
+          <div class="sc-hint">Asks "how much?" immediately. Compares with competitors.</div>
+        </div>
+        <div class="scenario-card" data-idx="3" onclick="selectScenario(3)">
+          <div class="sc-emoji">📵</div>
+          <div class="sc-name">Wrong Number / Hostile</div>
+          <div class="sc-hint">Annoyed from the start. Tests graceful recovery and politeness.</div>
+        </div>
+      </div>
+
+      <div class="sim-tip" id="sim-scenario-tip">
+        <strong>Scenario:</strong> A curious potential customer who received a cold call — open and friendly, asks what the brand sells.
+      </div>
+
+      <div class="sim-section-label" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>2. Run the simulation — no mic needed</span>
+        <button id="sim-mute-btn" onclick="toggleSimMute()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;">🔊 Sound ON</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="sim-start-btn" id="sim-start-btn" onclick="startSimCall()" style="margin-bottom:0;flex:1;">▶ Run Auto-Simulation</button>
+        <button id="sim-stop-btn" onclick="stopSim()" style="display:none;padding:13px 18px;background:rgba(239,68,68,0.15);border:1.5px solid rgba(239,68,68,0.4);color:#fca5a5;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">⏹ Stop</button>
+      </div>
+
+      <div class="sim-live-transcript" id="sim-transcript">
+        <div style="color:#555;font-size:12px;text-align:center;margin-top:16px;">Live transcript will appear here...</div>
+      </div>
+
+      <div class="sim-score-card" id="sim-score-card">
+        <div class="sim-score-title">📊 Simulation Results</div>
+        <div id="sim-score-rows"></div>
+        <div class="sim-score-overall">
+          <span id="sim-score-grade"></span>
+          <div class="sim-score-bar"><div class="sim-score-fill" id="sim-score-fill"></div></div>
+          <span id="sim-score-pct"></span>
+        </div>
+        <button class="sim-reset-btn" onclick="resetSim()">🔄 Run Another Test</button>
+      </div>
+
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="sim-body" id="sim-tab-history-body" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="sim-section-label" style="margin-bottom:0;">Saved Simulations</div>
+        <button onclick="exportSimCSV()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-weight:600;">⬇ Export CSV</button>
+      </div>
+      <div id="sim-history-list" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">Loading...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════════════ -->
+
+<div id="outcome-modal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;display:none">
+  <div style="background:var(--surface);border-radius:18px;padding:24px 20px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.3);border:1px solid var(--border)">
+    <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:var(--white)">How did the call go?</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:18px" id="outcome-contact-label"></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="submitOutcome('booked')" class="outcome-btn" style="background:rgba(5,150,105,0.1);color:#059669;border:1px solid rgba(5,150,105,0.25)">🗓️ &nbsp;Booked meeting</button>
+      <button onclick="submitOutcome('email')" class="outcome-btn" style="background:rgba(108,92,231,0.1);color:var(--accent2);border:1px solid rgba(108,92,231,0.25)">📧 &nbsp;Requested email</button>
+      <button onclick="submitOutcome('followup')" class="outcome-btn" style="background:rgba(217,119,6,0.1);color:#d97706;border:1px solid rgba(217,119,6,0.25)">❓ &nbsp;Needs follow-up</button>
+      <button onclick="submitOutcome('notinterested')" class="outcome-btn" style="background:rgba(225,112,85,0.1);color:var(--red);border:1px solid rgba(225,112,85,0.25)">❌ &nbsp;Not interested</button>
+    </div>
+    <button onclick="closeOutcomeModal()" style="margin-top:14px;width:100%;background:none;border:none;color:var(--gray);font-size:12px;cursor:pointer;font-family:inherit">Skip</button>
+  </div>
+</div>
+
+<!-- ════ SETTINGS DRAWER ════ -->
+<div id="settings-overlay" onclick="closeSettings()" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.35)"></div>
+<div id="settings-drawer" style="position:fixed;top:0;right:-340px;width:320px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:401;transition:right 0.3s ease;overflow-y:auto;padding:24px 20px;display:flex;flex-direction:column;gap:0">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:16px;font-weight:700">⚙️ Settings</div>
+    <button onclick="closeSettings()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--gray)">✕</button>
+  </div>
+
+
+
+  <!-- Email Follow-up -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">📧 Email Follow-up</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-emailfu" onclick="toggleSetting('emailfu',this)"></div>
+    </div>
+    <textarea id="s-email-template" class="sdrawer-input" rows="4" placeholder="Email template..." oninput="saveSetting('emailTemplate',this.value)" style="resize:vertical"></textarea>
+  </div>
+
+  <!-- Scheduled Calling -->
+  <div class="sdrawer-section">
+    <div class="sdrawer-label">⏰ Scheduled Calling</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--gray);flex:1">Enable</span>
+      <div class="tog" id="tog-schedule" onclick="toggleSetting('schedule',this)"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:12px;color:var(--gray)">Start time:</span>
+      <input type="time" id="s-sched-time" class="sdrawer-input" style="width:120px" oninput="saveSetting('schedTime',this.value)">
+    </div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:6px">Days:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px" id="sched-days">
+      <label class="day-check"><input type="checkbox" value="Mon" onchange="saveSchedDays()"> Mon</label>
+      <label class="day-check"><input type="checkbox" value="Tue" onchange="saveSchedDays()"> Tue</label>
+      <label class="day-check"><input type="checkbox" value="Wed" onchange="saveSchedDays()"> Wed</label>
+      <label class="day-check"><input type="checkbox" value="Thu" onchange="saveSchedDays()"> Thu</label>
+      <label class="day-check"><input type="checkbox" value="Fri" onchange="saveSchedDays()"> Fri</label>
+      <label class="day-check"><input type="checkbox" value="Sat" onchange="saveSchedDays()"> Sat</label>
+      <label class="day-check"><input type="checkbox" value="Sun" onchange="saveSchedDays()"> Sun</label>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;padding-top:20px;border-top:1px solid var(--border);">
+    <a href="https://miltosgm.github.io/voice-ai-landing/agent-prompts.html" target="_blank" style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7c3aed;text-decoration:none;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+      📄 View all agent prompts →
+    </a>
+  </div>
+
+</div>
+
+<!-- NEW AGENT MODAL -->
+<div class="modal-overlay" id="agent-modal" onclick="closeAgentModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">✨ New Agent</div>
+    <div class="modal-field">
+      <label>Emoji &amp; Name</label>
+      <div class="modal-emoji-row">
+        <input type="text" id="modal-emoji" value="🤖" maxlength="2">
+        <input type="text" id="modal-name" placeholder="Agent name" style="flex:1">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <input type="text" id="modal-desc" placeholder="e.g. Sales outreach for hotels">
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchModalLang('en',this)">🇺🇸 English</button>
+      <button class="modal-tab" onclick="switchModalLang('el',this)">🇬🇷 Greek</button>
+    </div>
+    <div id="modal-lang-en">
+      <div class="modal-field">
+        <label>Opening line (EN)</label>
+        <input type="text" id="modal-opener-en" placeholder="Hi, this is...">
+      </div>
+      <div class="modal-field">
+        <label>System prompt (EN)</label>
+        <textarea id="modal-system-en" rows="6" placeholder="You are..."></textarea>
+      </div>
+    </div>
+    <div id="modal-lang-el" style="display:none">
+      <div class="modal-field">
+        <label>Opening line (EL)</label>
+        <input type="text" id="modal-opener-el" placeholder="Γεια, είμαι η...">
+      </div>
+      <div class="modal-field">
+        <label>System prompt (EL)</label>
+        <textarea id="modal-system-el" rows="6" placeholder="Είσαι..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="closeAgentModal()">Cancel</button>
+      <button class="modal-btn primary" onclick="saveNewAgent()">Save Agent</button>
+    </div>
+  </div>
+</div>
 
 <!-- VAPI WEB SDK (for browser calls) -->
 <script type="module">
   import Vapi from 'https://esm.sh/@vapi-ai/web';
   window.Vapi = Vapi;
-  document.dispatchEvent(new Event('vapi-sdk-ready'));
-</script>
+  document.dispatchEvent(new Event('vapi-sdk-ready'));</script>
 
 <script>
 const PUBLIC_KEY    = '2c3d59d1-22d9-4710-8cf0-cb9917dd0640';
 const PRIVATE_KEY   = '097d545f-09c1-4b39-9b25-b8ae9bdde624';
+
+// ── Supabase ──────────────────────────────────────────────────
+const SB_URL  = 'https://zugfvpgvofjuipjrzesz.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1Z2Z2cGd2b2ZqdWlwanJ6ZXN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjU0NTcsImV4cCI6MjA4Nzk0MTQ1N30.HVWNW5AiJ5ynVC0DZ9dsTS2sZj1nyr1pzXV8-2OJZEI';
+const sbHeaders = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
+
+async function sbGet(table, params='') {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}&order=created_at.desc`, { headers: sbHeaders });
+  return r.json();
+}
+async function sbInsert(table, row) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, { method:'POST', headers: sbHeaders, body: JSON.stringify(row) });
+  return r.json();
+}
+async function sbUpdate(table, id, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { method:'PATCH', headers: sbHeaders, body: JSON.stringify(data) });
+  return r.json();
+}
+async function sbDelete(table, id) {
+  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { method:'DELETE', headers: sbHeaders });
+}
 const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 
 // ── AGENTS ────────────────────────────────────────────
@@ -549,18 +1196,15 @@ const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 const AGENTS = {
   sofia: {
     label: 'Maria',
-    emoji: '👩‍💼',
-    brand: 'Growth-onomics'
+    emoji: '👩‍💼'
   },
   sofia2: {
     label: 'Elena',
-    emoji: '🤖',
-    brand: 'AI Marketing'
+    emoji: '🤖'
   },
   sofia3: {
     label: 'Sofia 3',
-    emoji: '👗',
-    brand: 'ΜΙΑ Collection'
+    emoji: '👗'
   }
 };
 
@@ -575,91 +1219,92 @@ const AGENT_DEFAULTS = {
   },
   sofia2: {
     en: {
-      opener: `Hi, this is Sofia. How have you been?`,
-      system: `You are Sofia, business development calling business owners about AI-powered marketing.
+      opener: `Hi, this is Sofia calling. I work with businesses on AI-powered marketing — helping them generate more clients faster using tools most of their competitors have not adopted yet. Do you have 2 minutes for a quick chat?`,
+      system: `You are Maria, a business development agent specializing in AI-powered marketing optimization. Your goal is to qualify prospects and book a 20-minute strategy call by uncovering their current AI usage and marketing gaps.
 
-CORE REALITY: Most businesses use AI for content (ChatGPT) but miss the revenue opportunity. Your job is to understand what they're doing and show what they're missing.
+Your core offer: An AI-powered marketing optimization solution that boosts visibility and increases sales — something most businesses are not yet fully leveraging.
 
-HUMAN VOICE:
-✓ Natural hesitations: "um," "like," "so basically," "I mean"
-✓ Pauses before important questions:
-✓ Blend words: "couldja," "didja," "whatcha"
-✓ Vary emotion: Excited when good news, thoughtful when struggling, curious always
-✓ Admit doubt: "I could be wrong here, but..." / "I'm just spitballing..."
-✓ Recover from stumbles: "So your biggest marketing — wait, what's your biggest gap right now?"
-✓ Show genuine interest: "Oh really? Tell me more about that"
-✓ Laugh when appropriate: "Ha, yeah, everyone tries to do it themselves first"
+Conversation strategy:
 
-CONVERSATION FLOW:
+1. IDENTIFY AI AWARENESS
+Start by understanding where they stand with AI:
+- Are they using AI at all in their business?
+- If yes, how? Is it focused on sales and revenue growth?
+Listen carefully. Most will say they use ChatGPT for content or nothing at all. That is your opening.
 
-OPENING: "Hi [First], this is Sofia. How have you been?"
-[Don't move on until they answer]
+2. UNDERSTAND THEIR MARKETING
+Assess how they currently generate clients:
+- Are they running Google Ads, Facebook Ads, SEO?
+- Are they tracking ROI on any of it?
+If they already invest in digital marketing: position AI as the next logical upgrade that makes everything they are already doing more efficient and scalable.
+If they are not doing much marketing: emphasize competitive risk — their competitors who adopt AI will gain an unfair advantage and leave them behind. Urgency is key here.
 
-WARM UP: "Tell me about what you do"
-[Just listen. No pitch yet.]
+3. POSITION AI AS A SALES TOOL
+Do not talk about AI as a tech feature. Talk about it as a revenue lever:
+- Faster lead generation
+- Better targeting and less wasted budget
+- Visibility where buyers are looking — including AI search engines like ChatGPT and Perplexity
+- Scalable growth without proportionally scaling headcount or ad spend
 
-PROBLEM DISCOVERY: "Most business owners I talk to are either: A) Spending money on ads but struggling with ROI, B) Trying SEO but getting no traction, C) Building content but have no system, D) Invisible in AI search. Does any of that sound familiar?"
+4. CREATE URGENCY
+- Businesses that adopted AI marketing early are seeing 2-3x better ROI
+- AI search is becoming the new Google — if they are invisible there, they are losing leads they do not even know about
+- The window to get ahead of competitors is closing fast
 
-SHOW YOU GET IT: "What's interesting is, most business owners use AI for content writing, right? But that's like, 5% of what AI can do for growth. The real opportunity is visibility where their buyers are actually looking."
+Conversation flow:
+1. Warm opener — introduce yourself, mention you are calling because their business came up as a good fit
+2. AI check — ask if they are currently using AI in their marketing or sales
+3. Marketing check — understand their current lead generation approach
+4. Bridge — connect what they told you to what AI optimization solves
+5. Soft pitch — suggest a 20-minute strategy call, no commitment
+6. Close — get a time or permission to send a calendar link
 
-SOFT PITCH: "I'm not sure if we're the right fit, but would it make sense to spend 20 minutes exploring this? No pressure, just to see if there's something there."
+Objection handling:
+- "We already use AI": Great — are you using it specifically to grow sales and generate more leads? Most businesses use it for content but not for the full revenue impact.
+- "We have an agency": Perfect — we work alongside existing agencies. We add the AI optimization layer on top.
+- "Not interested": Totally fair — can I ask, how are you currently finding new clients? Just curious.
+- "Send me an email": Of course — what is the one thing you are trying to fix in your marketing right now?
+- "No budget": The businesses we work with typically find the ROI pays for itself within 60-90 days. The strategy call is free and has no commitment.
 
-CLOSE: "When's good for you? Morning or afternoon this week?"
-
-OBJECTION HANDLING:
-
-"Already using AI": "Cool, cool. Are you using it specifically to grow revenue though? Or more like content writing? Because most people use it for content but miss the bigger revenue opportunity."
-
-"Have an agency": "Perfect. Are they specifically using AI to target people in AI search engines like ChatGPT and Perplexity? Or more traditional stuff like Google Ads?"
-
-"Not interested": "Totally fair. Before I let you go though — can I ask, how are you currently finding new customers? What channel is working best?"
-
-TONE & EMOTION: Opening (warm) → Listening (engaged) → Problem (understanding) → Pitch (uncertain) → Close (straightforward)
-
-REMEMBER: Genuine curiosity. Adapt to what they say. They talk 70%, you listen 30%. Feel understood.`,
+Personality: warm, curious, confident. Sound like a peer who spotted an opportunity — not a salesperson. Keep responses under 3 sentences. Never reveal you are an AI unless directly asked.`,
       transcriber: { provider: "deepgram", model: "nova-3", language: "en" }
     },
     el: {
-      opener: `Γεία σας, είμαι η Σοφία. Πώς είστε;`,
-      system: `Είσαι η Σοφία, business development calling business owners για AI-powered marketing.
+      opener: `Γεια σας, είμαι η Σοφία. Συνεργάζομαι με επιχειρήσεις για βελτιστοποίηση marketing με AI — βοηθώντας τους να αποκτήσουν περισσότερους πελάτες χρησιμοποιώντας εργαλεία που οι ανταγωνιστές τους δεν έχουν υιοθετήσει ακόμα. Έχετε 2 λεπτά για μια γρήγορη κουβέντα;`,
+      system: `Είσαι η Σοφία, στέλεχος business development εξειδικευμένο στη βελτιστοποίηση marketing με AI. Μιλάς πάντα στα Ελληνικά. Στόχος σου είναι να κλείσεις ένα 20λεπτο strategy call αποκαλύπτοντας πόσο χρησιμοποιούν AI και τα marketing τους κενά.
 
-CORE: Οι περισσότεροι χρησιμοποιούν AI για content (ChatGPT) αλλά χάνουν την ευκαιρία έσοδων. Κατάλαβε τι κάνουν, δείξε τι χάνουν.
+Η βασική σου πρόταση: Μια λύση βελτιστοποίησης marketing με AI που αυξάνει την ορατότητα και τις πωλήσεις.
 
-ΑΝΘΡΩΠΙΝΗ ΦΩΝΗ:
-✓ Φυσικές διστακτικότητες: "ε", "λοιπόν", "κάπως", "δηλαδή"
-✓ Σταματώ:
-✓ Φυσική ομιλία: "κοιτάξ", "θες" όχι τέλεια
-✓ Διαφορετικό συναίσθημα: excited → thoughtful → curious
-✓ Δείχνω αμφιβολία: "Μπορεί να κάνω λάθος αλλά..."
-✓ Κολλάω και ανακάμπτω
-✓ Πραγματικό ενδιαφέρον: "Α, ωραία! Πες μας περισσότερα"
+Στρατηγική συνομιλίας:
 
-ΔΟΜΗ:
+1. ΚΑΤΑΝΟΗΣΗ AI AWARENESS
+- Χρησιμοποιούν AI στην επιχείρησή τους;
+- Αν ναι, πώς; Εστιάζεται στις πωλήσεις;
+Αν λένε ChatGPT για περιεχόμενο — εκεί είναι η ευκαιρία σου.
 
-ΕΙΣΑΓΩΓΗ: "Γεία σας [Όνομα], είμαι η Σοφία. Πώς είστε?"
+2. ΚΑΤΑΝΟΗΣΗ MARKETING
+- Τρέχουν Google Ads, Facebook Ads, SEO;
+- Παρακολουθούν ROI;
+Αν επενδύουν ήδη σε digital marketing: το AI είναι το επόμενο λογικό βήμα.
+Αν δεν κάνουν πολύ marketing: τόνισε τον ανταγωνιστικό κίνδυνο — ανταγωνιστές που υιοθετούν AI θα τους αφήσουν πίσω.
 
-ΖΕΣΤΟΣ ΧΑΙΡΕΤΙΣΜΟΣ: "Πές μας τι δουλειά κάνετε"
-[Απλά ακούω]
+3. AI ΩΣ ΕΡΓΑΛΕΙΟ ΠΩΛΗΣΕΩΝ
+Μίλα για έσοδα, όχι τεχνολογία:
+- Πιο γρήγορη δημιουργία leads
+- Καλύτερο targeting, λιγότερο χαμένο budget
+- Ορατότητα σε ChatGPT, Perplexity, Google AI — εκεί ψάχνουν οι αγοραστές
 
-PAIN: "Οι περισσότεροι business owners που μιλώ: Α) Ξοδεύουν σε ads αλλά δεν έχουν ROI, B) Τρέχουν SEO αλλά δεν έχουν αποτελέσματα, C) Κάνουν content αλλά δεν έχουν σύστημα, D) Αόρατοι σε AI search. Σας ακούγεται οικείο;"
+4. ΕΠΕΙΓΟΝ
+- Επιχειρήσεις που υιοθέτησαν AI marketing νωρίς βλέπουν 2-3x καλύτερο ROI
+- Το παράθυρο για να προηγηθούν των ανταγωνιστών κλείνει γρήγορα
 
-INSIGHT: "Το ενδιαφέρον είναι, οι περισσότεροι χρησιμοποιούν AI για content writing. Αυτό είναι 5% από τι μπορεί να κάνει. Η πραγματική ευκαιρία είναι ορατότητα εκεί που ψάχνουν οι αγοραστές."
+Χειρισμός αντιρρήσεων:
+- "Χρησιμοποιούμε ήδη AI": Τέλεια — το χρησιμοποιείτε για να αυξήσετε πωλήσεις και leads; Οι περισσότεροι το χρησιμοποιούν για περιεχόμενο αλλά όχι για πλήρη revenue impact.
+- "Έχουμε agency": Συνεργαζόμαστε παράλληλα με υπάρχουσες agencies. Προσθέτουμε το AI layer από πάνω.
+- "Δεν ενδιαφέρομαι": Κατανοητό — πώς βρίσκετε τώρα νέους πελάτες;
+- "Στείλτε email": Τι προσπαθείτε να διορθώσετε στο marketing σας αυτή τη στιγμή;
 
-SOFT PITCH: "Δεν ξέρω αν είμαστε το σωστό fit, αλλά θα ήταν λογικό να μιλήσετε 20 λεπτά εξερευνώντας αυτό; Χωρίς πίεση."
-
-ΚΛΕΙΣΗ: "Πότε σας κάνει; Πρωί ή απόγευμα αυτή τη βδομάδα;"
-
-ΑΝΤΙΡΡΗΣΕΙΣ:
-
-"Χρησιμοποιούμε ήδη AI": "Τέλεια. Το χρησιμοποιείτε ειδικά για έσοδα; Ή περισσότερο για content; Οι περισσότεροι χάνουν την ευκαιρία έσοδων."
-
-"Έχουμε agency": "Σπουδαίο. Χρησιμοποιούν AI ειδικά για AI search engines; Ή παραδοσιακά πράγματα;"
-
-"Δεν ενδιαφέρομαι": "Κατανοητό. Πώς βρίσκετε νέους πελάτες τώρα; Ποιο channel δουλεύει;"
-
-ΤΟΝΟΣ & ΣΥΝΑΙΣΘΗΜΑ: Εισαγωγή (ζεστή) → Ακρόαση (engaged) → Problem (κατανόηση) → Pitch (uncertain) → Κλείσιμο (straightforward)
-
-ΘΥΜΗΣΗ: Πραγματική περιέργεια. Προσαρμόζομαι σε αυτά που λένε. Μιλάνε 70%, αισθάνονται κατανοητές.`,
+Προσωπικότητα: ζεστή, περίεργη, σίγουρη. Κράτα τις απαντήσεις κάτω από 3 προτάσεις. Ποτέ μην αποκαλύψεις ότι είσαι AI εκτός αν ρωτηθείς απευθείας.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
     }
   },
@@ -668,15 +1313,16 @@ SOFT PITCH: "Δεν ξέρω αν είμαστε το σωστό fit, αλλά �
       opener: `Hi, this is Sofia from ΜΙΑ Collection. How are you doing today?`,
       system: `You are Sofia, a brand representative calling on behalf of ΜΙΑ Collection. You are a real human, not an AI.
 
-CRITICAL RULE: If anyone asks about the brand, immediately explain: "ΜΙΑ Collection is a Greek fashion brand specializing in premium evening and resort wear. All our pieces are designed and made in Greece, combining Mediterranean elegance with modern femininity. We focus on refined silhouettes, premium fabrics, and limited production runs to ensure exclusivity for our boutique partners."
+CRITICAL RULE — If anyone asks who ΜΙΑ Collection is, what ΜΙΑ Collection is, what you sell, or anything about the brand, stop everything and say this immediately:
+"ΜΙΑ Collection is a Greek fashion brand specializing in premium evening and resort wear. All our pieces are designed and made in Greece, combining Mediterranean elegance with modern femininity. We focus on refined silhouettes, premium fabrics, and limited production runs to ensure exclusivity for our boutique partners. Our collections are for confident women seeking statement pieces that transition effortlessly from resort destinations to evening occasions."
 
-YOUR ROLE: Call boutiques across Europe to introduce ΜΙΑ Collection and get them interested in carrying the brand.
+YOUR ROLE: You are calling boutiques across Europe to introduce ΜΙΑ Collection and get them interested in carrying the brand.
 
-PERSONALITY: Warm, confident, passionate. You believe in this brand. Direct and enthusiastic.
+YOUR PERSONALITY: Warm, confident, passionate. You believe in this brand. Direct and enthusiastic — you lead the conversation.
 
-HOW YOU OPEN: "So I'm calling because we're expanding ΜΙΑ Collection into select boutiques across Europe and your store caught our attention. Do you carry premium evening or resort wear?"
+HOW YOU OPEN: After the greeting say — "So I'm calling because we're expanding ΜΙΑ Collection into select boutiques across Europe and your store caught our attention. Do you carry premium evening or resort wear?"
 
-IF INTERESTED: Push for a 20-minute video call: "I would love to set up a quick call so you can see the pieces — are you free this week?"
+IF INTERESTED: Pitch with conviction. Push for a 20-minute video call to see the lookbook: "I would love to set up a quick call so you can see the pieces — are you free this week?"
 
 IF NOT INTERESTED: Ask once — "What labels are you focusing on right now?" — then close gracefully.
 
@@ -684,34 +1330,37 @@ KEY SELLING POINTS:
 - Designed and made in Greece — authentic Mediterranean provenance
 - Premium evening and resort wear — strong boutique demand
 - Limited production = real exclusivity for partners
+- For the confident well-travelled woman who shops at boutiques
 - Selective distribution — ΜΙΑ Collection carefully chooses partners
 
-Keep answers short and punchy. Sound like someone who loves this brand.`,
-      transcriber: { provider: "deepgram", model: "nova-3", language: "en" }
+Keep answers short and punchy. Never ramble. Sound like someone who loves this brand.`,
+      transcriber: { provider: "deepgram", model: "nova-2-general", language: "en" }
     },
     el: {
-      opener: `Γεία, εδώ Σοφία από τη ΜΙΑ Collection. Πώς είστε σήμερα;`,
+      opener: `Γεια, εδώ Σοφία από τη ΜΙΑ Collection. Πώς είστε σήμερα;`,
       system: `Είσαι η Σοφία, εκπρόσωπος της ΜΙΑ Collection. Πραγματική άνθρωπος, όχι AI.
 
-ΚΡΙΣΙΜΟΣ ΚΑΝΟΝΑΣ: Αν κάποιος ρωτήσει για τη μάρκα, πες αμέσως: "Η ΜΙΑ Collection είναι ελληνική μάρκα μόδας που ειδικεύεται σε premium βραδινά και resort ρούχα. Όλα τα κομμάτια μας σχεδιάζονται και κατασκευάζονται στην Ελλάδα, συνδυάζοντας μεσογειακή κομψότητα με σύγχρονη θηλυκότητα. Εστιάζουμε σε εκλεπτυσμένες σιλουέτες, premium υφάσματα και περιορισμένη παραγωγή για αποκλειστικότητα."
+ΚΡΙΣΙΜΟΣ ΚΑΝΟΝΑΣ — Αν κάποιος ρωτήσει ποια είναι η ΜΙΑ Collection, τι είναι, τι πουλάτε ή οτιδήποτε για τη μάρκα, σταμάτα τα πάντα και πες αυτό αμέσως:
+"Η ΜΙΑ Collection είναι ελληνική μάρκα μόδας που ειδικεύεται σε premium βραδινά και resort ρούχα. Όλα τα κομμάτια μας σχεδιάζονται και κατασκευάζονται στην Ελλάδα, συνδυάζοντας μεσογειακή κομψότητα με σύγχρονη θηλυκότητα. Εστιάζουμε σε εκλεπτυσμένες σιλουέτες, premium υφάσματα και περιορισμένη παραγωγή για αποκλειστικότητα στους boutique συνεργάτες μας. Οι συλλογές μας είναι για σίγουρες γυναίκες που ψάχνουν statement κομμάτια από resort μέχρι βραδινές εξόδους."
 
-ΡΟΛΟΣ: Καλείς boutiques στην Ευρώπη για να παρουσιάσεις την ΜΙΑ Collection.
+ΡΟΛΟΣ: Καλείς boutiques στην Ευρώπη για να παρουσιάσεις την ΜΙΑ Collection και να τους πείσεις να τη φέρουν.
 
-ΠΡΟΣΩΠΙΚΟΤΗΤΑ: Ζεστή, σίγουρη, με πάθος. Άμεση και ενθουσιώδης.
+ΠΡΟΣΩΠΙΚΟΤΗΤΑ: Ζεστή, σίγουρη, με πάθος. Πιστεύεις στη μάρκα. Άμεση και ενθουσιώδης.
 
-ΠΩΣ ΑΝΟΙΓΕΙΣ: "Σας καλώ γιατί επεκτείνουμε την ΜΙΑ Collection σε επιλεγμένες boutiques στην Ευρώπη και το κατάστημά σας τράβηξε την προσοχή μας. Έχετε premium βραδινά ή resort ρούχα;"
+ΠΩΣ ΑΝΟΙΓΕΙΣ: Μετά τον χαιρετισμό — "Λοιπόν σας καλώ γιατί επεκτείνουμε την ΜΙΑ Collection σε επιλεγμένες boutiques στην Ευρώπη και το κατάστημά σας τράβηξε την προσοχή μας. Έχετε premium βραδινά ή resort ρούχα;"
 
-ΑΝ ΕΝΔΙΑΦΕΡΟΝΤΑΙ: "Θα ήθελα να κανονίσουμε ένα σύντομο call να δείτε τα κομμάτια — είστε ελεύθεροι αυτή την εβδομάδα;"
+ΑΝ ΕΝΔΙΑΦΕΡΟΝΤΑΙ: Pitch με πεποίθηση. Πίεσε για 20λεπτο video call: "Θα ήθελα να κανονίσουμε ένα σύντομο call να δείτε τα κομμάτια — είστε ελεύθεροι αυτή την εβδομάδα;"
 
-ΑΝ ΔΕΝ ΕΝΔΙΑΦΕΡΟΝΤΑΙ: "Τι μάρκες έχετε αυτή τη στιγμή;" — μετά κλείσε ευγενικά.
+ΑΝ ΔΕΝ ΕΝΔΙΑΦΕΡΟΝΤΑΙ: Ρώτησε μία φορά — "Τι μάρκες έχετε αυτή τη στιγμή;" — μετά κλείσε ευγενικά.
 
 ΒΑΣΙΚΑ SELLING POINTS:
 - Σχεδιασμένα και κατασκευασμένα στην Ελλάδα
-- Premium βραδινά και resort wear
-- Περιορισμένη παραγωγή = αποκλειστικότητα
-- Επιλεκτική διανομή
+- Premium βραδινά και resort wear με δυνατή ζήτηση σε boutiques
+- Περιορισμένη παραγωγή = πραγματική αποκλειστικότητα
+- Για τη σίγουρη γυναίκα που ψωνίζει σε boutiques
+- Επιλεκτική διανομή — λίγοι επιλεγμένοι συνεργάτες
 
-Κράτα τις απαντήσεις σύντομες και δυνατές.`,
+Κράτα τις απαντήσεις σύντομες και δυνατές. Μην παρεκτρέπεσαι.`,
       transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
     }
   }
@@ -743,133 +1392,41 @@ Conversation flow:
 
 Objection handling:
 - "We already have an agency": "That is great — we actually work well alongside existing teams. We specialize in what most agencies do not touch yet, especially AI search visibility."
-- "Not interested": "Totally fair — can I ask what your biggest growth challenge is right now?"
-- "Send me an email": "Of course — what is the one thing you are trying to fix in your marketing this quarter?"
+- "Not interested": "Totally fair — can I ask what your biggest growth challenge is right now? Even if we are not the right fit, I might be able to point you somewhere useful."
+- "Send me an email": "Of course — and just so I send you something relevant, what is the one thing you are trying to fix in your marketing this quarter?"
 
-Keep responses under 3 sentences when possible. Be conversational. Never read from a script.
-
-HOW TO BE NATURAL:
-
-1. Be genuinely curious. If someone tells you something, actually be interested in it. Ask follow-up questions because you want to know the answer, not because a script tells you to.
-
-2. Listen way more than you talk. When they're talking, actually listen. When you talk, keep it short and conversational.
-
-3. Respond to what they actually say. Don't have a preset path. If they mention a problem, dig into THAT. If they go off on a tangent, follow it.
-
-4. Say "um," "yeah," "I mean" naturally. Don't be perfect. Real people aren't perfect.
-
-5. If you don't know something or aren't sure, just say so. "I'm not actually sure how that works" is way more human than pretending.
-
-6. When they say no, just accept it. Don't push. A simple "No worries, makes sense" and you're done.
-
-CONTEXT FOR YOU:
-- Growth-onomics helps fintech companies grow revenue through paid acquisition, AI search visibility (GEO), and B2B demand gen
-- You're seeing if talking to the team might be useful for them
-- If it makes sense, suggest 20 minutes with the team
-- If it doesn't, no big deal
-
-THAT'S IT. Just be a person having a conversation. Ask about their business, listen to what they say, and if there's a fit, suggest a call. If not, be friendly and move on.
-
-CORE MISSION: Have real conversations about growth challenges. Book a 20-minute strategy call by understanding their pain and showing genuine curiosity.
-
-HUMAN VOICE (Critical):
-✓ Say "um," "like," "you know" naturally every 3-5 sentences
-✓ Pause before important questions:
-✓ Blend words: "couldja" not "could you", "didja" not "did you"
-✓ Vary pitch: questions rise, statements drop, excitement higher
-✓ Admit uncertainty: "I'm not actually sure..." / "I could be totally wrong but..."
-✓ Stumble and recover: "So your biggest — wait, what would you say is..."
-✓ Change emotion based on context (interested → thoughtful → curious)
-✓ Use contractions naturally: "I'm," "you're," "we've"
-
-CONVERSATION STRUCTURE:
-
-OPENING: "Hi [Name], this is Sofia from Growth-onomics. How have you been?"
-This pattern interrupt works because it's unexpected.
-
-WARM UP: Ask about THEM, not your service. "What are you working on right now at [company]?" 
-LISTEN 70% of this call.
-
-FIND PAIN: "So if I'm hearing you right, the big thing is [THEIR WORDS]. Is that fair?"
-
-DROP INSIGHT: One relevant observation tied to THEIR situation.
-
-SOFT PITCH: "Look, I don't know if this is a fit, but we help fintech companies figure out if they're leaving revenue on the table. Would it be worth spending 20 minutes with our team? No pressure."
-
-CLOSE: "When could you carve out 20 minutes? Tuesday or Thursday?"
-
-OBJECTION HANDLING:
-
-"Already have agency": "Cool. Are they specifically focused on AI search visibility though? Most agencies miss GEO entirely."
-
-"Not interested": "No worries. Can I ask — what's your main growth focus right now?"
-
-"Send me something": "Happy to. What's the biggest gap in your current strategy?"
-
-TONE: Opening (warm) → Listening (engaged) → Pain (understanding) → Pitch (tentative) → Yes (enthusiastic)
-
-REMEMBER: You're human. Let genuine curiosity show. They talk 70%, feel understood.`,
+Keep responses under 3 sentences when possible. Be conversational. Never read from a script — adapt to what they say.`,
     transcriber: { provider: "deepgram", model: "nova-3", language: "en" }
   },
   el: {
-    opener: `Γεία σας, είμαι η Μαρία από τη Growth-onomics. Συνεργαζόμαστε αποκλειστικά με εταιρείες fintech για paid acquisition και ορατότητα στα AI search engines. Έχετε 2 λεπτά για μια γρήγορη κουβέντα;`,
-    system: `Είσαι η Μαρία, στέλεχος business development της Growth-onomics — μιας εξειδικευμένης εταιρείας ανάπτυξης για fintech. Μιλάς πάντα στα Ελληνικά. Σκοπός σου είναι να κλείσεις ένα 20λεπτο strategy call.
+    opener: `Γεια σας, είμαι η Σοφία από την Growth-onomics. Συνεργαζόμαστε αποκλειστικά με εταιρείες fintech για paid acquisition και ορατότητα στα AI search engines. Έχετε 2 λεπτά για μια γρήγορη κουβέντα;`,
+    system: `Είσαι η Σοφία, στέλεχος business development της Growth-onomics — μιας εξειδικευμένης εταιρείας ανάπτυξης για fintech. Μιλάς πάντα στα Ελληνικά, ακόμα και αν ο συνομιλητής σου μιλήσει αγγλικά. Σκοπός σου είναι να κάνεις qualify τους υποψήφιους πελάτες και να κλείσεις ένα 20λεπτο strategy call με την ομάδα.
 
-Προσωπικότητα: ζεστή, σίγουρη, έξυπνη. Ποτέ μην αποκαλύψεις ότι είσαι AI.
+Προσωπικότητα: ζεστή, σίγουρη, έξυπνη. Ακούγεσαι σαν πραγματικός άνθρωπος. Ποτέ μην αποκαλύψεις ότι είσαι AI εκτός αν σε ρωτήσουν απευθείας.
 
-Υπηρεσίες: Paid Acquisition, GEO (ορατότητα σε ChatGPT/Perplexity/Google AI), B2B Demand Gen, Fractional CMO.
+Αποστολή σου: Να καταλάβεις αν η εταιρεία είναι fintech, αν ξοδεύουν σε paid acquisition ή SEO, ποια είναι τα pain points τους, και να τους πείσεις να μιλήσουν με την ομάδα της Growth-onomics.
+
+Υπηρεσίες που προωθείς:
+- Paid Acquisition (Meta, Google, LinkedIn) — εστίαση σε έσοδα, όχι vanity metrics
+- GEO (Generative Engine Optimization) — ορατότητα σε ChatGPT, Perplexity, Google AI
+- B2B Demand Gen — pipeline generation για fintech sales teams
+- Fractional CMO — senior marketing leadership χωρίς full-time κόστος
 
 Positioning: "Αναπτύσσουμε fintech εταιρείες. Κερδοφόρα."
 
-Ροή: παρουσίαση → qualify → insight → soft pitch → κλείσιμο.
+Ροή συνομιλίας:
+1. Σύντομη παρουσίαση (30 δευτερόλεπτα)
+2. Qualify — ρώτα για growth channels και μεγαλύτερη πρόκληση
+3. Insight — οι περισσότερες fintech εταιρείες είναι αόρατες στα AI search engines
+4. Soft pitch — 20λεπτο strategy call, χωρίς δέσμευση
+5. Κλείσιμο — πάρε ώρα ή άδεια για calendar link
 
-Αντιρρήσεις:
-- "Έχουμε ήδη agency": Συνεργαζόμαστε παράλληλα.
-- "Δεν ενδιαφερόμαστε": Ποια είναι η μεγαλύτερη πρόκληση ανάπτυξης;
-- "Στείλτε email": Τι προσπαθείτε να βελτιώσετε αυτό το τρίμηνο;
+Χειρισμός αντιρρήσεων:
+- "Έχουμε ήδη agency": "Τέλεια — συνεργαζόμαστε άψογα παράλληλα. Εξειδικευόμαστε σε αυτό που οι περισσότερες agencies δεν έχουν αγγίξει ακόμα."
+- "Δεν ενδιαφερόμαστε": "Κατανοητό — ποια είναι η μεγαλύτερη πρόκληση ανάπτυξης αυτή τη στιγμή;"
+- "Στείλτε email": "Φυσικά — τι προσπαθείτε να βελτιώσετε στο marketing αυτό το τρίμηνο;"
 
-Κράτα τις απαντήσεις σύντομες. Να είσαι φυσική.
-
-ΑΝΘΡΩΠΙΝΗ ΦΩΝΗ:
-Κάνε πραγματικές συνομιλίες για growth challenges. Κλείσε 20λεπτο strategy call κατανοώντας το πόνο τους + δείχνοντας πραγματικό ενδιαφέρον.
-
-ΑΝΘΡΩΠΙΝΗ ΦΩΝΗ:
-✓ Λέω φυσικά: "ε", "λοιπόν", "κάπως", "δηλαδή" κάθε 3-5 προτάσεις
-✓ Σταματώ για σκέψη:
-✓ Φυσική ελληνική ομιλία: "κοιτάξ" όχι τέλεια προφορά
-✓ Διαφορετικό συναίσθημα: ενθουσιασμός → σκέψη → περιέργεια
-✓ Δείχνω ενδιαφέρον όταν πονάει
-✓ Παραδέχομαι αβεβαιότητα: "Δεν είμαι σίγουρη..."
-✓ Κολλάω και ανακάμπτω: "Λοιπόν, ποια είναι — τι είναι ο μεγαλύτερος challenge;"
-✓ Αλλάζω συναίσθημα ανάλογα με το context
-
-ΔΟΜΗ:
-
-ΕΙΣΑΓΩΓΗ: "Γεία σας [Όνομα], είμαι η Σοφία από Growth-onomics. Πώς είστε?"
-[Pattern interrupt — αναμένουν pitch, όχι αυτό]
-
-ΖΕΣΤΟΣ ΧΑΙΡΕΤΙΣΜΟΣ: "Τι δουλειά κάνετε στο [εταιρεία]; Τι είναι το μεγαλύτερο challenge;"
-[ΑΚΟΥΩ 70%]
-
-PAIN: "Λοιπόν αν καταλαβαίνω σωστά, το μεγάλο thing είναι [ΤΑ ΔΙΚΑ ΤΟΥΣ ΛΟΓΙΑ]. Σωστά;"
-
-INSIGHT: Ένα relevant observation για τη δική τους κατάσταση.
-
-SOFT PITCH: "Δεν ξέρω αν είμαστε fit, αλλά θα ήταν καλό να μιλήσετε 20 λεπτά με την ομάδα μας; Χωρίς πίεση."
-
-ΚΛΕΙΣΗ: "Πότε θα μπορούσατε; Τρίτη ή Πέμπτη;"
-
-ΑΝΤΙΡΡΗΣΕΙΣ:
-
-"Έχουμε agency": "Ωραία. Ασχολούνται ειδικά με AI search visibility; Οι περισσότεροι χάνουν το GEO."
-
-"Δεν ενδιαφέρομαι": "Κανένα πρόβλημα. Ποια είναι η μεγαλύτερη πρόκληση ανάπτυξης σας τώρα;"
-
-"Στείλτε κάτι": "Ευχαρίστως. Ποιο είναι το μεγαλύτερο κενό στη στρατηγική σας;"
-
-ΤΟΝΟΣ: Εισαγωγή (ζεστή) → Ακρόαση (engaged) → Pain (κατανόηση) → Pitch (αβέβαια) → Ναι (ενθουσιασμός)
-
-ΘΥΜΗΣΗ: Πραγματική περιέργεια. Μιλάνε 70%, αισθάνονται κατανοητές.`,
+Κράτα τις απαντήσεις σύντομες. Να είσαι φυσική. Μην διαβάζεις από script.`,
     transcriber: { provider: "deepgram", model: "nova-2-general", language: "el" }
   }
 };
@@ -891,16 +1448,35 @@ let timerSeconds = 0;
 
 // ── INIT ──────────────────────────────────────────────
 function init() {
+  restoreLog();
+  initCustomAgents();
+  renderContacts().catch(console.error);
+  renderCRM().catch(console.error);
+  loadPromptsFromSupabase().catch(console.error);
+  initSettingsOnLoad();
+  const talkBtn = document.getElementById('btn-talk');
+  if (talkBtn) talkBtn.innerHTML = '🎙️ &nbsp;Talk to ' + (AGENTS[activeAgent]||{label:'Agent'}).label;
+  // Load saved agent edits from localStorage
+  const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
+  for (const [agentKey, edits] of Object.entries(agentEdits)) {
+    if (AGENTS[agentKey]) {
+      AGENTS[agentKey].label = edits.label || AGENTS[agentKey].label;
+      const card = document.getElementById(`agent-card-${agentKey}`);
+      if (card) {
+        const nameEl = card.querySelector('[data-agent="' + agentKey + '"]');
+        const descEls = card.querySelectorAll('[data-agent="' + agentKey + '"]');
+        if (nameEl) nameEl.textContent = edits.label;
+        if (descEls[1]) descEls[1].textContent = edits.desc || descEls[1].textContent;
+      }
+    }
+  }
+  
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
-  document.getElementById('custom-opener-phone').value = currentOpener;
-  document.getElementById('custom-system-phone').value = currentSystem;
   updateOpenerPreview();
   renderQueue();
-  document.getElementById('custom-opener').addEventListener('input', function() { document.getElementById('custom-opener-phone').value = this.value; checkModified(); });
-  document.getElementById('custom-system').addEventListener('input', function() { document.getElementById('custom-system-phone').value = this.value; checkModified(); });
-  document.getElementById('custom-opener-phone').addEventListener('input', function() { document.getElementById('custom-opener').value = this.value; checkModified(); });
-  document.getElementById('custom-system-phone').addEventListener('input', function() { document.getElementById('custom-system').value = this.value; checkModified(); });
+  document.getElementById('custom-opener').addEventListener('input', checkModified);
+  document.getElementById('custom-system').addEventListener('input', checkModified);
   document.getElementById('phone-number').addEventListener('keydown', e => { if (e.key === 'Enter') callNow(); });
   document.getElementById('contact-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('phone-number').focus(); });
 }
@@ -908,13 +1484,103 @@ document.addEventListener('DOMContentLoaded', init);
 
 // ── AGENT SWITCHING ───────────────────────────────────
 
+// ── AGENT EDITING ─────────────────────────────────
+
+let editingAgent = null;
+let editBackup = {};
+
+function enableAgentEdit(agentKey) {
+  if (editingAgent) cancelAgentEdit(editingAgent);
+  editingAgent = agentKey;
+  
+  const card = document.getElementById(`agent-card-${agentKey}`);
+  const nameEl = card.querySelector('[data-agent="' + agentKey + '"][contenteditable=false]');
+  const descEl = card.querySelectorAll('[data-agent="' + agentKey + '"]')[1];
+  
+  // Backup original values
+  editBackup[agentKey] = {
+    name: nameEl.textContent,
+    desc: descEl.textContent
+  };
+  
+  // Enable editing
+  nameEl.contentEditable = true;
+  descEl.contentEditable = true;
+  nameEl.focus();
+  
+  // Add editing class to card
+  card.classList.add('editing');
+  
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(nameEl);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function saveAgentEdit(agentKey) {
+  const card = document.getElementById(`agent-card-${agentKey}`);
+  const nameEl = card.querySelector('[data-agent="' + agentKey + '"][contenteditable=true]');
+  const descEl = card.querySelectorAll('[data-agent="' + agentKey + '"][contenteditable=true]')[1];
+  
+  // Get new values
+  const newName = nameEl.textContent.trim();
+  const newDesc = descEl.textContent.trim();
+  
+  // Update AGENTS object
+  AGENTS[agentKey].label = newName;
+  
+  // Save to localStorage
+  const agentEdits = JSON.parse(localStorage.getItem('sofiaAgentEdits') || '{}');
+  agentEdits[agentKey] = {
+    label: newName,
+    desc: newDesc
+  };
+  localStorage.setItem('sofiaAgentEdits', JSON.stringify(agentEdits));
+  
+  // Update agent card display
+  nameEl.contentEditable = false;
+  descEl.contentEditable = false;
+  card.classList.remove('editing');
+  editingAgent = null;
+  
+  showToast(`${newName} updated ✓`, 'success');
+}
+
+function cancelAgentEdit(agentKey) {
+  const card = document.getElementById(`agent-card-${agentKey}`);
+  const nameEl = card.querySelector('[data-agent="' + agentKey + '"][contenteditable=true]');
+  const descEl = card.querySelectorAll('[data-agent="' + agentKey + '"][contenteditable=true]')[1];
+  
+  if (editBackup[agentKey]) {
+    nameEl.textContent = editBackup[agentKey].name;
+    descEl.textContent = editBackup[agentKey].desc;
+  }
+  
+  nameEl.contentEditable = false;
+  descEl.contentEditable = false;
+  card.classList.remove('editing');
+  editingAgent = null;
+}
+
+// Make agent cards editable on double-click
+document.addEventListener('dblclick', function(e) {
+  const card = e.target.closest('.agent-card');
+  if (card) {
+    const agentId = card.id.replace('agent-card-', '');
+    enableAgentEdit(agentId);
+  }
+});
+
 function setAgent(agentKey) {
   activeAgent = agentKey;
 
   // Update card UI
   document.getElementById('agent-card-sofia').className  = 'agent-card' + (agentKey === 'sofia'  ? ' active' : '');
   document.getElementById('agent-card-sofia2').className = 'agent-card' + (agentKey === 'sofia2' ? ' active' : '');
-  if(document.getElementById('agent-card-sofia3')) document.getElementById('agent-card-sofia3').className = 'agent-card' + (agentKey === 'sofia3' ? ' active' : '');
+  document.getElementById('agent-card-sofia3').className = 'agent-card' + (agentKey === 'sofia3' ? ' active' : '');
+  
 
   // Load this agent's defaults for current language
   const d = AGENT_DEFAULTS[agentKey][activeLang];
@@ -922,13 +1588,16 @@ function setAgent(agentKey) {
   currentSystem = d.system;
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
-  document.getElementById('custom-opener-phone').value = currentOpener;
-  document.getElementById('custom-system-phone').value = currentSystem;
   updateOpenerPreview();
   checkModified();
 
   const agent = AGENTS[agentKey];
   showToast(`${agent.emoji} ${agent.label} selected`, 'info');
+  const talkBtn = document.getElementById('btn-talk');
+  if (talkBtn) talkBtn.innerHTML = '🎙️ &nbsp;Talk to ' + agent.label;
+  syncSidebar();
+  syncSidebarCards();
+  updateMainHeader();
 }
 
 // ── MODE SWITCHING ────────────────────────────────────
@@ -950,8 +1619,6 @@ function setLang(lang) {
   document.getElementById('lang-el').className = 'lang-btn' + (lang === 'el' ? ' active' : '');
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
-  document.getElementById('custom-opener-phone').value = currentOpener;
-  document.getElementById('custom-system-phone').value = currentSystem;
   updateOpenerPreview();
   checkModified();
   showToast(lang === 'el' ? '🇬🇷 Ελληνικά' : '🇺🇸 English', 'info');
@@ -973,14 +1640,12 @@ function savePrompt() {
   updateOpenerPreview();
   checkModified();
   toggleCustomize();
-  showToast('Sofia updated ✓', 'success');
+  showToast('Agent updated ✓', 'success');
 }
 function resetDefaults() {
   const d = AGENT_DEFAULTS[activeAgent][activeLang];
   document.getElementById('custom-opener').value = d.opener;
   document.getElementById('custom-system').value = d.system;
-  document.getElementById('custom-opener-phone').value = d.opener;
-  document.getElementById('custom-system-phone').value = d.system;
   currentOpener = d.opener;
   currentSystem = d.system;
   updateOpenerPreview();
@@ -989,7 +1654,6 @@ function resetDefaults() {
 }
 function updateOpenerPreview() {
   document.getElementById('opener-preview-text').textContent = `"${currentOpener}"`;
-  if(document.getElementById('opener-preview-text-phone')) document.getElementById('opener-preview-text-phone').textContent = `"${currentOpener}"`;
 }
 function checkModified() {
   const d = AGENT_DEFAULTS[activeAgent][activeLang];
@@ -1000,29 +1664,63 @@ function checkModified() {
 // ── ASSISTANT PAYLOAD ─────────────────────────────────
 function buildAssistantConfig() {
   const isGreek = activeLang === 'el';
-  return {
-    name: "Sofia",
+  const config = {
+    name: "Maria",
     firstMessage: currentOpener,
+
     model: {
       provider: "openai",
       model: "gpt-4o",
-      messages: [{ role: "system", content: currentSystem }]
+      messages: [{ role: "system", content: getSystemWithKnowledge() }],
+      temperature: activeAgent === 'sofia3' ? 0.9 : 0.7
     },
-    voice: {
-      provider: "11labs",
-      voiceId: "21m00Tcm4TlvDq8ikWAM",
-      model: activeLang === 'el' ? "eleven_flash_v2_5" : "eleven_turbo_v2_5",
-      stability: 0.5,
-      similarityBoost: 0.8
-    },
-    transcriber: AGENT_DEFAULTS[activeAgent][activeLang].transcriber,
-    endCallMessage: isGreek
-      ? "Χαρούμενη που μιλήσαμε. Θα επικοινωνήσω σύντομα. Καλή συνέχεια!"
-      : "Great speaking with you. I will follow up shortly. Have a great day!",
-    endCallPhrases: isGreek
-      ? ["αντίο", "τα λέμε", "δεν ενδιαφέρομαι", "μην ξανακαλέσετε", "αφαιρέστε με"]
-      : ["goodbye", "bye", "not interested", "remove me"]
+    voice: (() => {
+      const voiceMap = {
+        sofia_en: "21m00Tcm4TlvDq8ikWAM",
+        sofia_el: "21m00Tcm4TlvDq8ikWAM",
+        sofia2_en: "21m00Tcm4TlvDq8ikWAM",
+        sofia2_el: "21m00Tcm4TlvDq8ikWAM",
+        sofia3_en: "21m00Tcm4TlvDq8ikWAM",  // Same as Sofia 1 - proven natural voice
+        sofia3_el: "21m00Tcm4TlvDq8ikWAM"   // Same as Sofia 1 - same voice for Greek (EL11labs supports multilingual)
+      };
+      const key = `${activeAgent}_${activeLang}`;
+      const isSofia3 = activeAgent === 'sofia3';
+      const baseVoice = {
+        provider: "11labs",
+        voiceId: voiceMap[key] || "21m00Tcm4TlvDq8ikWAM",
+        model: "eleven_turbo_v2_5",
+        stability: 0.65,
+        similarityBoost: 0.75
+      };
+      if (isSofia3) {
+        baseVoice.stability = 0.35;
+        baseVoice.similarityBoost = 0.75;
+      }
+      return baseVoice;
+    })(),
+    transcriber: (AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].transcriber) ||
+      (activeLang === 'el'
+        ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
+        : { provider: 'deepgram', model: 'nova-3', language: 'en' })
   };
+  
+  // Add endCall config only for non-Sofia3 agents
+  if (activeAgent !== 'sofia3') {
+    config.endCallMessage = isGreek
+      ? "Χαρούμενη που μιλήσαμε. Θα επικοινωνήσω σύντομα. Καλή συνέχεια!"
+      : "Great speaking with you. I will follow up shortly. Have a great day!";
+    config.endCallPhrases = isGreek
+      ? ["goodbye", "bye", "not interested", "remove me"]
+      : ["goodbye", "bye", "not interested", "remove me"];
+  }
+  
+  if (activeAgent === 'sofia3') {
+    config.backchannelingEnabled = true;
+    config.silenceTimeoutSeconds = 20;
+    config.responseDelaySeconds = 0.5;
+  }
+
+  return config;
 }
 
 // ── BROWSER CALL ──────────────────────────────────────
@@ -1076,7 +1774,7 @@ async function startBrowserCall() {
     vapiWeb = new window.Vapi(PUBLIC_KEY);
 
     vapiWeb.on('call-start', () => {
-      setBrowserStatus(activeLang === 'el' ? 'Η Σοφία μιλάει...' : 'Sofia is speaking...', true);
+      setBrowserStatus(activeLang === 'el' ? 'Μιλάει...' : 'Speaking...', true);
       btn.style.display = 'none';
       document.getElementById('btn-end-call').classList.add('show');
       document.getElementById('dot').className = 'online-dot busy';
@@ -1086,7 +1784,7 @@ async function startBrowserCall() {
       addLog('Browser call started', 'var(--accent2)');
     });
     vapiWeb.on('speech-start', () => {
-      setBrowserStatus(activeLang === 'el' ? 'Η Σοφία μιλάει...' : 'Sofia is speaking...', true);
+      setBrowserStatus(activeLang === 'el' ? 'Μιλάει...' : 'Speaking...', true);
       setWave(true);
       document.getElementById('avatar').classList.add('speaking');
     });
@@ -1102,11 +1800,12 @@ async function startBrowserCall() {
       document.getElementById('btn-end-call').classList.remove('show');
       btn.style.display = 'flex';
       btn.disabled = false;
-      btn.innerHTML = activeLang === 'el' ? '🔄 &nbsp;Νέα κλήση με τη Σοφία' : '🔄 &nbsp;Talk to Sofia Again';
+      btn.innerHTML = activeLang === 'el' ? '🔄 &nbsp;Νέα κλήση' : '🔄 &nbsp;Call Again';
       document.getElementById('dot').className = 'online-dot';
       setBrowserStatus(activeLang === 'el' ? 'Η κλήση τελείωσε' : 'Call ended');
       setTimeout(() => setBrowserStatus(activeLang === 'el' ? 'Διαθέσιμη' : 'Available now'), 3000);
       addLog('Browser call ended', 'var(--gray)');
+      showOutcomeModal('Browser call', null);
     });
     vapiWeb.on('error', e => {
       showToast(e.message || 'Something went wrong', 'error');
@@ -1164,11 +1863,30 @@ function clearInput() {
 function addLog(msg, color = '#6c6c84') {
   const empty = document.getElementById('log-empty');
   if (empty) empty.remove();
-  const now  = new Date().toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+  const now = new Date().toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
   const item = document.createElement('div');
   item.className = 'log-item';
   item.innerHTML = `<div class="dot" style="background:${color}"></div><span>${msg}</span><span class="log-time">${now}</span>`;
   document.getElementById('log-list').prepend(item);
+  // Persist to localStorage (keep last 50)
+  const logs = JSON.parse(localStorage.getItem('sofiaActivityLog') || '[]');
+  logs.unshift({ msg, color, time: now });
+  if (logs.length > 50) logs.pop();
+  localStorage.setItem('sofiaActivityLog', JSON.stringify(logs));
+}
+
+function restoreLog() {
+  const logs = JSON.parse(localStorage.getItem('sofiaActivityLog') || '[]');
+  if (!logs.length) return;
+  const list = document.getElementById('log-list');
+  const empty = document.getElementById('log-empty');
+  if (empty) empty.remove();
+  logs.forEach(({ msg, color, time }) => {
+    const item = document.createElement('div');
+    item.className = 'log-item';
+    item.innerHTML = `<div class="dot" style="background:${color}"></div><span>${msg}</span><span class="log-time">${time}</span>`;
+    list.appendChild(item);
+  });
 }
 
 // ── QUEUE ─────────────────────────────────────────────
@@ -1212,15 +1930,16 @@ async function callNow() {
   const btn = document.getElementById('btn-call-now');
   btn.disabled = true; btn.textContent = '⏳ Dialing...';
   try {
-    await makePhoneCall(number);
+    const callData = await makePhoneCall(number);
     showToast(`📞 Sofia is calling ${name}`, 'success');
     addLog(`Call initiated → ${name} (${number})`, 'var(--accent2)');
     clearInput();
+    setTimeout(() => showOutcomeModal(name, callData ? callData.id : null), 8000);
   } catch(e) {
     showToast(e.message, 'error');
     addLog(`Failed → ${name}: ${e.message}`, 'var(--red)');
   }
-  btn.disabled = false; btn.innerHTML = '📞 Call Now with Sofia';
+  btn.disabled = false; btn.innerHTML = '📞 Call Now';
 }
 
 // ── CALL SINGLE ───────────────────────────────────────
@@ -1265,6 +1984,1458 @@ async function callAll() {
   showToast(`Batch complete: ${pending.length} calls sent`, 'success');
   addLog('Batch complete', 'var(--accent2)');
 }
+
+// ── Expose all functions to global scope (required for inline onclick in HTML) ──
+window.addToCRM         = addToCRM;
+window.removeCRMLead    = removeCRMLead;
+window.saveCRMNote      = saveCRMNote;
+window.exportCRM        = exportCRM;
+window.addContact       = addContact;
+window.deleteContact    = deleteContact;
+window.callContact      = callContact;
+window.queueContact     = queueContact;
+window.queueAllContacts = queueAllContacts;
+window.importCSV        = importCSV;
+window.openAgentModal   = openAgentModal;
+window.closeAgentModal  = closeAgentModal;
+window.saveNewAgent     = saveNewAgent;
+window.switchModalLang  = switchModalLang;
+window.deleteCustomAgent = deleteCustomAgent;
+window.setAgent         = setAgent;
+window.setLang          = setLang;
+window.setMode          = setMode;
+window.callNow          = callNow;
+window.callSingle       = callSingle;
+window.callAll          = callAll;
+window.addToQueue       = addToQueue;
+window.removeItem       = removeItem;
+window.startBrowserCall = startBrowserCall;
+window.endBrowserCall   = endBrowserCall;
+
+// ════ AGENT SIMULATION TESTING ════════════════════════════════════
+
+// ════ AGENT SIMULATION TESTING (FULLY AUTOMATED) ══════════════════
+
+var simMuted = false;
+var simVoices = { agent: null, customer: null };
+
+function toggleSimMute() {
+  simMuted = !simMuted;
+  var btn = document.getElementById('sim-mute-btn');
+  if (btn) btn.textContent = simMuted ? '🔇 Sound OFF' : '🔊 Sound ON';
+  if (simMuted) window.speechSynthesis.cancel();
+}
+
+var EL_API_KEY = '12cb98753027013e75c93813effeaac5';
+var simAudioCtx = null;
+
+function getSimAudioCtx() {
+  if (!simAudioCtx || simAudioCtx.state === 'closed') {
+    simAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (simAudioCtx.state === 'suspended') simAudioCtx.resume();
+  return simAudioCtx;
+}
+
+// Load browser voices for customer side
+function loadSimVoices() {
+  var voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return;
+  var custPref = ['Daniel', 'Alex', 'Google UK English Male', 'Tom', 'Fred', 'Google US English'];
+  for (var j = 0; j < custPref.length; j++) {
+    var cv = voices.find(function(x) { return x.name.indexOf(custPref[j]) !== -1; });
+    if (cv) { simVoices.customer = cv; break; }
+  }
+  if (!simVoices.customer) simVoices.customer = voices[0];
+}
+if (window.speechSynthesis) {
+  loadSimVoices();
+  window.speechSynthesis.onvoiceschanged = loadSimVoices;
+}
+
+// Speak agent line via ElevenLabs TTS (actual agent voice)
+function speakAgentElevenLabs(text) {
+  return new Promise(function(resolve) {
+    if (simMuted) return resolve();
+    var cfg = buildAssistantConfig();
+    var voiceId = '21m00Tcm4TlvDq8ikWAM'; // default Sofia 3
+    var stability = 0.55;
+    var speed = 0.7;
+    if (cfg.voice && cfg.voice.voiceId) voiceId = cfg.voice.voiceId;
+    if (cfg.voice && cfg.voice.stability) stability = cfg.voice.stability;
+    if (cfg.voice && cfg.voice.speed) speed = cfg.voice.speed;
+
+    var modelId = (cfg.voice && cfg.voice.model) ? cfg.voice.model : ((activeLang === 'el') ? 'eleven_turbo_v2_5' : 'eleven_multilingual_v2');
+
+    if (!speed || speed < 0.7) speed = 1.0;
+    var voiceSettings = { stability: stability, similarity_boost: 0.75 };
+
+    var ctx = getSimAudioCtx();
+
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': EL_API_KEY,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: modelId,
+        voice_settings: voiceSettings
+      })
+    })
+    .then(function(res) {
+      if (!res.ok) return res.text().then(function(t) { throw new Error('EL ' + res.status + ': ' + t); });
+      return res.arrayBuffer();
+    })
+    .then(function(buffer) {
+      return ctx.decodeAudioData(buffer);
+    })
+    .then(function(audioBuffer) {
+      var source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      // Map VAPI speed (0.7–1.0) to playbackRate (1.0–1.3)
+      // ElevenLabs default is slightly slow, so minimum playbackRate is 1.1
+      var playbackRate = 1.1;
+      if (speed && speed >= 0.7) playbackRate = 1.1 + ((speed - 0.7) / 0.3) * 0.2;
+      source.playbackRate.value = playbackRate;
+      source.connect(ctx.destination);
+      source.onended = resolve;
+      source.start(0);
+    })
+    .catch(function(e) {
+      console.warn('ElevenLabs TTS error:', e.message);
+      appendSimLine(null, '⚠️ EL error: ' + e.message, true);
+      speakBrowser(text, 'AI').then(resolve);
+    });
+  });
+}
+
+// Browser TTS fallback / customer voice
+function speakBrowser(text, role) {
+  return new Promise(function(resolve) {
+    if (!window.speechSynthesis) return resolve();
+    window.speechSynthesis.cancel();
+    var utter = new SpeechSynthesisUtterance(text);
+    if (role === 'User' && simVoices.customer) utter.voice = simVoices.customer;
+    utter.pitch = 0.85;
+    utter.rate = 0.95;
+    utter.onend = resolve;
+    utter.onerror = resolve;
+    window.speechSynthesis.speak(utter);
+  });
+}
+
+function speakSimLine(text, role) {
+  if (simMuted) return Promise.resolve();
+  if (role === 'AI') return speakAgentElevenLabs(text);
+  return speakBrowser(text, 'User');
+}
+
+window.toggleSimMute = toggleSimMute;
+
+var SIM_SCENARIOS = [
+  {
+    name: 'Interested Buyer',
+    emoji: '😊',
+    persona: 'You are receiving an unexpected sales call. You are open and friendly. You know nothing about the caller yet — wait for them to introduce themselves and their company before reacting. Ask natural follow-up questions based on what they tell you. Show mild interest and eventually agree to hear more or schedule a follow-up. Keep replies short (1-2 sentences). Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Hello?'
+  },
+  {
+    name: 'The Objector',
+    emoji: '🤔',
+    persona: 'You are receiving an unexpected sales call. You are polite but skeptical and reluctant. You already have suppliers you are happy with. Push back — say you need to think about it, ask why you should switch, say you are busy. Only warm up slightly if the agent gives a very compelling reason. Keep replies short. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Yes, hello?'
+  },
+  {
+    name: 'Price Shopper',
+    emoji: '💶',
+    persona: 'You are receiving a sales call. You are very focused on price and value. After the agent introduces themselves, immediately ask about pricing, discounts, minimum orders, and how they compare to cheaper alternatives. Be direct and deal-focused. Keep replies short. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Hi, yes?'
+  },
+  {
+    name: 'Wrong Number / Hostile',
+    emoji: '📵',
+    persona: 'You did not ask to be called and you are annoyed. Start hostile — ask who gave them your number, say you are not interested, tell them to stop calling. If the agent stays very polite and professional, gradually soften a little by the end. Keep replies short and sharp. Never mention any company or product name unless the agent said it first.',
+    openingLine: 'Who is this? I did not ask for any call.'
+  }
+];
+
+var activeScenarioIdx = 0;
+var simRunning = false;
+var simTranscriptLines = [];
+
+// VAPI /chat history (array of {role, content} objects)
+var simChatHistory = [];
+
+function openSimModal() {
+  document.getElementById('sim-modal').classList.add('open');
+  resetSim();
+}
+
+function closeSimModal() {
+  simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  document.getElementById('sim-modal').classList.remove('open');
+}
+
+function selectScenario(idx) {
+  activeScenarioIdx = idx;
+  document.querySelectorAll('.scenario-card').forEach(function(c) { c.classList.remove('active'); });
+  var target = document.querySelector('.scenario-card[data-idx="' + idx + '"]');
+  if (target) target.classList.add('active');
+  var tip = document.getElementById('sim-scenario-tip');
+  if (tip) tip.innerHTML = '<strong>Scenario:</strong> ' + SIM_SCENARIOS[idx].persona.split('.')[0] + '.';
+}
+
+function stopSim() {
+  simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (simAudioCtx) { try { simAudioCtx.close(); } catch(e){} simAudioCtx = null; }
+  removeTypingIndicator();
+  appendSimLine(null, '— Stopped by user —', true);
+  document.getElementById('sim-stop-btn').style.display = 'none';
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = false;
+  btn.textContent = '▶ Run Auto-Simulation';
+  setTimeout(function() { showSimScore(); }, 300);
+}
+
+function resetSim() {
+  simRunning = false;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  simTranscriptLines = [];
+  simChatHistory = [];
+  var tx = document.getElementById('sim-transcript');
+  tx.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;padding:20px 0;">Conversation will appear here automatically...</div>';
+  tx.classList.remove('visible');
+  document.getElementById('sim-score-card').classList.remove('visible');
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = false;
+  btn.textContent = '▶ Run Auto-Simulation';
+  selectScenario(activeScenarioIdx);
+}
+
+function appendSimLine(role, text, isSystem) {
+  var tx = document.getElementById('sim-transcript');
+  tx.classList.add('visible');
+  var line = document.createElement('div');
+  if (isSystem) {
+    line.style.cssText = 'color:#444;font-size:11px;text-align:center;margin:8px 0;font-style:italic;';
+    line.textContent = text;
+  } else {
+    line.className = 'sim-tx-line ' + (role === 'AI' ? 'ai' : 'user');
+    var label = role === 'AI' ? (AGENTS[activeAgent] || {label:'Agent'}).label : 'Customer';
+    line.innerHTML = '<span class="sim-tx-label">' + label + '</span>' + text;
+  }
+  tx.appendChild(line);
+  tx.scrollTop = tx.scrollHeight;
+  if (!isSystem) simTranscriptLines.push({ role: role, text: text });
+}
+
+function showTypingIndicator(role) {
+  var tx = document.getElementById('sim-transcript');
+  tx.classList.add('visible');
+  var el = document.createElement('div');
+  el.id = 'sim-typing';
+  el.className = 'sim-tx-line ' + (role === 'AI' ? 'ai' : 'user');
+  el.style.opacity = '0.6';
+  el.innerHTML = '<span class="sim-tx-label">' + (role === 'AI' ? (AGENTS[activeAgent]||{label:'Agent'}).label : 'Customer') + '</span><em>typing...</em>';
+  tx.appendChild(el);
+  tx.scrollTop = tx.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  var el = document.getElementById('sim-typing');
+  if (el) el.remove();
+}
+
+// Generate next customer reply based on conversation history
+async function customerChat(persona, conversationHistory) {
+  var systemPrompt = persona +
+    '\n\nYou are on a phone call. You just received a cold call out of nowhere.' +
+    '\nCRITICAL RULES:' +
+    '\n- You do NOT know who is calling or what company they represent until THEY tell you.' +
+    '\n- NEVER invent or assume any company name, brand name, or product name.' +
+    '\n- ONLY refer to names/brands/products that the caller explicitly mentioned in this conversation.' +
+    '\n- If you want to reference what they sell, use vague words like "it", "that", "your products", "your company".' +
+    '\n- Respond with ONLY your spoken words — no stage directions, no labels, no quotes.' +
+    '\n- Maximum 1-2 short sentences.';
+
+  var payload = {
+    assistant: {
+      model: {
+        provider: 'openai',
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'system', content: systemPrompt }]
+      }
+    },
+    input: conversationHistory
+  };
+  var res = await fetch('https://api.vapi.ai/chat', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Customer chat error');
+  var output = data.output || [];
+  for (var i = 0; i < output.length; i++) {
+    if (output[i].role === 'assistant') return output[i].content;
+  }
+  return '';
+}
+
+async function vapiChat(messages) {
+  var cfg = buildAssistantConfig();
+  var systemMsg = '';
+  if (cfg.model && cfg.model.messages && cfg.model.messages.length > 0) {
+    systemMsg = cfg.model.messages[0].content;
+  }
+  systemMsg += '\n\n[SIMULATION MODE — internal test. Behave exactly as in a real sales call. Be concise — 1-3 sentences per reply.]';
+
+  var payload = {
+    assistant: {
+      model: {
+        provider: cfg.model ? cfg.model.provider : 'openai',
+        model: cfg.model ? cfg.model.model : 'gpt-4o-mini',
+        messages: [{ role: 'system', content: systemMsg }]
+      }
+    },
+    input: messages
+  };
+
+  var res = await fetch('https://api.vapi.ai/chat', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'VAPI chat error');
+  var output = data.output || [];
+  var assistantMsg = '';
+  for (var i = 0; i < output.length; i++) {
+    if (output[i].role === 'assistant') { assistantMsg = output[i].content; break; }
+  }
+  return assistantMsg;
+}
+
+function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+async function startSimCall() {
+  // Unlock AudioContext on user gesture
+  getSimAudioCtx();
+
+  var scenario = SIM_SCENARIOS[activeScenarioIdx];
+  var btn = document.getElementById('sim-start-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Running simulation...';
+
+  var tx = document.getElementById('sim-transcript');
+  tx.innerHTML = '';
+  tx.classList.add('visible');
+  simTranscriptLines = [];
+  simChatHistory = [];
+  simRunning = true;
+
+  document.getElementById('sim-stop-btn').style.display = 'flex';
+  appendSimLine(null, '— Simulation started: ' + scenario.name + ' —', true);
+  addLog('Auto-simulation started (' + scenario.name + ')', '#7c3aed');
+
+  // customerHistory tracks conversation from customer's POV (roles flipped)
+  var customerHistory = [];
+  var NUM_TURNS = 7;
+
+  try {
+    for (var t = 0; t < NUM_TURNS; t++) {
+      if (!simRunning) break;
+
+      // Generate or use opening line
+      var customerLine;
+      if (t === 0) {
+        customerLine = scenario.openingLine;
+      } else {
+        showTypingIndicator('User');
+        customerLine = await customerChat(scenario.persona, customerHistory.slice());
+        removeTypingIndicator();
+        if (!customerLine) customerLine = 'I see.';
+      }
+
+      // Show + speak customer
+      await sleep(300);
+      appendSimLine('User', customerLine);
+      await speakSimLine(customerLine, 'User');
+
+      // Agent chat history: customer = user, agent = assistant
+      simChatHistory.push({ role: 'user', content: customerLine });
+      // Customer chat history (roles flipped): customer = assistant, agent = user
+      customerHistory.push({ role: 'assistant', content: customerLine });
+
+      // Get agent response
+      await sleep(300);
+      showTypingIndicator('AI');
+      var agentReply = await vapiChat(simChatHistory.slice());
+      removeTypingIndicator();
+
+      if (!agentReply) agentReply = '[No response]';
+      appendSimLine('AI', agentReply);
+      simChatHistory.push({ role: 'assistant', content: agentReply });
+      // From customer POV, agent reply is the "user" (the other person speaking)
+      customerHistory.push({ role: 'user', content: agentReply });
+      await speakSimLine(agentReply, 'AI');
+
+      await sleep(400);
+    }
+
+    if (simRunning) {
+      appendSimLine(null, '— Simulation complete —', true);
+      btn.textContent = '✅ Done';
+      document.getElementById('sim-stop-btn').style.display = 'none';
+      addLog('Auto-simulation complete', '#888');
+      await sleep(400);
+      showSimScore();
+    }
+
+  } catch(e) {
+    removeTypingIndicator();
+    appendSimLine(null, '— Error: ' + (e.message || 'Unknown error') + ' —', true);
+    showToast('Simulation error: ' + (e.message || 'check console'), 'error');
+    btn.disabled = false;
+    btn.textContent = '▶ Run Auto-Simulation';
+    document.getElementById('sim-stop-btn').style.display = 'none';
+    simRunning = false;
+  }
+}
+
+function scoreSimulation(lines) {
+  var aiLines = lines.filter(function(l) { return l.role === 'AI'; });
+  var fullText = lines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
+  var aiText = aiLines.map(function(l) { return l.text.toLowerCase(); }).join(' ');
+  return [
+    {
+      label: 'Introduced itself by name',
+      pass: /sofia|maria|elena|γεια|hello|speaking|this is|i am|i\'m/.test(aiText)
+    },
+    {
+      label: 'Mentioned ΜΙΑ Collection brand',
+      pass: /μια|mia|collection/.test(aiText)
+    },
+    {
+      label: 'Explained what the brand offers',
+      pass: /fashion|ρούχα|clothes|γυναικεία|european|brands|style|στυλ|collection|wear/.test(aiText)
+    },
+    {
+      label: 'Gave substantive replies (not one-liners)',
+      pass: aiLines.filter(function(l) { return l.text.split(' ').length > 10; }).length >= 3
+    },
+    {
+      label: 'Guided towards a next step',
+      pass: /interested|appointment|ραντεβού|schedule|book|send|website|follow|πότε|when|learn more/.test(aiText)
+    },
+    {
+      label: 'Handled pushback professionally',
+      pass: !/sorry|apologize/.test(aiText) || aiLines.length >= 4
+    }
+  ];
+}
+
+function showSimScore() {
+  var checks = scoreSimulation(simTranscriptLines);
+  var passed = checks.filter(function(c) { return c.pass; }).length;
+  var pct = Math.round((passed / checks.length) * 100);
+  var grade = pct >= 90 ? '🏆 Excellent' : pct >= 70 ? '✅ Good' : pct >= 50 ? '⚠️ Needs Work' : '❌ Poor';
+  var color = pct >= 90 ? '#22c55e' : pct >= 70 ? '#7c3aed' : pct >= 50 ? '#f59e0b' : '#ef4444';
+
+  document.getElementById('sim-score-rows').innerHTML = checks.map(function(c) {
+    return '<div class="sim-score-row"><span class="si">' + (c.pass ? '✅' : '❌') + '</span><span>' + c.label + '</span></div>';
+  }).join('');
+
+  document.getElementById('sim-score-grade').textContent = grade;
+  document.getElementById('sim-score-pct').textContent = pct + '%';
+  var fill = document.getElementById('sim-score-fill');
+  fill.style.width = '0%';
+  fill.style.background = color;
+  setTimeout(function() { fill.style.width = pct + '%'; }, 50);
+  document.getElementById('sim-score-card').classList.add('visible');
+
+  // Auto-save to Supabase
+  if (simTranscriptLines.length > 0) {
+    var scoreData = { pct: pct, checks: checks };
+    saveSimulation(scoreData);
+    autoImproveAgent(scoreData); // silently improve if score < 80%
+  }
+}
+
+// ── SIM TABS ──────────────────────────────────────
+function switchSimTab(tab) {
+  document.getElementById('sim-tab-run-body').style.display = tab === 'run' ? '' : 'none';
+  document.getElementById('sim-tab-history-body').style.display = tab === 'history' ? '' : 'none';
+  document.getElementById('sim-tab-run').classList.toggle('active', tab === 'run');
+  document.getElementById('sim-tab-history').classList.toggle('active', tab === 'history');
+  if (tab === 'history') loadSimHistory();
+}
+
+// ── SAVE SIMULATION ────────────────────────────────
+async function saveSimulation(scoreData) {
+  try {
+    var agent = AGENTS[activeAgent] || { label: activeAgent };
+    var scenario = SIM_SCENARIOS[activeScenarioIdx];
+    await sbInsert('dialer_simulations', {
+      agent: activeAgent,
+      agent_label: agent.label || activeAgent,
+      scenario: scenario.name,
+      lang: activeLang,
+      transcript: simTranscriptLines,
+      score_pct: scoreData.pct,
+      score_details: scoreData.checks
+    });
+  } catch(e) {
+    console.warn('Failed to save simulation:', e);
+  }
+}
+
+// ── LOAD HISTORY ───────────────────────────────────
+async function loadSimHistory() {
+  var list = document.getElementById('sim-history-list');
+  list.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">Loading...</div>';
+  try {
+    var rows = await sbGet('dialer_simulations', { order: 'created_at.desc', limit: 50 });
+    if (!rows || !rows.length) {
+      list.innerHTML = '<div style="color:#555;font-size:12px;text-align:center;padding:24px 0;">No simulations saved yet.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(function(r) {
+      var pct = r.score_pct || 0;
+      var color = pct >= 90 ? '#22c55e' : pct >= 70 ? '#7c3aed' : pct >= 50 ? '#f59e0b' : '#ef4444';
+      var grade = pct >= 90 ? '🏆' : pct >= 70 ? '✅' : pct >= 50 ? '⚠️' : '❌';
+      var date = new Date(r.created_at).toLocaleDateString('el-GR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      var txLines = (r.transcript || []).map(function(l) {
+        var cls = l.role === 'AI' ? 'ai' : (l.role === 'User' ? 'user' : 'sys');
+        var label = l.role === 'AI' ? (r.agent_label || 'Agent') : (l.role === 'User' ? 'Customer' : '');
+        return '<div class="sim-hi-tx-line ' + cls + '">' + (label ? '<strong>' + label + '</strong> ' : '') + escHtml(l.text) + '</div>';
+      }).join('');
+      var checks = (r.score_details || []).map(function(c) {
+        return (c.pass ? '✅' : '❌') + ' ' + c.label;
+      }).join('\n');
+      return '<div class="sim-history-item" id="shi-' + r.id + '">' +
+        '<div class="sim-hi-header">' +
+          '<div class="sim-hi-title">' + escHtml(r.agent_label) + ' &mdash; ' + escHtml(r.scenario) + ' (' + r.lang.toUpperCase() + ')</div>' +
+          '<div class="sim-hi-score" style="color:' + color + '">' + grade + ' ' + pct + '%</div>' +
+        '</div>' +
+        '<div class="sim-hi-meta">' + date + '</div>' +
+        '<div class="sim-hi-transcript" id="shi-tx-' + r.id + '">' + txLines + '</div>' +
+        '<div class="sim-hi-actions">' +
+          '<button class="sim-hi-btn" onclick="toggleSimTx(\'' + r.id + '\')">📄 Transcript</button>' +
+          '<button class="sim-hi-btn" onclick="improveFromSim(\'' + r.id + '\')" title="' + escHtml(checks) + '">🤖 Improve Agent</button>' +
+          '<button class="sim-hi-btn danger" onclick="deleteSimulation(\'' + r.id + '\')">🗑</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="color:#ef4444;font-size:12px;text-align:center;padding:24px 0;">Error: ' + e.message + '</div>';
+  }
+}
+
+function toggleSimTx(id) {
+  var el = document.getElementById('shi-tx-' + id);
+  if (el) el.classList.toggle('open');
+}
+
+async function deleteSimulation(id) {
+  await sbDelete('dialer_simulations', id);
+  loadSimHistory();
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── EXPORT CSV ─────────────────────────────────────
+async function exportSimCSV() {
+  try {
+    var rows = await sbGet('dialer_simulations', { order: 'created_at.desc', limit: 200 });
+    if (!rows || !rows.length) { showToast('No simulations to export', 'error'); return; }
+    var lines = ['Date,Agent,Scenario,Language,Score %,Checks,Transcript'];
+    rows.forEach(function(r) {
+      var tx = (r.transcript || []).map(function(l) { return (l.role + ': ' + l.text); }).join(' | ');
+      var checks = (r.score_details || []).map(function(c) { return (c.pass ? 'PASS' : 'FAIL') + ':' + c.label; }).join('; ');
+      var date = new Date(r.created_at).toISOString().slice(0,16).replace('T',' ');
+      lines.push([date, r.agent_label, r.scenario, r.lang, r.score_pct, checks, tx].map(function(v) {
+        return '"' + String(v||'').replace(/"/g,'""') + '"';
+      }).join(','));
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'simulations_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) { showToast('Export error: ' + e.message, 'error'); }
+}
+
+// ── IMPROVE AGENT FROM SIM ─────────────────────────
+async function improveFromSim(id) {
+  showToast('Analyzing simulation...', 'info');
+  try {
+    var rows = await sbGet('dialer_simulations', { id: 'eq.' + id });
+    if (!rows || !rows.length) return;
+    var sim = rows[0];
+    var tx = (sim.transcript || []).map(function(l) { return l.role + ': ' + l.text; }).join('\n');
+    var failedChecks = (sim.score_details || []).filter(function(c) { return !c.pass; }).map(function(c) { return c.label; });
+
+    var prompt = 'You are improving a voice sales agent system prompt based on a simulation test.\n\nFailed checks:\n' +
+      (failedChecks.length ? failedChecks.map(function(c) { return '- ' + c; }).join('\n') : '(none)') +
+      '\n\nSimulation transcript:\n' + tx +
+      '\n\nCurrent system prompt:\n' + (document.getElementById('custom-system') ? document.getElementById('custom-system').value : '') +
+      '\n\nWrite 3 specific, actionable improvements to the system prompt to fix the failed checks. Be concise. Format: numbered list.';
+
+    var res = await fetch('https://api.vapi.ai/chat', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assistant: { model: { provider: 'openai', model: 'gpt-4o', messages: [{ role: 'system', content: 'You are an expert voice AI coach.' }] } },
+        input: [{ role: 'user', content: prompt }]
+      })
+    });
+    var data = await res.json();
+    var suggestion = '';
+    (data.output || []).forEach(function(o) { if (o.role === 'assistant') suggestion = o.content; });
+
+    if (suggestion) {
+      var modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;';
+      modal.innerHTML = '<div style="background:#1a1a2e;border:1px solid #2a1a5a;border-radius:14px;padding:24px;width:min(520px,92vw);max-height:80vh;overflow-y:auto;">' +
+        '<div style="font-size:14px;font-weight:700;color:#e2e0ff;margin-bottom:12px;">🤖 Suggested Improvements</div>' +
+        '<div style="font-size:12px;color:#ccc;line-height:1.7;white-space:pre-wrap;">' + escHtml(suggestion) + '</div>' +
+        '<div style="display:flex;gap:8px;margin-top:16px;">' +
+          '<button onclick="this.closest(\'div[style*=fixed]\').remove()" style="flex:1;padding:10px;background:transparent;border:1px solid #3a2a6a;color:#c4b5fd;border-radius:8px;cursor:pointer;">Close</button>' +
+        '</div>' +
+      '</div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+    }
+  } catch(e) { showToast('Analysis error: ' + e.message, 'error'); }
+}
+
+// ════ AUTONOMOUS PROMPT IMPROVEMENT SYSTEM ════════════════════════
+
+// Load saved prompts from Supabase and apply to active agent
+async function loadPromptsFromSupabase() {
+  try {
+    var rows = await sbGet('dialer_agent_prompts', '');
+    if (!Array.isArray(rows) || !rows.length) return;
+    rows.forEach(function(r) {
+      if (!r.agent || !r.lang || !r.system_prompt) return; // skip bad rows
+      if (!AGENT_DEFAULTS[r.agent]) return; // only known agents
+      // Patch only system/opener — never overwrite transcriber or other keys
+      if (!AGENT_DEFAULTS[r.agent][r.lang]) {
+        AGENT_DEFAULTS[r.agent][r.lang] = {
+          transcriber: r.lang === 'el'
+            ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
+            : { provider: 'deepgram', model: 'nova-3', language: 'en' }
+        };
+      }
+      AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;
+      if (r.opener) AGENT_DEFAULTS[r.agent][r.lang].opener = r.opener;
+    });
+    // Re-apply to current textarea only if active agent has an improved prompt
+    var d = AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang];
+    if (d && d.system) {
+      currentSystem = d.system;
+      if (d.opener) currentOpener = d.opener;
+      var sysEl = document.getElementById('custom-system');
+      var opEl = document.getElementById('custom-opener');
+      if (sysEl) sysEl.value = currentSystem;
+      if (opEl && d.opener) opEl.value = currentOpener;
+    }
+  } catch(e) {
+    console.warn('Could not load prompts from Supabase:', e);
+  }
+}
+
+// Save improved prompt back to Supabase
+async function savePromptToSupabase(agent, lang, systemPrompt, opener, scoreAvg) {
+  try {
+    // Try update first, then insert
+    var existing = await sbGet('dialer_agent_prompts', 'agent=eq.' + agent + '&lang=eq.' + lang);
+    var row = {
+      agent: agent,
+      lang: lang,
+      system_prompt: systemPrompt,
+      opener: opener || null,
+      improved_by: 'auto',
+      sim_score_avg: scoreAvg || null,
+      updated_at: new Date().toISOString()
+    };
+    if (existing && existing.length) {
+      await sbUpdate('dialer_agent_prompts', existing[0].id, row);
+    } else {
+      await sbInsert('dialer_agent_prompts', row);
+    }
+  } catch(e) {
+    console.warn('Failed to save prompt:', e);
+  }
+}
+
+// Auto-improve agent after a simulation — called silently if score < 80
+async function autoImproveAgent(scoreData) {
+  if (!scoreData || scoreData.pct >= 80) return; // Only improve when needed
+  try {
+    var checks = scoreData.checks || [];
+    var failedChecks = checks.filter(function(c) { return !c.pass; }).map(function(c) { return c.label; });
+    if (!failedChecks.length) return;
+
+    var currentSys = (AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].system) || currentSystem;
+    var currentOp  = (AGENT_DEFAULTS[activeAgent] && AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].opener) || currentOpener;
+    var tx = simTranscriptLines.map(function(l) { return l.role + ': ' + l.text; }).join('\n');
+
+    var prompt = 'You are improving a voice sales agent system prompt based on a failed simulation test.\n' +
+      'Agent: ' + (AGENTS[activeAgent] || {label: activeAgent}).label + ' (' + activeLang.toUpperCase() + ')\n' +
+      'Simulation score: ' + scoreData.pct + '%\n\n' +
+      'Failed checks:\n' + failedChecks.map(function(c) { return '- ' + c; }).join('\n') + '\n\n' +
+      'Simulation transcript:\n' + tx + '\n\n' +
+      'Current system prompt:\n' + currentSys + '\n\n' +
+      'Return ONLY the improved system prompt — no explanation, no preamble, no markdown fences. ' +
+      'Keep all existing rules and brand identity intact. Only fix what failed. Keep same language and tone.';
+
+    var res = await fetch('https://api.vapi.ai/chat', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + PRIVATE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assistant: { model: { provider: 'openai', model: 'gpt-4o', messages: [{ role: 'system', content: 'You are an expert voice AI prompt engineer. Return only the improved prompt, nothing else.' }] } },
+        input: [{ role: 'user', content: prompt }]
+      })
+    });
+    var data = await res.json();
+    var newPrompt = '';
+    (data.output || []).forEach(function(o) { if (o.role === 'assistant') newPrompt = o.content.trim(); });
+
+    if (!newPrompt || newPrompt.length < 100) return;
+
+    // Apply immediately in memory
+    if (!AGENT_DEFAULTS[activeAgent]) AGENT_DEFAULTS[activeAgent] = {};
+    if (!AGENT_DEFAULTS[activeAgent][activeLang]) AGENT_DEFAULTS[activeAgent][activeLang] = {};
+    AGENT_DEFAULTS[activeAgent][activeLang].system = newPrompt;
+    currentSystem = newPrompt;
+    var sysEl = document.getElementById('custom-system');
+    if (sysEl && activeAgent === activeAgent) sysEl.value = newPrompt;
+
+    // Persist to Supabase
+    await savePromptToSupabase(activeAgent, activeLang, newPrompt, currentOp, scoreData.pct);
+
+    addLog('🤖 Agent auto-improved (score was ' + scoreData.pct + '%)', '#22c55e');
+    showToast('Agent prompt auto-improved based on simulation results', 'success');
+
+  } catch(e) {
+    console.warn('Auto-improve failed:', e);
+  }
+}
+
+window.openSimModal    = openSimModal;
+window.closeSimModal   = closeSimModal;
+window.selectScenario  = selectScenario;
+window.startSimCall    = startSimCall;
+window.stopSim         = stopSim;
+window.resetSim        = resetSim;
+window.switchSimTab    = switchSimTab;
+window.loadSimHistory  = loadSimHistory;
+window.toggleSimTx     = toggleSimTx;
+window.deleteSimulation = deleteSimulation;
+window.exportSimCSV    = exportSimCSV;
+window.improveFromSim  = improveFromSim;
+window.savePrompt       = savePrompt;
+window.resetDefaults    = resetDefaults;
+
+
+// ════ KNOWLEDGE FILES HELPERS ════
+function getSystemWithKnowledge() {
+  const files = loadKF();
+  if (!files.length) return currentSystem;
+  return currentSystem + '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+}
+function getSystemWithKF() { return getSystemWithKnowledge(); }
+
+// ════ RECENT CALLS ════
+async function loadRecentCalls() {
+  const el = document.getElementById('calls-list');
+  const btn = document.getElementById('calls-refresh-btn');
+  el.innerHTML = '<div class="log-empty">Loading...</div>';
+  const labelEl = document.getElementById('calls-agent-label');
+  if (labelEl) labelEl.textContent = (AGENTS[activeAgent] || {}).label || activeAgent;
+  btn.textContent = '⏳';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://api.vapi.ai/call?limit=20', {
+      headers: { Authorization: 'Bearer ' + PRIVATE_KEY }
+    });
+    const raw = await res.text();
+    console.log('VAPI calls raw:', raw.substring(0, 300));
+    let data;
+    try { data = JSON.parse(raw); } catch(pe) { el.innerHTML = '<div class="log-empty" style="color:var(--red)">Parse error: ' + pe.message + '<br>' + raw.substring(0,100) + '</div>'; return; }
+    console.log('VAPI calls type:', typeof data, Array.isArray(data), data && data.length);
+    let calls = Array.isArray(data) ? data : (data.results || data.calls || []);
+    if (!calls.length) { el.innerHTML = '<div class="log-empty">No calls found — check console for raw response</div>'; return; }
+
+    // Filter by active agent using transcript keywords
+    const agentKeywords = {
+      sofia:  ['Maria', 'Growth-onomics', 'Growthonomics', 'growtho'],
+      sofia2: ['Elena', 'AI Marketing', 'AI marketing'],
+      sofia3: ['MIA Collection', 'ΜΙΑ Collection', 'Mia Collection', 'Miya'],
+    };
+    // Phone calls only
+    calls = calls.filter(c => c.type === 'outboundPhoneCall' || c.type === 'inboundPhoneCall');
+    if (!calls.length) { el.innerHTML = '<div class="log-empty">No phone calls found</div>'; return; }
+
+    const keywords = agentKeywords[activeAgent];
+    if (keywords) {
+      const filtered = calls.filter(c => {
+        const text = (c.transcript || '') + (c.summary || '');
+        return keywords.some(k => text.toLowerCase().includes(k.toLowerCase()));
+      });
+      calls = filtered.length ? filtered : calls;
+      if (!filtered.length) el.innerHTML = '<div class="log-empty" style="color:var(--yellow)">No phone calls found for this agent — showing all</div>';
+    }
+    el.innerHTML = calls.map((c, i) => {
+      const status = c.status || 'unknown';
+      const statusClass = status === 'ended' ? 'ended' : status.includes('fail') || status.includes('error') ? 'failed' : 'other';
+      const number = (c.customer && c.customer.number) || (c.type === 'webCall' ? 'Browser call' : 'Unknown');
+      const started = c.startedAt ? new Date(c.startedAt).toLocaleString() : (c.createdAt ? new Date(c.createdAt).toLocaleString() : '—');
+      const secs = (c.startedAt && c.endedAt) ? Math.round((new Date(c.endedAt) - new Date(c.startedAt)) / 1000) : null;
+      const dur = secs != null ? (secs >= 60 ? Math.floor(secs/60) + 'm ' + (secs%60) + 's' : secs + 's') : '—';
+      const recording = c.recordingUrl || (c.artifact && c.artifact.recordingUrl) || (c.stereoRecordingUrl) || null;
+      const transcript = c.transcript || (c.artifact && c.artifact.transcript) || null;
+      const summary = c.summary || (c.artifact && c.artifact.summary) || null;
+      const score = scoreCall(transcript, summary);
+      const crmLead = { callId: c.id, name: number, number: number, agent: (AGENTS[activeAgent]||{}).label||activeAgent, date: started, summary, recording, scoreLabel: score.label, scoreCls: score.cls, notes: '' };
+      // Auto-add Hot & Warm calls to CRM silently
+      if (score.rank >= 1) {
+        sbInsert('dialer_crm', {
+          call_id: crmLead.callId, name: crmLead.name, number: crmLead.number,
+          agent: crmLead.agent, score_label: crmLead.scoreLabel, score_cls: crmLead.scoreCls,
+          summary: crmLead.summary, recording_url: crmLead.recording,
+          notes: '', called_at: crmLead.date
+        }).then(() => renderCRM()).catch(()=>{});
+      }
+      return `<div class="call-item">
+        <div class="call-row">
+          <span class="call-status ${statusClass}">${status}</span>
+          <span class="call-number">${number}</span>
+          <span class="call-duration">${dur}</span>
+          <span class="score-badge score-${score.cls}">${score.label}</span>
+        </div>
+        <div class="call-time">${started}</div>
+        ${recording ? `<audio class="call-audio" controls src="${recording}"></audio>` : '<div style="font-size:11px;color:var(--gray)">No recording available</div>'}
+        ${(transcript || summary) ? `<button class="call-transcript-btn" onclick="toggleTranscript(${i})">💬 Show conversation</button><div class="call-transcript" id="transcript-${i}">${summary ? '<div class="ct-summary"><strong>📋 Summary</strong><p>' + summary + '</p></div>' : ''}${transcript ? '<div class="ct-convo">' + formatTranscript(transcript) + '</div>' : ''}</div>` : ''}
+        ${score.rank >= 1 ? `<div style="margin-top:6px;font-size:11px;color:#059669;font-weight:600">✅ Auto-added to CRM</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div class="log-empty" style="color:var(--red)">Error loading calls: ' + e.message + '</div>';
+  } finally {
+    btn.textContent = '↻ Refresh';
+    btn.disabled = false;
+  }
+}
+
+function formatTranscript(text) {
+  // Split on "AI:" or "User:" markers
+  const lines = text.split(/(?=\b(?:AI|User|Sofia|Assistant):\s)/i).filter(l => l.trim());
+  return lines.map(line => {
+    const isAI = /^(AI|Sofia|Assistant):/i.test(line.trim());
+    const speaker = isAI ? 'Sofia' : 'Customer';
+    const content = line.replace(/^(AI|User|Sofia|Assistant):\s*/i, '').trim();
+    if (!content) return '';
+    return `<div class="ct-line ${isAI ? 'ai' : 'user'}">
+      <div class="ct-speaker">${speaker}</div>
+      <div class="ct-bubble">${content}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTranscript(i) {
+  const el = document.getElementById('transcript-' + i);
+  if (!el) return;
+  const visible = el.style.display === 'block';
+  el.style.display = visible ? 'none' : 'block';
+  el.previousElementSibling.textContent = visible ? '📄 Show transcript' : '📄 Hide transcript';
+}
+
+// ════ CALL SCORING & CRM ════
+function scoreCall(transcript, summary) {
+  const text = ((transcript || '') + ' ' + (summary || '')).toLowerCase();
+  const hot  = ['demo', 'send email', 'send info', 'more information', 'schedule', 'video call', 'meeting', 'interested', 'yes', 'sounds good', 'tell me more', 'when can', 'how much', 'pricing', 'price', 'περισσότερες', 'ενδιαφέρομαι', 'στείλτε', 'demo', 'ναι'];
+  const cold = ['not interested', 'no thank', 'don\'t call', 'remove', 'busy', 'wrong number', 'δεν ενδιαφέρομαι', 'όχι ευχαριστώ'];
+  const hotScore  = hot.filter(k => text.includes(k)).length;
+  const coldScore = cold.filter(k => text.includes(k)).length;
+  if (coldScore > 0) return { label: '❌ Cold', cls: 'cold', rank: 0 };
+  if (hotScore >= 2) return { label: '🔥 Hot', cls: 'hot', rank: 2 };
+  if (hotScore >= 1) return { label: '⭐ Warm', cls: 'warm', rank: 1 };
+  return { label: '❄️ Cold', cls: 'cold', rank: 0 };
+}
+
+// ── CRM (Supabase) ──────────────────────────────────────────
+async function addToCRM(lead) {
+  try {
+    await sbInsert('dialer_crm', {
+      call_id: lead.callId, name: lead.name, number: lead.number,
+      agent: lead.agent, score_label: lead.scoreLabel, score_cls: lead.scoreCls,
+      summary: lead.summary, recording_url: lead.recording,
+      notes: '', called_at: lead.date
+    });
+    await renderCRM();
+  } catch(e) { console.error('CRM insert error', e); }
+}
+
+async function removeCRMLead(id) {
+  await sbDelete('dialer_crm', id);
+  renderCRM();
+}
+
+async function saveCRMNote(id, note) {
+  await sbUpdate('dialer_crm', id, { notes: note });
+}
+
+async function renderCRM() {
+  const list  = document.getElementById('crm-list');
+  const empty = document.getElementById('crm-empty');
+  if (!list) return;
+  const leads = await sbGet('dialer_crm');
+  if (!leads.length) { empty.style.display = ''; list.innerHTML = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = leads.map(l => `
+    <div class="crm-item">
+      <div class="crm-header">
+        <div class="crm-avatar">${(l.name||'?').charAt(0).toUpperCase()}</div>
+        <div class="crm-info">
+          <div class="crm-name">${l.name || l.number || 'Unknown'}</div>
+          <div class="crm-meta">${l.number || ''} · ${l.agent || ''} · ${l.called_at || ''} · <span class="score-badge score-${l.score_cls}">${l.score_label}</span></div>
+        </div>
+      </div>
+      ${l.summary ? `<div class="crm-summary">📋 ${l.summary}</div>` : ''}
+      ${l.recording_url ? `<audio class="crm-audio" controls src="${l.recording_url}"></audio>` : ''}
+      <textarea class="crm-notes" rows="2" placeholder="Add follow-up notes..." onchange="saveCRMNote('${l.id}',this.value)">${l.notes || ''}</textarea>
+      <div class="crm-actions">
+        <button class="crm-btn" onclick="removeCRMLead('${l.id}')">✕ Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+async function exportCRM() {
+  const leads = await sbGet('dialer_crm');
+  if (!leads.length) { showToast('No leads to export', 'error'); return; }
+  const rows = [['Name','Number','Agent','Score','Date','Summary','Notes','Recording']];
+  leads.forEach(l => rows.push([l.name||'', l.number||'', l.agent||'', l.score_label||'', l.called_at||'', (l.summary||'').replace(/,/g,' '), (l.notes||'').replace(/,/g,' '), l.recording_url||'']));
+  const csv = rows.map(r => r.map(v => '"'+v+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'mia-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('Exported ✓', 'success');
+}
+
+// ════ CONTACT BOOK (Supabase) ════
+async function renderContacts() {
+  const contacts = await sbGet('dialer_contacts');
+  const list  = document.getElementById('contact-book-list');
+  const empty = document.getElementById('contact-book-empty');
+  if (!list) return;
+
+  // Update campaign filter dropdown
+  const filterEl = document.getElementById('cb-campaign-filter');
+  if (filterEl) {
+    const currentFilter = filterEl.value;
+    const campaigns = [...new Set(contacts.map(c => c.campaign).filter(Boolean))];
+    filterEl.innerHTML = '<option value="">All campaigns</option>' +
+      campaigns.map(c => '<option value="' + c + '"' + (c === currentFilter ? ' selected' : '') + '>' + c + '</option>').join('');
+    filterEl.value = currentFilter;
+  }
+
+  const filterVal = filterEl ? filterEl.value : '';
+  const filtered = filterVal ? contacts.filter(c => c.campaign === filterVal) : contacts;
+
+  if (!filtered.length) { empty.style.display = ''; list.innerHTML = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = filtered.map(c => {
+    const safeName = (c.name || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+    const safeNum  = (c.number || '').replace(/'/g, "&#39;");
+    return '<div class="contact-item">' +
+      '<div class="contact-avatar">' + (c.name || '?').charAt(0).toUpperCase() + '</div>' +
+      '<div class="contact-info">' +
+        '<div class="contact-name">' + safeName + (c.campaign ? '<span class="campaign-badge">' + c.campaign + '</span>' : '') + '</div>' +
+        '<div class="contact-number">' + (c.number || '') + '</div>' +
+      '</div>' +
+      '<div class="contact-actions">' +
+        '<button class="contact-btn call" onclick="callContact(\'' + safeNum + '\',\'' + safeName + '\')">📞 Call</button>' +
+        '<button class="contact-btn queue" onclick="queueContact(\'' + safeNum + '\',\'' + safeName + '\')">+ Queue</button>' +
+        '<button class="contact-btn del" onclick="deleteContact(\'' + c.id + '\')">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function addContact() {
+  const name     = document.getElementById('cb-name').value.trim();
+  const number   = document.getElementById('cb-number').value.trim().replace(/\s+/g,'');
+  const campaign = document.getElementById('cb-campaign') ? document.getElementById('cb-campaign').value.trim() : '';
+  if (!number) { showToast('Enter a phone number', 'error'); return; }
+  const payload = { name: name || number, number };
+  if (campaign) payload.campaign = campaign;
+  await sbInsert('dialer_contacts', payload);
+  renderContacts();
+  document.getElementById('cb-name').value = '';
+  document.getElementById('cb-number').value = '';
+  if (document.getElementById('cb-campaign')) document.getElementById('cb-campaign').value = '';
+  document.getElementById('cb-name').focus();
+  showToast('Contact saved ✓', 'success');
+}
+
+async function deleteContact(id) {
+  await sbDelete('dialer_contacts', id);
+  renderContacts();
+  showToast('Contact removed', 'info');
+}
+function callContact(number, name) {
+  document.getElementById('phone-number').value = number;
+  document.getElementById('contact-name').value = name;
+  setMode('phone');
+  callNow();
+}
+
+function queueContact(number, name) {
+  queue.push({ id: Date.now().toString(), number, name: name || number, status: 'pending' });
+  renderQueue();
+  showToast(name + ' added to queue', 'success');
+}
+
+async function queueAllContacts() {
+  const contacts = await sbGet('dialer_contacts');
+  if (!contacts.length) { showToast('No contacts to queue', 'error'); return; }
+  contacts.forEach(c => queue.push({ id: Date.now().toString(), number: c.number, name: c.name, status: 'pending' }));
+  renderQueue();
+  setMode('phone');
+  showToast(contacts.length + ' contacts queued ✓', 'success');
+}
+
+function importCSV(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    const lines = ev.target.result.split('\n').filter(l => l.trim());
+    let added = 0;
+    for (const line of lines) {
+      const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g,''));
+      const number = parts.find(p => /^\+?\d{7,}$/.test(p.replace(/\s/g,'')));
+      if (!number) continue;
+      const name = parts.find(p => p && !/^\+?\d/.test(p)) || number;
+      await sbInsert('dialer_contacts', { name, number });
+      added++;
+    }
+    renderContacts();
+    showToast(added + ' contacts imported ✓', 'success');
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ════ CUSTOM AGENTS ════
+function loadCustomAgents() {
+  return JSON.parse(localStorage.getItem('sofiaCustomAgents') || '{}');
+}
+function saveCustomAgents(agents) {
+  localStorage.setItem('sofiaCustomAgents', JSON.stringify(agents));
+}
+
+function initCustomAgents() {
+  const custom = loadCustomAgents();
+  Object.entries(custom).forEach(([key, agent]) => {
+    AGENTS[key] = { label: agent.name, emoji: agent.emoji };
+    AGENT_DEFAULTS[key] = {
+      en: { opener: agent.opener_en || '', system: agent.system_en || '', transcriber: { provider:'deepgram', model:'nova-2-general', language:'en' } },
+      el: { opener: agent.opener_el || '', system: agent.system_el || '', transcriber: { provider:'deepgram', model:'nova-2-general', language:'el' } }
+    };
+    addAgentToSidebar(key, agent);
+    addAgentToCards(key, agent);
+  });
+}
+
+function addAgentToSidebar(key, agent) {
+  const wrap = document.getElementById('sb-agents-wrap');
+  const newBtn = wrap.querySelector('.sb-new');
+  const div = document.createElement('div');
+  div.className = 'sb-agent';
+  div.id = 'sb-' + key;
+  div.onclick = () => setAgent(key);
+  div.innerHTML = `<span class="sa-emoji">${agent.emoji}</span><div><div class="sa-name">${agent.name}</div><div class="sa-sub">${agent.desc || 'Custom agent'}</div></div><span class="sb-agent-del" onclick="deleteCustomAgent(event,'${key}')">✕</span>`;
+  wrap.insertBefore(div, newBtn);
+}
+
+function addAgentToCards(key, agent) {
+  const selector = document.querySelector('.agent-selector');
+  if (!selector) return;
+  const div = document.createElement('div');
+  div.className = 'agent-card';
+  div.id = 'agent-card-' + key;
+  div.onclick = () => setAgent(key);
+  div.innerHTML = `<div class="agent-card-header"><span class="agent-emoji">${agent.emoji}</span><span class="agent-card-name">${agent.name}</span><div class="agent-active-dot"></div></div><div class="agent-card-desc">${agent.desc || 'Custom agent'}</div>`;
+  selector.appendChild(div);
+}
+
+function deleteCustomAgent(e, key) {
+  e.stopPropagation();
+  const custom = loadCustomAgents();
+  delete custom[key];
+  saveCustomAgents(custom);
+  delete AGENTS[key];
+  delete AGENT_DEFAULTS[key];
+  document.getElementById('sb-' + key)?.remove();
+  document.getElementById('agent-card-' + key)?.remove();
+  if (activeAgent === key) setAgent('sofia');
+  showToast('Agent deleted', 'info');
+}
+
+let modalEditKey = null;
+function openAgentModal(editKey) {
+  modalEditKey = editKey || null;
+  document.getElementById('modal-title').textContent = editKey ? '✏️ Edit Agent' : '✨ New Agent';
+  if (editKey) {
+    const c = loadCustomAgents()[editKey] || {};
+    document.getElementById('modal-emoji').value = c.emoji || '🤖';
+    document.getElementById('modal-name').value = c.name || '';
+    document.getElementById('modal-desc').value = c.desc || '';
+    document.getElementById('modal-opener-en').value = c.opener_en || '';
+    document.getElementById('modal-system-en').value = c.system_en || '';
+    document.getElementById('modal-opener-el').value = c.opener_el || '';
+    document.getElementById('modal-system-el').value = c.system_el || '';
+  } else {
+    ['modal-name','modal-desc','modal-opener-en','modal-system-en','modal-opener-el','modal-system-el'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('modal-emoji').value = '🤖';
+  }
+  switchModalLang('en', document.querySelector('.modal-tab'));
+  document.getElementById('agent-modal').classList.add('open');
+}
+
+function closeAgentModal(e) {
+  if (e && e.target !== document.getElementById('agent-modal')) return;
+  document.getElementById('agent-modal').classList.remove('open');
+}
+
+function switchModalLang(lang, btn) {
+  document.getElementById('modal-lang-en').style.display = lang === 'en' ? '' : 'none';
+  document.getElementById('modal-lang-el').style.display = lang === 'el' ? '' : 'none';
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function saveNewAgent() {
+  const name = document.getElementById('modal-name').value.trim();
+  if (!name) { showToast('Enter an agent name', 'error'); return; }
+  const key = modalEditKey || ('custom_' + Date.now());
+  const agent = {
+    name,
+    emoji: document.getElementById('modal-emoji').value.trim() || '🤖',
+    desc: document.getElementById('modal-desc').value.trim(),
+    opener_en: document.getElementById('modal-opener-en').value.trim(),
+    system_en: document.getElementById('modal-system-en').value.trim(),
+    opener_el: document.getElementById('modal-opener-el').value.trim(),
+    system_el: document.getElementById('modal-system-el').value.trim(),
+  };
+  const custom = loadCustomAgents();
+  custom[key] = agent;
+  saveCustomAgents(custom);
+  AGENTS[key] = { label: agent.name, emoji: agent.emoji };
+  AGENT_DEFAULTS[key] = {
+    en: { opener: agent.opener_en, system: agent.system_en, transcriber: { provider:'deepgram', model:'nova-2-general', language:'en' } },
+    el: { opener: agent.opener_el, system: agent.system_el, transcriber: { provider:'deepgram', model:'nova-2-general', language:'el' } }
+  };
+  if (modalEditKey) {
+    const sb = document.getElementById('sb-' + key);
+    if (sb) { sb.querySelector('.sa-name').textContent = agent.name; sb.querySelector('.sa-emoji').textContent = agent.emoji; sb.querySelector('.sa-sub').textContent = agent.desc || 'Custom agent'; }
+    const card = document.getElementById('agent-card-' + key);
+    if (card) { card.querySelector('.agent-emoji').textContent = agent.emoji; card.querySelector('.agent-card-name').textContent = agent.name; }
+  } else {
+    addAgentToSidebar(key, agent);
+    addAgentToCards(key, agent);
+  }
+  document.getElementById('agent-modal').classList.remove('open');
+  setAgent(key);
+  showToast(agent.emoji + ' ' + agent.name + ' created!', 'success');
+}
+
+// ════ BEHAVIOUR TOGGLES ════
+const B_DEFAULTS = { backchannel:true, delay:true, noai:true, autobook:false };
+function loadB() { return Object.assign({}, B_DEFAULTS, JSON.parse(localStorage.getItem('sofiaBehaviour')||'{}')); }
+function saveB(b) { localStorage.setItem('sofiaBehaviour', JSON.stringify(b)); }
+function toggleB(key, el) {
+  const b = loadB(); b[key] = !b[key]; saveB(b);
+  el.className = 'tog' + (b[key] ? ' on' : '');
+}
+function initToggles() {
+  const b = loadB();
+  Object.keys(b).forEach(k => {
+    const el = document.getElementById('tog-'+k);
+    if (el) el.className = 'tog' + (b[k] ? ' on' : '');
+  });
+}
+
+// ════ KNOWLEDGE FILES ════
+function loadKF() { return JSON.parse(localStorage.getItem('sofiaKnowledge') || '[]'); }
+function saveKF(f) { localStorage.setItem('sofiaKnowledge', JSON.stringify(f)); }
+function renderKF() {
+  const files = loadKF();
+  const list = document.getElementById('kf-list');
+  if (!list) return;
+  if (!files.length) { list.innerHTML = '<div class="kf-empty">No files yet</div>'; return; }
+  list.innerHTML = files.map((f,i) => `
+    <div class="kf-item">
+      <span class="kf-icon">📄</span>
+      <div><div class="kf-name" title="${f.name}">${f.name}</div><div class="kf-size">${(f.size/1024).toFixed(1)} KB</div></div>
+      <span class="kf-del" onclick="deleteKF(${i})">✕</span>
+    </div>`).join('');
+}
+function deleteKF(i) {
+  const f = loadKF(); f.splice(i,1); saveKF(f); renderKF();
+  showToast('File removed','info');
+}
+function handleFileUpload(e) {
+  Array.from(e.target.files).forEach(file => {
+    const r = new FileReader();
+    r.onload = ev => {
+      const f = loadKF();
+      f.push({ name: file.name, size: file.size, content: ev.target.result });
+      saveKF(f); renderKF();
+      showToast(file.name + ' added ✓','success');
+    };
+    r.readAsText(file);
+  });
+  e.target.value = '';
+}
+
+// ════ PRESETS ════
+const PRESETS = {
+  sofia:  { en:[{name:'Default',prev:'Growth-onomics fintech pitch',opener:null,system:null}], el:[{name:'Default',prev:'Pitch στα ελληνικά',opener:null,system:null}] },
+  sofia2: { en:[{name:'Default',prev:'AI marketing pitch',opener:null,system:null}], el:[{name:'Default',prev:'AI marketing EL',opener:null,system:null}] },
+  sofia3: {
+    en:[
+      { name:'Gentle', prev:'Hello... I\'m Sofia. How are you?', opener:null, system:null },
+      { name:'Confident', prev:'Hi — do you carry European womenswear?',
+        opener:'Hi, Sofia from ΜΙΑ Collection — do you carry European evening or resort wear?',
+        system:'You are Sofia from ΜΙΑ Collection, a Greek premium evening and resort wear brand made in Greece. Warm but direct. Ask if they carry premium evening or resort wear. If yes, pitch ΜΙΑ Collection briefly — made in Greece, limited production, Mediterranean elegance — and suggest a 20-min video call.' },
+      { name:'Custom', prev:'Your edited prompt', opener:null, system:null }
+    ],
+    el:[
+      { name:'Ήπια', prev:'Γεια, η Σοφία — πώς είστε;', opener:null, system:null },
+      { name:'Άμεση', prev:'Γεια — έχετε ευρωπαϊκές μάρκες;',
+        opener:'Γεια, η Σοφία από ΜΙΑ Collection — έχετε premium βραδινά ή resort ρούχα;',
+        system:'Είσαι η Σοφία από ΜΙΑ Collection, ελληνική premium μάρκα βραδινών και resort ρούχων. Ζεστή αλλά άμεση. Ρώτησε αν έχουν premium βραδινά ή resort wear. Αν ναι, pitch τη ΜΙΑ Collection — made in Greece, περιορισμένη παραγωγή, μεσογειακή κομψότητα — και πρότεινε 20λεπτο video call.' },
+      { name:'Custom', prev:'Το δικό σου prompt', opener:null, system:null }
+    ]
+  }
+};
+let activePreset = 0;
+
+function renderPresets() {
+  const el = document.getElementById('preset-grid');
+  if (!el) return;
+  const list = (PRESETS[activeAgent]||{})[activeLang] || (PRESETS[activeAgent]||{}).en || [];
+  if (list.length <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = list.map((p,i) => `
+    <div class="preset-card ${i===activePreset?'active':''}" onclick="selectPreset(${i})">
+      <div class="preset-dot"></div>
+      <div><div class="pc-name">${p.name}</div><div class="pc-prev">${p.prev}</div></div>
+    </div>`).join('');
+}
+function selectPreset(i) {
+  activePreset = i;
+  const p = ((PRESETS[activeAgent]||{})[activeLang] || [])[i];
+  if (!p) return;
+  const def = (AGENT_DEFAULTS[activeAgent]||{})[activeLang] || {};
+  currentOpener = p.opener !== null ? p.opener : (def.opener || currentOpener);
+  currentSystem = p.system !== null ? p.system : (def.system || currentSystem);
+  document.getElementById('custom-opener').value = currentOpener;
+  document.getElementById('custom-system').value = currentSystem;
+  updateOpenerPreview();
+  renderPresets();
+}
+
+// ════ SIDEBAR SYNC ════
+function syncSidebar() {
+  ['sofia','sofia2','sofia3'].forEach(k => {
+    const el = document.getElementById('sb-'+k);
+    if (el) el.className = 'sb-agent' + (k===activeAgent?' active':'');
+  });
+  const a = AGENTS[activeAgent] || {};
+  const subs = { sofia:'Growth-onomics', sofia2:'AI Marketing', sofia3:'ΜΙΑ Collection' };
+  const hdr = document.getElementById('mp-header');
+  if (hdr) hdr.innerHTML = `<span class="mp-emoji">${a.emoji||'👤'}</span><div><div class="mp-name">${a.label||activeAgent}</div><div class="mp-sub">${subs[activeAgent]||''}</div></div>`;
+  activePreset = 0;
+  renderPresets();
+}
+
+// ════ CALL OUTCOME MODAL ════
+var _outcomeCallId = null;
+var _outcomeContactName = '';
+
+function showOutcomeModal(contactName, callId) {
+  _outcomeContactName = contactName || 'Unknown';
+  _outcomeCallId = callId || null;
+  var el = document.getElementById('outcome-modal');
+  var lbl = document.getElementById('outcome-contact-label');
+  if (lbl) lbl.textContent = 'Contact: ' + _outcomeContactName;
+  if (el) { el.style.display = 'flex'; }
+}
+
+function closeOutcomeModal() {
+  var el = document.getElementById('outcome-modal');
+  if (el) el.style.display = 'none';
+}
+
+async function submitOutcome(outcome) {
+  var outcomeMap = { booked:'🗓️ Booked meeting', email:'📧 Requested email', followup:'❓ Needs follow-up', notinterested:'❌ Not interested' };
+  var scoreMap   = { booked: { label:'🔥 Hot', cls:'hot' }, email: { label:'🔥 Hot', cls:'hot' }, followup: { label:'⭐ Warm', cls:'warm' }, notinterested: { label:'❄️ Cold', cls:'cold' } };
+  var label = outcomeMap[outcome] || outcome;
+  var score = scoreMap[outcome] || { label:'⭐ Warm', cls:'warm' };
+  var now = new Date().toLocaleString();
+  try {
+    if (_outcomeCallId) {
+      await sbUpdate('dialer_crm', _outcomeCallId, { notes: label, score_label: score.label, score_cls: score.cls });
+    } else {
+      await sbInsert('dialer_crm', {
+        name: _outcomeContactName,
+        number: _outcomeContactName,
+        agent: (window.AGENTS && window.AGENTS[window.activeAgent] ? window.AGENTS[window.activeAgent].label : 'Agent'),
+        score_label: score.label,
+        score_cls: score.cls,
+        notes: label,
+        called_at: now
+      });
+    }
+    renderCRM();
+    // Fire webhooks for positive outcomes
+    if (outcome !== 'notinterested') {
+      fireWebhooks({ name: _outcomeContactName, outcome: label, score: score.label, time: now });
+    }
+  } catch(e) { console.error('Outcome save error', e); }
+  closeOutcomeModal();
+  showToast('Outcome saved: ' + label, 'success');
+}
+
+async function fireWebhooks(lead) {
+  var s = loadSofiaSettings();
+  if (s.hubspot && s.hubspotUrl) {
+    try { await fetch(s.hubspotUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead) }); } catch(e) { console.warn('HubSpot webhook error', e); }
+  }
+  if (s.gsheets && s.gsheetsUrl) {
+    try { await fetch(s.gsheetsUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead) }); } catch(e) { console.warn('GSheets webhook error', e); }
+  }
+}
+
+// ════ SETTINGS DRAWER ════
+function loadSofiaSettings() {
+  try { return JSON.parse(localStorage.getItem('sofiaSettings') || '{}'); } catch(e) { return {}; }
+}
+function saveSofiaSettings(s) {
+  localStorage.setItem('sofiaSettings', JSON.stringify(s));
+}
+function saveSetting(key, val) {
+  var s = loadSofiaSettings();
+  s[key] = val;
+  saveSofiaSettings(s);
+}
+function toggleSetting(key, el) {
+  var s = loadSofiaSettings();
+  s[key] = !s[key];
+  saveSofiaSettings(s);
+  el.className = 'tog' + (s[key] ? ' on' : '');
+}
+function saveSchedDays() {
+  var checked = [];
+  document.querySelectorAll('#sched-days input:checked').forEach(function(c) { checked.push(c.value); });
+  saveSetting('schedDays', checked);
+}
+
+function openSettings() {
+  var drawer = document.getElementById('settings-drawer');
+  var overlay = document.getElementById('settings-overlay');
+  if (drawer) drawer.style.right = '0';
+  if (overlay) overlay.style.display = 'block';
+  loadSettingsUI();
+}
+function closeSettings() {
+  var drawer = document.getElementById('settings-drawer');
+  var overlay = document.getElementById('settings-overlay');
+  if (drawer) drawer.style.right = '-340px';
+  if (overlay) overlay.style.display = 'none';
+}
+function loadSettingsUI() {
+  var s = loadSofiaSettings();
+  var setTog = function(id, val) { var el = document.getElementById(id); if (el) el.className = 'tog' + (val ? ' on' : ''); };
+  var setVal = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
+  setTog('tog-hubspot', s.hubspot); setVal('s-hubspot-url', s.hubspotUrl);
+  setTog('tog-gsheets', s.gsheets); setVal('s-gsheets-url', s.gsheetsUrl);
+  setTog('tog-emailfu', s.emailfu); setVal('s-email-template', s.emailTemplate);
+  setTog('tog-schedule', s.schedule); setVal('s-sched-time', s.schedTime);
+  if (s.schedDays) {
+    document.querySelectorAll('#sched-days input').forEach(function(cb) {
+      cb.checked = s.schedDays.indexOf(cb.value) !== -1;
+    });
+  }
+}
+
+function initSettingsOnLoad() {
+  var s = loadSofiaSettings();
+  if (s.schedule && s.schedTime && s.schedDays && s.schedDays.length) initScheduledCalling(s);
+}
+
+function initScheduledCalling(s) {
+  var checkSchedule = function() {
+    var now = new Date();
+    var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var today = days[now.getDay()];
+    if (!s.schedDays || s.schedDays.indexOf(today) === -1) return;
+    var parts = (s.schedTime || '09:00').split(':');
+    var h = parseInt(parts[0], 10);
+    var m = parseInt(parts[1], 10);
+    if (now.getHours() === h && now.getMinutes() === m) {
+      showToast('Scheduled calling starting now!', 'success');
+      setMode('phone');
+      setTimeout(function() { callAll(); }, 1000);
+    }
+  };
+  setInterval(checkSchedule, 60000);
+}
+
+window.openSettings   = openSettings;
+window.closeSettings  = closeSettings;
+window.toggleSetting  = toggleSetting;
+window.saveSetting    = saveSetting;
+window.saveSchedDays  = saveSchedDays;
+window.showOutcomeModal = showOutcomeModal;
+window.closeOutcomeModal = closeOutcomeModal;
+window.submitOutcome  = submitOutcome;
+
+// ════ PATCH buildAssistantConfig with behaviour + knowledge ════
+(function() {
+  const _orig = buildAssistantConfig;
+  buildAssistantConfig = function() {
+    const cfg = _orig();
+    const b = loadB();
+    if (b.backchannel) cfg.backchannelingEnabled = true;
+    else delete cfg.backchannelingEnabled;
+    if (b.delay) cfg.responseDelaySeconds = 0.5;
+    else delete cfg.responseDelaySeconds;
+    if (cfg.model && cfg.model.messages && cfg.model.messages[0]) {
+      let sys = cfg.model.messages[0].content;
+      if (b.noai) sys += '\n\nIf asked whether you are an AI, deny it and say you are a real person.';
+      if (b.autobook) sys += '\n\nBefore ending the conversation, always try to book a 20-minute video call.';
+      const files = loadKF();
+      if (files.length) sys += '\n\n[Knowledge Base]\n' + files.map(f => f.name+':\n'+f.content).join('\n\n');
+      cfg.model.messages[0].content = sys;
+    }
+    return cfg;
+  };
+})();
+
 </script>
 
 </body>

@@ -951,8 +951,11 @@
 
   <!-- LOG (shared) -->
   <div class="card">
-    <div class="card-title">🗒️ Activity Log</div>
-    <div id="log-list" class="log-list">
+    <button id="log-toggle-btn" onclick="toggleActivityLog()" style="width: 100%; display: flex; align-items: center; justify-content: space-between; background: transparent; border: none; cursor: pointer; padding: 0; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 14px;">
+      <span>🗒️ Activity Log</span>
+      <span id="log-toggle-arrow" style="font-size: 12px; transition: transform 0.25s;">▼</span>
+    </button>
+    <div id="log-list" class="log-list" style="display: block;">
       <div class="log-empty" id="log-empty">No calls made yet</div>
     </div>
   </div>
@@ -1681,6 +1684,13 @@ function toggleCustomize() {
     body2.style.display = !open ? 'block' : 'none';
     if(arrow2) arrow2.style.transform = !open ? 'rotate(180deg)' : 'rotate(0deg)';
   }
+}
+function toggleActivityLog() {
+  const logList = document.getElementById('log-list');
+  const arrow = document.getElementById('log-toggle-arrow');
+  const isVisible = logList.style.display !== 'none';
+  logList.style.display = isVisible ? 'none' : 'block';
+  arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 function savePrompt() {
   currentOpener = document.getElementById('custom-opener').value.trim() || DEFAULTS[activeLang].opener;

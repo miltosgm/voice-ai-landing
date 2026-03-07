@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compass — Real Stories From Winning Teams</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .nav-btn { background: #0369a1; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #0c4a6e; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .blue { color: #0369a1; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 48px; }
+    
+    .cta-button { background: #0369a1; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #0c4a6e; }
+    
+    .narrative-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+    .narrative-section h2 { text-align: center; font-size: 44px; font-weight: 900; margin-bottom: 80px; }
+    
+    .story-grid { display: grid; grid-template-columns: 1fr; gap: 80px; }
+    .story { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .story:nth-child(even) .story-text { order: 2; }
+    .story:nth-child(even) .story-metrics { order: 1; }
+    
+    .story-header { font-size: 24px; font-weight: 900; margin-bottom: 12px; color: #1a1a1a; }
+    .story-role { font-size: 14px; color: #999; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .story-description { font-size: 16px; color: #666; line-height: 1.8; margin-bottom: 32px; }
+    
+    .story-metrics { background: #f0f9ff; padding: 48px; border-radius: 12px; border-left: 4px solid #0369a1; }
+    .metric { margin-bottom: 32px; }
+    .metric:last-child { margin-bottom: 0; }
+    .metric-label { font-size: 13px; color: #999; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px; }
+    .metric-before { font-size: 24px; color: #666; margin-bottom: 8px; }
+    .metric-arrow { font-size: 20px; margin: 8px 0; }
+    .metric-after { font-size: 36px; font-weight: 900; color: #0369a1; }
+    .metric-outcome { font-size: 13px; color: #666; margin-top: 8px; }
+    
+    .quote-section { background: #f0f9ff; padding: 80px 20px; }
+    .quote-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .quotes { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .quote-card { background: white; padding: 40px; border-radius: 12px; border: 2px solid #bae6fd; border-left: 4px solid #0369a1; }
+    .quote-text { font-size: 16px; color: #1a1a1a; margin-bottom: 24px; line-height: 1.8; font-style: italic; font-weight: 500; }
+    .quote-author { font-weight: 800; font-size: 14px; color: #1a1a1a; }
+    .quote-title { font-size: 12px; color: #0369a1; font-weight: 700; margin-bottom: 4px; }
+    .quote-company { font-size: 12px; color: #999; }
+    
+    .proof-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+    .proof-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 20px; }
+    .proof-subtitle { text-align: center; font-size: 16px; color: #666; margin-bottom: 60px; }
+    
+    .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+    .proof-card { background: #f0f9ff; padding: 28px; border-radius: 12px; }
+    .proof-rating { font-size: 18px; color: #0369a1; margin-bottom: 12px; }
+    .proof-text { font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6; }
+    .proof-author { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+    .proof-role { font-size: 12px; color: #999; }
+    
+    .pricing-section { background: #f0f9ff; padding: 80px 20px; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-header p { color: #666; }
+    
+    .pricing-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #0369a1; box-shadow: 0 12px 40px rgba(3, 105, 161, 0.15); }
+    .price-card.featured { border: 2px solid #0369a1; box-shadow: 0 12px 40px rgba(3, 105, 161, 0.15); }
+    
+    .price-badge { display: inline-block; background: #0369a1; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #0369a1; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(3, 105, 161, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #0369a1; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; }
+    
+    @media (max-width: 768px) { 
+      .hero h1 { font-size: 36px; } 
+      .story { grid-template-columns: 1fr; }
+      .story:nth-child(even) .story-text { order: auto; }
+      .story:nth-child(even) .story-metrics { order: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Compass</div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <h1>See How <span class="blue">Real Teams</span> Navigate To Revenue Growth</h1>
+  <p>100+ companies. 1M+ calls. 4.9★ rating. Here are their stories.</p>
+  <button class="cta-button">Read Their Success Stories</button>
+</section>
+
+<section class="narrative-section">
+  <h2>How Teams Navigate Success With Compass</h2>
+  <div class="story-grid">
+    
+    <div class="story">
+      <div class="story-text">
+        <div class="story-header">Sarah's B2B SaaS Team</div>
+        <div class="story-role">VP Sales managing 5 SDRs</div>
+        <div class="story-description">Sarah was lost. 5 SDRs. Three months ramping each. High turnover. Inconsistent quality. Compass gave her direction.</div>
+        <p style="font-size: 14px; color: #0369a1; font-weight: 700; margin-top: 20px;">The Navigation</p>
+        <p style="font-size: 14px; color: #666; margin-top: 8px;">Week 1: Compass charted the course. Week 2: 2x meetings. Week 4: 3x meetings from same list. Cost: $899/month. ROI: Clear path.</p>
+      </div>
+      <div class="story-metrics">
+        <div class="metric">
+          <div class="metric-label">Meetings/Month</div>
+          <div class="metric-before">50 (manual)</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">150</div>
+          <div class="metric-outcome">3x growth in first 30 days</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Cost Per Qualified Meeting</div>
+          <div class="metric-before">$800+ (SDR salary)</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">$6</div>
+          <div class="metric-outcome">99% reduction in customer acquisition cost</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Team Direction</div>
+          <div class="metric-before">Lost (manual grind)</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">Clear (revenue focus)</div>
+          <div class="metric-outcome">Team navigates towards winning</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-text">
+        <div class="story-header">Marcus's Enterprise Sales</div>
+        <div class="story-role">Sales Director at 200-person company</div>
+        <div class="story-description">Marcus needed direction. Scaling meant hiring more SDRs. Each SDR cost $60K+ fully loaded. Ramp time: 6 months. Compass plotted a better route.</div>
+        <p style="font-size: 14px; color: #0369a1; font-weight: 700; margin-top: 20px;">The Route</p>
+        <p style="font-size: 14px; color: #666; margin-top: 8px;">2 SDRs @ $130K = $130K/year. Compass Growth Plan = $10.8K/year. Same output. 92% cost savings. Clear direction forward.</p>
+      </div>
+      <div class="story-metrics">
+        <div class="metric">
+          <div class="metric-label">Annual SDR Cost</div>
+          <div class="metric-before">$130,000</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">$10,800</div>
+          <div class="metric-outcome">$119K reinvested into growth</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Time to 2x Pipeline</div>
+          <div class="metric-before">6-9 months</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">Week 1</div>
+          <div class="metric-outcome">Navigate revenue faster than rivals</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Dependency Risk</div>
+          <div class="metric-before">High (turnover)</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">Zero</div>
+          <div class="metric-outcome">Consistent navigation forever</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-text">
+        <div class="story-header">Lisa's FinTech Startup</div>
+        <div class="story-role">Founder bootstrapping sales</div>
+        <div class="story-description">Lisa was adrift. No SDR budget. No direction. Compass gave her navigation to compete with bigger teams.</div>
+        <p style="font-size: 14px; color: #0369a1; font-weight: 700; margin-top: 20px;">The Discovery</p>
+        <p style="font-size: 14px; color: #666; margin-top: 8px;">First month: 150+ qualified calls. Month 2: first $50K deal from Compass-sourced lead. Navigating towards $50K MRR.</p>
+      </div>
+      <div class="story-metrics">
+        <div class="metric">
+          <div class="metric-label">SDR Investment (Old Way)</div>
+          <div class="metric-before">$60K+ salary</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">$299/month</div>
+          <div class="metric-outcome">Capital freed for navigation</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Competitive Position</div>
+          <div class="metric-before">Adrift (no outbound)</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">Charting course</div>
+          <div class="metric-outcome">Navigate with teams 10x bigger</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">First Deal From Compass</div>
+          <div class="metric-before">Impossible before</div>
+          <div class="metric-arrow">⬇ ⬆</div>
+          <div class="metric-after">Month 2: $50K</div>
+          <div class="metric-outcome">Navigated to new trajectory</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="quote-section">
+  <h2>Direct Quotes From Teams</h2>
+  <div class="quotes">
+    <div class="quote-card">
+      <div class="quote-text">"30 to 150 meetings in one month. Compass navigated us to growth."</div>
+      <div class="quote-title">VP Sales</div>
+      <div class="quote-author">Sarah Chen</div>
+      <div class="quote-company">B2B SaaS</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"Replaced 2 SDRs. Freed $100K. Compass charted our path to 3x growth."</div>
+      <div class="quote-title">Sales Director</div>
+      <div class="quote-author">Marcus Johnson</div>
+      <div class="quote-company">Enterprise</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"Compass guided us from bootstrap to $50K MRR in 60 days."</div>
+      <div class="quote-title">Co-Founder</div>
+      <div class="quote-author">Lisa Rodriguez</div>
+      <div class="quote-company">FinTech</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"5-minute setup. Compass was calling before lunch. Growth started week 1."</div>
+      <div class="quote-title">COO</div>
+      <div class="quote-author">David Kim</div>
+      <div class="quote-company">Real Estate</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"Compass navigates outbound. We navigate relationships. Perfect fit."</div>
+      <div class="quote-title">Head of Sales</div>
+      <div class="quote-author">Emma Thompson</div>
+      <div class="quote-company">SaaS</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"$299 → $2,500. Compass charted the quickest path to ROI."</div>
+      <div class="quote-title">VP Revenue</div>
+      <div class="quote-author">James Wilson</div>
+      <div class="quote-company">Services</div>
+    </div>
+  </div>
+</section>
+
+<section class="proof-section">
+  <h2>Why Teams Navigate With Compass</h2>
+  <div class="proof-subtitle">100+ teams. 1M+ calls. Real results.</div>
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">Live in 5 minutes. Immediate navigation towards growth.</div>
+      <div class="proof-author">Speed</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">10x cheaper than SDRs. Navigate to profitability faster.</div>
+      <div class="proof-author">Cost</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">AI qualifies. Your team closes. 3x better booking rates.</div>
+      <div class="proof-author">Quality</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">Scale instantly. 1K or 100K calls. Compass navigates scale.</div>
+      <div class="proof-author">Scale</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">Syncs everywhere. HubSpot, Salesforce, Pipedrive.</div>
+      <div class="proof-author">Integration</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★</div>
+      <div class="proof-text">Your voice. Your pitch. Compass learns it instantly.</div>
+      <div class="proof-author">Custom</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Navigate to Revenue Growth Today</h2>
+    <p>14 days free. No credit card. Full feature access.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">STARTER</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>Custom AI agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 custom agents</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>White-label</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Compass</p>
+</footer>
+
+</body>
+</html>

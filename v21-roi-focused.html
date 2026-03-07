@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Calculate Your ROI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .nav-btn { background: #2e1065; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #1e0a3d; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .highlight { color: #2e1065; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 48px; }
+    
+    .cta-button { background: #2e1065; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #1e0a3d; }
+    
+    .roi-section { background: #f9f9f9; padding: 80px 20px; }
+    .roi-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .roi-calculator { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; border: 1px solid #e0e0e0; }
+    .calc-row { margin-bottom: 32px; }
+    .calc-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1a1a1a; }
+    .calc-input { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; }
+    
+    .roi-output { background: #2e1065; color: white; padding: 32px; border-radius: 8px; margin-top: 32px; }
+    .output-row { display: flex; justify-content: space-between; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .output-row:last-child { border: none; margin-bottom: 0; }
+    .output-label { font-size: 14px; opacity: 0.9; }
+    .output-value { font-size: 24px; font-weight: 900; }
+    
+    .use-cases { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .use-cases h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .case-card { background: #f9f9f9; padding: 32px; border-radius: 12px; border-left: 4px solid #2e1065; }
+    .case-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .case-label { font-size: 12px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 16px; }
+    .case-card p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+    .case-metric { font-size: 24px; font-weight: 900; color: #2e1065; margin-bottom: 4px; }
+    .case-metric-label { font-size: 12px; color: #999; }
+    
+    .comparison-section { background: #f9f9f9; padding: 80px 20px; }
+    .comparison-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .comparison-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1200px; margin: 0 auto; }
+    .comp-card { background: white; padding: 32px; border-radius: 12px; border: 2px solid #e0e0e0; text-align: center; }
+    .comp-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 24px; }
+    .comp-metric { margin-bottom: 24px; }
+    .comp-number { font-size: 36px; font-weight: 900; color: #2e1065; }
+    .comp-label { font-size: 12px; color: #999; margin-top: 4px; }
+    .comp-card.winner { border-color: #2e1065; background: #f9f9f9; box-shadow: 0 8px 24px rgba(46, 16, 101, 0.1); }
+    .winner-badge { display: inline-block; background: #2e1065; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+    
+    .testimonial-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .testimonial-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+    .testimonial { background: #f9f9f9; padding: 28px; border-radius: 8px; border-left: 4px solid #2e1065; }
+    .testimonial-text { font-size: 14px; color: #666; margin-bottom: 16px; font-weight: 500; line-height: 1.6; }
+    .testimonial-author { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+    .testimonial-role { font-size: 12px; color: #999; }
+    
+    .pricing-section { background: #f9f9f9; padding: 80px 20px; }
+    .pricing-section h2 { text-align: center; font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-section .subtitle { text-align: center; color: #666; margin-bottom: 60px; }
+    
+    .pricing-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #2e1065; box-shadow: 0 12px 40px rgba(46, 16, 101, 0.15); }
+    .price-card.featured { border: 2px solid #2e1065; box-shadow: 0 12px 40px rgba(46, 16, 101, 0.15); }
+    
+    .price-badge { display: inline-block; background: #2e1065; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #2e1065; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(46, 16, 101, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #2e1065; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; }
+    
+    @media (max-width: 768px) { .hero h1 { font-size: 36px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sofia</div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <h1>Sofia Pays For Itself In <span class="highlight">Week One</span></h1>
+  <p>See exactly how much revenue you'll unlock with AI outbound calling.</p>
+  <button class="cta-button">Try Sofia Free (14 Days)</button>
+</section>
+
+<section class="roi-section">
+  <h2>ROI Calculator</h2>
+  <div class="roi-calculator">
+    <div class="calc-row">
+      <label class="calc-label">How many prospects can you reach per month?</label>
+      <input type="number" class="calc-input" id="prospects" value="1000" placeholder="e.g., 1000">
+    </div>
+    
+    <div class="calc-row">
+      <label class="calc-label">What's your average deal size? ($)</label>
+      <input type="number" class="calc-input" id="dealSize" value="5000" placeholder="e.g., 5000">
+    </div>
+    
+    <div class="calc-row">
+      <label class="calc-label">What's your average close rate? (%)</label>
+      <input type="number" class="calc-input" id="closeRate" value="20" placeholder="e.g., 20">
+    </div>
+    
+    <div class="calc-row">
+      <label class="calc-label">Sales team size</label>
+      <input type="number" class="calc-input" id="teamSize" value="3" placeholder="e.g., 3">
+    </div>
+    
+    <div class="roi-output">
+      <div class="output-row">
+        <span class="output-label">Monthly meetings booked</span>
+        <span class="output-value" id="meetings">380</span>
+      </div>
+      <div class="output-row">
+        <span class="output-label">Closed deals/month</span>
+        <span class="output-value" id="deals">76</span>
+      </div>
+      <div class="output-row">
+        <span class="output-label">Monthly revenue</span>
+        <span class="output-value" id="revenue">$380K</span>
+      </div>
+      <div class="output-row">
+        <span class="output-label">Sofia cost</span>
+        <span class="output-value" id="cost">$899</span>
+      </div>
+      <div class="output-row">
+        <span class="output-label" style="font-size: 16px; font-weight: 800;">ROI multiple</span>
+        <span class="output-value" id="roi" style="font-size: 36px;">423x</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="use-cases">
+  <h2>Real Numbers From Our Customers</h2>
+  <div class="case-grid">
+    <div class="case-card">
+      <div class="case-label">B2B SaaS</div>
+      <h3>Sarah's Sales Team</h3>
+      <p>Sales VP managing 5 SDRs. Before Sofia: 50 meetings/month. After: 150.</p>
+      <div class="case-metric">3x</div>
+      <div class="case-metric-label">More meetings</div>
+    </div>
+    
+    <div class="case-card">
+      <div class="case-label">FinTech Startup</div>
+      <h3>Lisa's Outbound</h3>
+      <p>No SDR team. Using Sofia for pure outbound. Hitting targets in 2 weeks.</p>
+      <div class="case-metric">150+</div>
+      <div class="case-metric-label">Calls/day</div>
+    </div>
+    
+    <div class="case-card">
+      <div class="case-label">Enterprise Sales</div>
+      <h3>Marcus's Team</h3>
+      <p>Reduced manual dialing by 90%. Team focused only on closing.</p>
+      <div class="case-metric">$2M</div>
+      <div class="case-metric-label">Pipeline/month</div>
+    </div>
+  </div>
+</section>
+
+<section class="comparison-section">
+  <h2>Sofia vs Hiring an SDR</h2>
+  <div class="comparison-cards">
+    <div class="comp-card">
+      <h3>Fully Loaded SDR Cost</h3>
+      <div class="comp-metric">
+        <div class="comp-number">$50K</div>
+        <div class="comp-label">Per year (salary)</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">+ $15K</div>
+        <div class="comp-label">Benefits/tax</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">= $65K</div>
+        <div class="comp-label">Total annual cost</div>
+      </div>
+    </div>
+    
+    <div class="comp-card winner">
+      <div class="winner-badge">BETTER VALUE</div>
+      <h3>Sofia Growth Plan</h3>
+      <div class="comp-metric">
+        <div class="comp-number">$899</div>
+        <div class="comp-label">Per month</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">+ $0</div>
+        <div class="comp-label">Benefits/tax</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">= $10.8K</div>
+        <div class="comp-label">Total annual cost</div>
+      </div>
+    </div>
+    
+    <div class="comp-card">
+      <h3>Sofia Scale Plan</h3>
+      <div class="comp-metric">
+        <div class="comp-number">$1,999</div>
+        <div class="comp-label">Per month</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">5,000 calls</div>
+        <div class="comp-label">Per month</div>
+      </div>
+      <div class="comp-metric">
+        <div class="comp-number">$24K</div>
+        <div class="comp-label">Annual investment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial-section">
+  <h2>Customers Crushing It With Sofia</h2>
+  <div class="testimonials">
+    <div class="testimonial">
+      <div class="testimonial-text">"We replaced 2 SDRs with Sofia and freed up $100K in payroll. The quality of leads is better."</div>
+      <div class="testimonial-author">Sarah Chen</div>
+      <div class="testimonial-role">VP Sales, B2B SaaS</div>
+    </div>
+    
+    <div class="testimonial">
+      <div class="testimonial-text">"Our CEO asked: why aren't we doing this for every vertical? Sofia handles pure prospecting so our team closes."</div>
+      <div class="testimonial-author">Marcus Johnson</div>
+      <div class="testimonial-role">Sales Director, Enterprise</div>
+    </div>
+    
+    <div class="testimonial">
+      <div class="testimonial-text">"Startup with zero budget for SDRs. Sofia gave us outbound capability overnight. We're in the same game now."</div>
+      <div class="testimonial-author">Lisa Rodriguez</div>
+      <div class="testimonial-role">Founder, FinTech</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <h2>Start Your Free Trial Today</h2>
+  <p class="subtitle">No credit card. 14 days free. Full feature access.</p>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">BOOTSTRAP</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>Custom AI agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 custom agents</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>White-label</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<script>
+function updateROI() {
+  const prospects = parseFloat(document.getElementById('prospects').value) || 1000;
+  const dealSize = parseFloat(document.getElementById('dealSize').value) || 5000;
+  const closeRate = parseFloat(document.getElementById('closeRate').value) || 20;
+  const teamSize = parseFloat(document.getElementById('teamSize').value) || 3;
+  
+  const bookingRate = 0.38;
+  const meetings = Math.round(prospects * bookingRate);
+  const deals = Math.round(meetings * (closeRate / 100));
+  const revenue = deals * dealSize;
+  const cost = 899;
+  const roi = Math.round(revenue / cost);
+  
+  document.getElementById('meetings').textContent = meetings.toLocaleString();
+  document.getElementById('deals').textContent = deals.toLocaleString();
+  document.getElementById('revenue').textContent = '$' + (revenue / 1000).toFixed(0) + 'K';
+  document.getElementById('cost').textContent = '$' + cost;
+  document.getElementById('roi').textContent = roi + 'x';
+}
+
+document.getElementById('prospects').addEventListener('input', updateROI);
+document.getElementById('dealSize').addEventListener('input', updateROI);
+document.getElementById('closeRate').addEventListener('input', updateROI);
+document.getElementById('teamSize').addEventListener('input', updateROI);
+
+updateROI();
+</script>
+
+<footer>
+  <p>&copy; 2025 Sofia</p>
+</footer>
+
+</body>
+</html>

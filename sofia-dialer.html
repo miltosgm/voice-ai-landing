@@ -1499,6 +1499,8 @@ function init() {
     document.getElementById('custom-opener-browser').value = currentOpener;
     document.getElementById('custom-system-browser').value = currentSystem;
   }
+  // Load saved custom prompts if available
+  loadCustomPromptsFromStorage();
   updateOpenerPreview();
   renderQueue();
   document.getElementById('custom-opener').addEventListener('input', function() { 
@@ -1630,6 +1632,8 @@ function setAgent(agentKey) {
   currentSystem = d.system;
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
+  // Load saved custom prompts if available
+  loadCustomPromptsFromStorage();
   updateOpenerPreview();
   checkModified();
 
@@ -1661,6 +1665,8 @@ function setLang(lang) {
   document.getElementById('lang-el').className = 'lang-btn' + (lang === 'el' ? ' active' : '');
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
+  // Load saved custom prompts if available
+  loadCustomPromptsFromStorage();
   updateOpenerPreview();
   checkModified();
   showToast(lang === 'el' ? '🇬🇷 Ελληνικά' : '🇺🇸 English', 'info');
@@ -1692,6 +1698,31 @@ function toggleActivityLog() {
   logList.style.display = isVisible ? 'none' : 'block';
   arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
 }
+function loadCustomPromptsFromStorage() {
+  const storageKey = `sofiaCustom_${activeAgent}_${activeLang}`;
+  const saved = localStorage.getItem(storageKey);
+  if(saved) {
+    try {
+      const data = JSON.parse(saved);
+      currentOpener = data.opener;
+      currentSystem = data.system;
+      document.getElementById('custom-opener').value = currentOpener;
+      document.getElementById('custom-system').value = currentSystem;
+      if(document.getElementById('custom-opener-browser')) {
+        document.getElementById('custom-opener-browser').value = currentOpener;
+      }
+      if(document.getElementById('custom-system-browser')) {
+        document.getElementById('custom-system-browser').value = currentSystem;
+      }
+      updateOpenerPreview();
+      return true;
+    } catch(e) {
+      console.error('Failed to load custom prompts:', e);
+      return false;
+    }
+  }
+  return false;
+}
 function savePrompt() {
   currentOpener = document.getElementById('custom-opener').value.trim() || DEFAULTS[activeLang].opener;
   currentSystem = document.getElementById('custom-system').value.trim() || DEFAULTS[activeLang].system;
@@ -1699,6 +1730,13 @@ function savePrompt() {
     document.getElementById('custom-opener-browser').value = currentOpener;
     document.getElementById('custom-system-browser').value = currentSystem;
   }
+  // Save to localStorage
+  const storageKey = `sofiaCustom_${activeAgent}_${activeLang}`;
+  localStorage.setItem(storageKey, JSON.stringify({
+    opener: currentOpener,
+    system: currentSystem,
+    savedAt: new Date().toISOString()
+  }));
   updateOpenerPreview();
   checkModified();
   toggleCustomize();

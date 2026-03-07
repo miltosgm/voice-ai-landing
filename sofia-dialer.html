@@ -831,6 +831,25 @@
       <button class="btn-simulate" onclick="openSimModal()">🧪 &nbsp;Simulate</button>
     </div>
 
+    <!-- BROWSER: CUSTOMIZE TOGGLE -->
+    <button class="customize-toggle" id="customize-toggle-browser" onclick="toggleCustomize()" style="width: 100%; margin-top: 20px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--gray); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <span>✏️ &nbsp;Customize Agent</span>
+      <span id="toggle-arrow-browser" style="font-size: 12px;">▼</span>
+    </button>
+
+    <div class="customize-body" id="customize-body-browser" style="display: none; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 20px;">
+      <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gray); margin-bottom: 8px;">Opening Line</div>
+      <textarea class="custom-textarea" id="custom-opener-browser" rows="3" placeholder="Sofia's first message..." style="width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; outline: none; color: var(--white); background: rgba(255,255,255,0.03); font-family: 'Inter', sans-serif; margin-bottom: 16px;"></textarea>
+      
+      <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gray); margin-bottom: 8px;">System Prompt</div>
+      <textarea class="custom-textarea system-prompt" id="custom-system-browser" rows="6" placeholder="Sofia's system prompt..." style="width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 12px; outline: none; color: var(--white); background: rgba(255,255,255,0.03); font-family: 'Inter', sans-serif; margin-bottom: 16px;"></textarea>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn-reset" onclick="resetDefaults()" style="font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--gray); cursor: pointer; font-family: 'Inter', sans-serif;">↺ Reset</button>
+        <button class="btn-save-prompt" onclick="savePrompt()" style="font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; cursor: pointer; font-family: 'Inter', sans-serif;">✓ Save</button>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -1473,10 +1492,30 @@ function init() {
   
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
+  if(document.getElementById('custom-opener-browser')) {
+    document.getElementById('custom-opener-browser').value = currentOpener;
+    document.getElementById('custom-system-browser').value = currentSystem;
+  }
   updateOpenerPreview();
   renderQueue();
-  document.getElementById('custom-opener').addEventListener('input', checkModified);
-  document.getElementById('custom-system').addEventListener('input', checkModified);
+  document.getElementById('custom-opener').addEventListener('input', function() { 
+    checkModified(); 
+    if(document.getElementById('custom-opener-browser')) document.getElementById('custom-opener-browser').value = this.value;
+  });
+  document.getElementById('custom-system').addEventListener('input', function() { 
+    checkModified(); 
+    if(document.getElementById('custom-system-browser')) document.getElementById('custom-system-browser').value = this.value;
+  });
+  if(document.getElementById('custom-opener-browser')) {
+    document.getElementById('custom-opener-browser').addEventListener('input', function() { 
+      document.getElementById('custom-opener').value = this.value;
+      checkModified();
+    });
+    document.getElementById('custom-system-browser').addEventListener('input', function() { 
+      document.getElementById('custom-system').value = this.value;
+      checkModified();
+    });
+  }
   document.getElementById('phone-number').addEventListener('keydown', e => { if (e.key === 'Enter') callNow(); });
   document.getElementById('contact-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('phone-number').focus(); });
 }
@@ -1627,16 +1666,29 @@ function setLang(lang) {
 // ── CUSTOMIZE ─────────────────────────────────────────
 function toggleCustomize() {
   const body  = document.getElementById('customize-body');
+  const body2 = document.getElementById('customize-body-browser');
   const arrow = document.getElementById('toggle-arrow');
+  const arrow2 = document.getElementById('toggle-arrow-browser');
   const btn   = document.getElementById('customize-toggle');
+  const btn2  = document.getElementById('customize-toggle-browser');
+  
   const open  = body.classList.contains('open');
   body.classList.toggle('open', !open);
   arrow.classList.toggle('open', !open);
   btn.classList.toggle('open', !open);
+  
+  if(body2) {
+    body2.style.display = !open ? 'block' : 'none';
+    if(arrow2) arrow2.style.transform = !open ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
 }
 function savePrompt() {
   currentOpener = document.getElementById('custom-opener').value.trim() || DEFAULTS[activeLang].opener;
   currentSystem = document.getElementById('custom-system').value.trim() || DEFAULTS[activeLang].system;
+  if(document.getElementById('custom-opener-browser')) {
+    document.getElementById('custom-opener-browser').value = currentOpener;
+    document.getElementById('custom-system-browser').value = currentSystem;
+  }
   updateOpenerPreview();
   checkModified();
   toggleCustomize();
@@ -1646,6 +1698,10 @@ function resetDefaults() {
   const d = AGENT_DEFAULTS[activeAgent][activeLang];
   document.getElementById('custom-opener').value = d.opener;
   document.getElementById('custom-system').value = d.system;
+  if(document.getElementById('custom-opener-browser')) {
+    document.getElementById('custom-opener-browser').value = d.opener;
+    document.getElementById('custom-system-browser').value = d.system;
+  }
   currentOpener = d.opener;
   currentSystem = d.system;
   updateOpenerPreview();

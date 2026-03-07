@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Join 100+ Teams Or Fall Behind</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .nav-btn { background: #dc2626; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #991b1b; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .red { color: #dc2626; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 20px; }
+    .hero-subtext { font-size: 14px; color: #999; margin-bottom: 48px; font-weight: 600; }
+    
+    .cta-button { background: #dc2626; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #991b1b; }
+    
+    .stats { display: flex; justify-content: center; gap: 50px; margin-bottom: 60px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-number { font-size: 32px; font-weight: 900; color: #dc2626; }
+    .stat-label { font-size: 12px; color: #999; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .proof-section { background: #f9f9f9; padding: 80px 20px; margin-top: 60px; }
+    .proof-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 20px; color: #1a1a1a; }
+    .proof-subtitle { text-align: center; font-size: 16px; color: #666; margin-bottom: 60px; font-weight: 500; }
+    
+    .proof-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
+    .proof-card { background: white; padding: 32px; border-radius: 12px; border: 2px solid #fce7f3; }
+    .proof-rating { font-size: 24px; color: #dc2626; margin-bottom: 12px; }
+    .proof-text { font-size: 15px; color: #666; margin-bottom: 16px; line-height: 1.6; font-weight: 500; }
+    .proof-author { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+    .proof-role { font-size: 12px; color: #999; margin-bottom: 12px; }
+    .proof-company { display: inline-block; background: #fce7f3; color: #dc2626; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    
+    .results-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .results-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; color: #1a1a1a; }
+    
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .result-card { background: #fef2f2; padding: 40px; border-radius: 12px; border-left: 4px solid #dc2626; text-align: center; }
+    .result-before { font-size: 13px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .result-metric { font-size: 42px; font-weight: 900; color: #dc2626; margin: 16px 0; }
+    .result-description { font-size: 14px; color: #666; line-height: 1.6; }
+    
+    .wall-section { background: white; padding: 80px 20px; }
+    .wall-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .wall-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+    .wall-card { background: #fef2f2; padding: 32px; border-radius: 12px; border: 2px solid #dc2626; }
+    .wall-rating { font-size: 18px; color: #dc2626; margin-bottom: 12px; }
+    .wall-text { font-size: 15px; color: #1a1a1a; margin-bottom: 20px; line-height: 1.7; font-weight: 500; }
+    .wall-author { font-weight: 800; font-size: 14px; color: #1a1a1a; }
+    .wall-title { font-size: 12px; color: #dc2626; margin-bottom: 4px; font-weight: 700; }
+    .wall-company { font-size: 12px; color: #999; }
+    
+    .pricing-section { background: #f9f9f9; padding: 80px 20px; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-header p { color: #666; }
+    
+    .pricing-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #dc2626; box-shadow: 0 12px 40px rgba(220, 38, 38, 0.15); }
+    .price-card.featured { border: 2px solid #dc2626; box-shadow: 0 12px 40px rgba(220, 38, 38, 0.15); }
+    
+    .price-badge { display: inline-block; background: #dc2626; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #dc2626; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(220, 38, 38, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #dc2626; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; }
+    
+    @media (max-width: 768px) { .hero h1 { font-size: 36px; } .stats { gap: 30px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sofia</div>
+  <button class="nav-btn">Claim Your Spot</button>
+</header>
+
+<section class="hero">
+  <h1><span class="red">100+ Teams</span> Are Already Winning. You're Not.</h1>
+  <p>While you're still hiring SDRs, your competitors are scaling with AI.</p>
+  <div class="hero-subtext">The window is closing. Join the 100+ teams crushing quotas with Sofia.</div>
+  
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number">100+</div>
+      <div class="stat-label">Teams Scaling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">1M+</div>
+      <div class="stat-label">Calls/Month</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">4.9★</div>
+      <div class="stat-label">Proven Results</div>
+    </div>
+  </div>
+  
+  <button class="cta-button">Don't Fall Behind. Start Now</button>
+</section>
+
+<section class="proof-section">
+  <h2>What's Everyone Saying?</h2>
+  <div class="proof-subtitle">Real teams. Real results. Real ROI.</div>
+  
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ GAME CHANGER</div>
+      <div class="proof-text">"30 to 150 meetings in week one. We're not going back. Sofia is non-negotiable now."</div>
+      <div class="proof-author">Sarah Chen</div>
+      <div class="proof-role">VP Sales</div>
+      <div class="proof-company">B2B SaaS (Scaling 3x)</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ LIFE CHANGING</div>
+      <div class="proof-text">"Replaced 2 SDRs. Freed $100K. Better lead quality. Buying more licenses next quarter."</div>
+      <div class="proof-author">Marcus Johnson</div>
+      <div class="proof-role">Sales Director</div>
+      <div class="proof-company">Enterprise (Cost Neutral)</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ COMPETITIVE ADVANTAGE</div>
+      <div class="proof-text">"Zero SDR budget. Sofia gave us parity with teams 10x our size overnight."</div>
+      <div class="proof-author">Lisa Rodriguez</div>
+      <div class="proof-role">Founder</div>
+      <div class="proof-company">FinTech Startup (Competing)</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ MANDATORY NOW</div>
+      <div class="proof-text">"CFO asked: why aren't all teams using this? Sofia is now standard across org."</div>
+      <div class="proof-author">David Kim</div>
+      <div class="proof-role">CEO</div>
+      <div class="proof-company">Enterprise (Rolling Out)</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ NO BRAINER</div>
+      <div class="proof-text">"Setup was 5 minutes. Running before lunch. First month ROI: 423x."</div>
+      <div class="proof-author">Emma Thompson</div>
+      <div class="proof-role">Sales Manager</div>
+      <div class="proof-company">Services (100% Payback)</div>
+    </div>
+    
+    <div class="proof-card">
+      <div class="proof-rating">★★★★★ FUTURE OF SALES</div>
+      <div class="proof-text">"This is what separates winners from everyone else now. No question."</div>
+      <div class="proof-author">James Wilson</div>
+      <div class="proof-role">VP Revenue</div>
+      <div class="proof-company">Tech (Competitive)</div>
+    </div>
+  </div>
+</section>
+
+<section class="results-section">
+  <h2>Expect Results Like These</h2>
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="result-before">MEETINGS PER MONTH</div>
+      <div class="result-metric">50</div>
+      <div style="font-size: 20px;">⬇ ⬆</div>
+      <div class="result-metric">150</div>
+      <div class="result-description">3x more qualified meetings in first 30 days</div>
+    </div>
+    
+    <div class="result-card">
+      <div class="result-before">COST PER CALL</div>
+      <div class="result-metric">$2-5</div>
+      <div style="font-size: 20px;">⬇ ⬆</div>
+      <div class="result-metric">$0.30</div>
+      <div class="result-description">Plummet your outbound calling costs</div>
+    </div>
+    
+    <div class="result-card">
+      <div class="result-before">BOOKING RATE</div>
+      <div class="result-metric">12%</div>
+      <div style="font-size: 20px;">⬇ ⬆</div>
+      <div class="result-metric">38%</div>
+      <div class="result-description">3x improvement in lead quality</div>
+    </div>
+  </div>
+</section>
+
+<section class="wall-section">
+  <h2>Winning Teams Sound Like This</h2>
+  <div class="wall-grid">
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"Month 1: $299 investment. $2,500 in closed deals. Upgraded to Growth immediately. Best decision ever."</div>
+      <div class="wall-author">Marcus Johnson</div>
+      <div class="wall-title">Sales Director</div>
+      <div class="wall-company">Enterprise</div>
+    </div>
+    
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"Startup without budget for SDRs. Sofia eliminated that barrier. Now competing with funded companies."</div>
+      <div class="wall-author">Lisa Rodriguez</div>
+      <div class="wall-title">Co-Founder</div>
+      <div class="wall-company">FinTech</div>
+    </div>
+    
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"No onboarding delays. No setup time. Five minutes later, Sofia was making calls. Week 1 results were insane."</div>
+      <div class="wall-author">David Kim</div>
+      <div class="wall-title">COO</div>
+      <div class="wall-company">Real Estate</div>
+    </div>
+    
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"Sofia handles the noise. We handle relationships. Freed our team from soul-crushing cold calling."</div>
+      <div class="wall-author">Emma Thompson</div>
+      <div class="wall-title">Head of Sales</div>
+      <div class="wall-company">SaaS</div>
+    </div>
+    
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"Sales director was skeptical. Results changed his mind. Now rolling Sofia out to 3 more departments."</div>
+      <div class="wall-author">James Wilson</div>
+      <div class="wall-title">VP Revenue</div>
+      <div class="wall-company">Enterprise</div>
+    </div>
+    
+    <div class="wall-card">
+      <div class="wall-rating">★★★★★</div>
+      <div class="wall-text">"Best ROI I've ever seen in sales tech. Period. Everyone in the industry should be using this."</div>
+      <div class="wall-author">Sarah Chen</div>
+      <div class="wall-title">VP Sales</div>
+      <div class="wall-company">B2B SaaS</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Stop Waiting. Start Growing.</h2>
+    <p>14 days free. No credit card. No excuses.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">STARTER</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>Custom AI agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Claim Your Free Trial</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 custom agents</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Start Winning Today</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>White-label</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Talk To Sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Sofia</p>
+</footer>
+
+</body>
+</html>

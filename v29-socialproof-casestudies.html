@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Case Studies: $299 To $2,500 In 30 Days</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+    .logo { font-size: 24px; font-weight: 800; color: #1a1a1a; }
+    .nav-btn { background: #3b82f6; color: white; border: none; padding: 11px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .nav-btn:hover { background: #1d4ed8; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 16px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .blue { color: #3b82f6; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 48px; }
+    
+    .cta-button { background: #3b82f6; color: white; border: none; padding: 14px 32px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; display: inline-block; }
+    .cta-button:hover { background: #1d4ed8; }
+    
+    .case-section { padding: 100px 20px; }
+    .case-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 80px; }
+    
+    .case-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 80px; }
+    .case-study { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    
+    .case-header { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 40px; }
+    .case-industry { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 12px; font-weight: 600; }
+    .case-company { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .case-person { font-size: 14px; opacity: 0.95; }
+    
+    .case-body { padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .case-story h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #1a1a1a; }
+    .case-story p { font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.7; }
+    
+    .case-results { }
+    .result { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid #e0e0e0; }
+    .result:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+    
+    .result-label { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px; }
+    .result-before { font-size: 16px; color: #666; margin-bottom: 8px; }
+    .result-arrow { font-size: 18px; margin: 8px 0; }
+    .result-after { font-size: 28px; font-weight: 900; color: #3b82f6; }
+    .result-context { font-size: 12px; color: #999; margin-top: 8px; }
+    
+    .quote-section { background: #f0f9ff; padding: 80px 20px; }
+    .quote-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .quotes { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+    .quote-card { background: white; padding: 40px; border-radius: 12px; border: 2px solid #dbeafe; }
+    .quote-text { font-size: 16px; color: #1a1a1a; margin-bottom: 24px; line-height: 1.8; font-weight: 500; }
+    .quote-author { font-weight: 800; font-size: 14px; color: #1a1a1a; margin-bottom: 4px; }
+    .quote-title { font-size: 12px; color: #3b82f6; font-weight: 700; }
+    
+    .comparison-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+    .comparison-section h2 { text-align: center; font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .comp-card { background: #f9fafb; padding: 40px; border-radius: 12px; border: 1px solid #e5e7eb; }
+    .comp-card.featured { background: #f0f9ff; border: 2px solid #3b82f6; }
+    .comp-title { font-size: 18px; font-weight: 800; margin-bottom: 24px; color: #1a1a1a; }
+    .comp-item { margin-bottom: 16px; font-size: 14px; color: #666; display: flex; gap: 12px; }
+    .comp-item::before { content: '✓'; color: #3b82f6; font-weight: 900; flex-shrink: 0; }
+    
+    .stats-section { background: #f9fafb; padding: 80px 20px; text-align: center; }
+    .stats-section h2 { font-size: 40px; font-weight: 900; margin-bottom: 60px; }
+    
+    .stats-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
+    .stat-card { background: white; padding: 32px; border-radius: 12px; border: 1px solid #e5e7eb; }
+    .stat-number { font-size: 42px; font-weight: 900; color: #3b82f6; margin-bottom: 8px; }
+    .stat-label { font-size: 13px; color: #666; }
+    
+    .pricing-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 44px; font-weight: 900; margin-bottom: 12px; }
+    .pricing-header p { color: #666; }
+    
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .price-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #3b82f6; box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15); }
+    .price-card.featured { border: 2px solid #3b82f6; box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15); }
+    
+    .price-badge { display: inline-block; background: #3b82f6; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+    .price-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 900; color: #3b82f6; margin-bottom: 4px; }
+    .price-amount small { font-size: 16px; color: #999; font-weight: 400; }
+    .price-calls { background: rgba(59, 130, 246, 0.08); padding: 16px; border-radius: 8px; margin-bottom: 28px; font-weight: 600; font-size: 14px; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; display: flex; gap: 10px; color: #555; }
+    .features-list li::before { content: '✓'; color: #3b82f6; font-weight: 900; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; text-align: center; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #f0f0f0; }
+    
+    @media (max-width: 768px) { 
+      .hero h1 { font-size: 36px; } 
+      .case-body { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sofia</div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <h1>From $299 Investment To <span class="blue">$2,500+ In Revenue</span></h1>
+  <p>See how real teams are converting Sofia's trial into massive ROI.</p>
+  <button class="cta-button">Read The Case Studies</button>
+</section>
+
+<section class="case-section">
+  <h2>Case Studies: Real Results</h2>
+  <div class="case-grid">
+    
+    <div class="case-study">
+      <div class="case-header">
+        <div class="case-industry">B2B SaaS Company</div>
+        <div class="case-company">Sarah's Sales Team</div>
+        <div class="case-person">VP Sales managing 5 SDRs</div>
+      </div>
+      <div class="case-body">
+        <div class="case-story">
+          <h3>The Challenge</h3>
+          <p>Sarah had 5 SDRs. Each cost $60K+. 3-month ramp time. High turnover. One left and took months to replace, killing pipeline. She needed a better way to scale prospecting.</p>
+          <h3 style="margin-top: 32px;">The Solution</h3>
+          <p>Sofia. Deployed on Monday. Live same day. By Wednesday, Sofia had made 300 calls. By end of week, 2x the booking rate of her best SDR.</p>
+        </div>
+        <div class="case-results">
+          <div class="result">
+            <div class="result-label">Meetings Per Month</div>
+            <div class="result-before">Before Sofia: 50</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">150</div>
+            <div class="result-context">3x growth in first 30 days, same prospect list</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">Monthly Sofia Cost</div>
+            <div class="result-before">$899</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">$899</div>
+            <div class="result-context">Same cost. 100x more meetings than hiring SDR #6</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">Revenue Impact (30 days)</div>
+            <div class="result-before">$0 (hiring costs)</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">$45K</div>
+            <div class="result-context">100 extra meetings × 30% close rate × $15K deal size</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-study">
+      <div class="case-header">
+        <div class="case-industry">FinTech Startup</div>
+        <div class="case-company">Lisa's Outbound Sales</div>
+        <div class="case-person">Founder, bootstrapped sales</div>
+      </div>
+      <div class="case-body">
+        <div class="case-story">
+          <h3>The Challenge</h3>
+          <p>Lisa had zero SDR budget. But plenty of ambition. She needed a way to do outbound without hiring. Every dollar was tied up in product development. Sofia became her competitive equalizer.</p>
+          <h3 style="margin-top: 32px;">The Solution</h3>
+          <p>$299/month Starter plan. First week: 100+ calls. First month: 5 qualified meetings. By month 2, first customer from Sofia-sourced lead. Funded round off the back of revenue traction.</p>
+        </div>
+        <div class="case-results">
+          <div class="result">
+            <div class="result-label">First Month Investment</div>
+            <div class="result-before">$299</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">$2,500</div>
+            <div class="result-context">800% ROI in 30 days (one customer)</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">Outbound Capability</div>
+            <div class="result-before">None (no budget)</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">1,000 calls/month</div>
+            <div class="result-context">Instant parity with bigger teams</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">By Month 3</div>
+            <div class="result-before">Struggling for deals</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">$20K MRR</div>
+            <div class="result-context">Upgraded to Growth plan. Hiring sales team.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-study">
+      <div class="case-header">
+        <div class="case-industry">Enterprise Software</div>
+        <div class="case-company">Marcus's Sales Operation</div>
+        <div class="case-person">Sales Director at 200-person company</div>
+      </div>
+      <div class="case-body">
+        <div class="case-story">
+          <h3>The Challenge</h3>
+          <p>Marcus was scaling rapidly. But hiring SDRs was the bottleneck. Each SDR took 6 months to ramp. Cost $130K fully loaded. He needed instant capacity with zero hiring delays.</p>
+          <h3 style="margin-top: 32px;">The Solution</h3>
+          <p>Sofia Growth Plan ($899/month). Scale from 1K to 5K calls/month instantly. No 6-month hiring cycle. No ramp time. Day 1 productivity. He redirected his $130K budget elsewhere.</p>
+        </div>
+        <div class="case-results">
+          <div class="result">
+            <div class="result-label">Cost Replacement (2 SDRs)</div>
+            <div class="result-before">$130,000/year</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">$10,800/year</div>
+            <div class="result-context">92% cost reduction. Same output. Better consistency.</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">Time to Scale 2x Meetings</div>
+            <div class="result-before">6-9 months (hiring)</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">Week 1</div>
+            <div class="result-context">Competitive advantage: 6+ month head start on rivals</div>
+          </div>
+          
+          <div class="result">
+            <div class="result-label">Turnover Risk</div>
+            <div class="result-before">High (key person)</div>
+            <div class="result-arrow">⬇ ⬆</div>
+            <div class="result-after">Zero</div>
+            <div class="result-context">Sofia doesn't quit. Doesn't get sick. Always performing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="quote-section">
+  <h2>What They're Saying</h2>
+  <div class="quotes">
+    <div class="quote-card">
+      <div class="quote-text">"This is the best tool I've bought in my sales career. Seriously. The ROI is insane."</div>
+      <div class="quote-author">Sarah Chen</div>
+      <div class="quote-title">VP Sales, B2B SaaS</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"Replaced 2 SDRs. Freed $100K. Better lead quality. It's a no-brainer. Buying more licenses now."</div>
+      <div class="quote-author">Marcus Johnson</div>
+      <div class="quote-title">Sales Director, Enterprise</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"First customer from Sofia-sourced lead closed a $50K deal. Changed trajectory of our entire business."</div>
+      <div class="quote-author">Lisa Rodriguez</div>
+      <div class="quote-title">Founder, FinTech</div>
+    </div>
+    
+    <div class="quote-card">
+      <div class="quote-text">"No delays. No onboarding. Sofia was live and calling before I finished my morning coffee."</div>
+      <div class="quote-author">David Kim</div>
+      <div class="quote-title">COO, Real Estate</div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <h2>By The Numbers</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">100+</div>
+      <div class="stat-label">Teams Using Sofia</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1M+</div>
+      <div class="stat-label">Calls Made</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4.9★</div>
+      <div class="stat-label">Customer Rating</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">38%</div>
+      <div class="stat-label">Avg Booking Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3x</div>
+      <div class="stat-label">More Meetings/Month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">$8</div>
+      <div class="stat-label">Per Call ROI</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Start Your Case Study</h2>
+    <p>14 days free. No credit card. Write your own success story.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">STARTER</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>Custom AI agent</li>
+        <li>Email integration</li>
+        <li>Call transcripts</li>
+        <li>Basic support</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 custom agents</li>
+        <li>CRM sync</li>
+        <li>Advanced analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Try Free</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>White-label</li>
+        <li>Account manager</li>
+        <li>API access</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Sofia</p>
+</footer>
+
+</body>
+</html>

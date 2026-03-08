@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - Trusted By Leading Teams</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .cta { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        
+        .hero { padding: 80px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 52px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 18px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; background: #0d9488; color: white; }
+        
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin: 50px 0; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 36px; font-weight: 900; color: #0d9488; }
+        .stat-label { font-size: 13px; color: #4b5563; margin-top: 10px; text-transform: uppercase; }
+        
+        section { padding: 80px 20px; }
+        section h2 { font-size: 44px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        
+        .featured-testimonials { background: white; margin-bottom: 60px; }
+        .featured-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 40px; }
+        .featured-text h3 { font-size: 24px; margin-bottom: 20px; color: #0d9488; font-weight: 900; }
+        .featured-text p { font-size: 16px; color: #4b5563; margin-bottom: 20px; line-height: 1.8; }
+        .featured-quote { font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 15px; }
+        .featured-author { font-weight: 700; color: #0f172a; font-size: 14px; }
+        .featured-role { font-size: 12px; color: #4b5563; }
+        .featured-image { background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); height: 350px; border-radius: 12px; border: 2px solid #0d9488; }
+        
+        .testimonial-carousel { background: #f0fdfa; padding: 60px 40px; border-radius: 12px; }
+        .carousel-header { text-align: center; margin-bottom: 40px; }
+        .carousel-header h3 { font-size: 24px; margin-bottom: 10px; color: #0d9488; font-weight: 900; }
+        .carousel-header p { font-size: 14px; color: #4b5563; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 40px; border-radius: 12px; border-left: 4px solid #0d9488; transition: all 0.3s; }
+        .testimonial:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(13, 148, 136, 0.15); }
+        .company-tag { display: inline-block; background: #f0fdfa; color: #0d9488; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+        .stars { color: #f59e0b; margin-bottom: 12px; font-size: 16px; }
+        .quote { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 15px; line-height: 1.6; }
+        .context { font-size: 12px; color: #4b5563; margin-bottom: 12px; }
+        .author { font-weight: 700; color: #0f172a; font-size: 13px; }
+        
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 40px 0; }
+        .result-card { background: white; padding: 40px; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .result-metric { font-size: 32px; font-weight: 900; color: #0d9488; margin-bottom: 10px; }
+        .result-label { font-size: 14px; color: #4b5563; margin-bottom: 15px; }
+        .result-description { font-size: 13px; color: #4b5563; line-height: 1.8; }
+        
+        .trust-signals { background: white; padding: 60px 40px; border-radius: 12px; border: 2px solid #e2e8f0; margin: 40px 0; }
+        .trust-signals h3 { font-size: 20px; margin-bottom: 30px; color: #0d9488; font-weight: 900; }
+        .signal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .signal { text-align: center; }
+        .signal-icon { font-size: 40px; margin-bottom: 12px; }
+        .signal h4 { font-size: 14px; margin-bottom: 8px; color: #0f172a; font-weight: 700; }
+        .signal p { font-size: 12px; color: #4b5563; }
+        
+        .press { background: #f0fdfa; padding: 60px 40px; border-radius: 12px; margin: 60px 0; }
+        .press h3 { font-size: 20px; margin-bottom: 30px; color: #0d9488; font-weight: 900; text-align: center; }
+        .press-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .press-item { background: white; padding: 20px; border-radius: 8px; text-align: center; }
+        .press-logo { font-size: 12px; font-weight: 700; color: #0d9488; margin-bottom: 10px; }
+        .press-title { font-size: 12px; color: #4b5563; }
+        
+        .cta-final { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color: white; padding: 60px 40px; border-radius: 12px; text-align: center; margin: 60px 0; }
+        .cta-final h3 { font-size: 32px; margin-bottom: 15px; font-weight: 900; }
+        .cta-final p { font-size: 16px; margin-bottom: 30px; opacity: 0.95; }
+        
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .featured-grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <a href="#" class="cta">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Trusted By 100+ Leading Companies</h1>
+            <p class="subtitle">See why the best sales teams choose Athena</p>
+            <div style="margin-top: 40px;">
+                <a href="#" class="btn">Join The Community</a>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">1M+</div>
+                    <div class="stat-label">Calls Completed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100+</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">4.9★</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$6</div>
+                    <div class="stat-label">Cost Per Meeting</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <h2>Featured Stories</h2>
+            <div class="featured-testimonials">
+                <div class="featured-grid">
+                    <div class="featured-text">
+                        <h3>Series B Fintech Scales 3 Markets</h3>
+                        <p style="color: #4b5563; font-size: 14px;">Deployed Athena to replace hiring 6 SDRs across US, EU, APAC. Same pipeline quality. $390K/year savings.</p>
+                        <div class="featured-quote">"Instead of hiring 6 SDRs, we deployed Athena across 3 regions. Same quality. Better ROI. Freed capital for product."</div>
+                        <div class="featured-author">VP Sales, $50M raised fintech</div>
+                        <div class="featured-role">Series B</div>
+                    </div>
+                    <div class="featured-image"></div>
+                </div>
+            </div>
+
+            <div class="featured-testimonials">
+                <div class="featured-grid" style="direction: rtl;">
+                    <div class="featured-text" style="direction: ltr;">
+                        <h3>Mid-Market SaaS Fires Underperforming SDRs</h3>
+                        <p style="color: #4b5563; font-size: 14px;">2 junior SDRs were inconsistent. Replaced both with Athena. Better qualification. Better consistency. $200K annual savings.</p>
+                        <div class="featured-quote">"Athena actually qualifies. Our SDRs were just booking anyone who picked up."</div>
+                        <div class="featured-author">CEO, $2M ARR SaaS</div>
+                        <div class="featured-role">25-person team</div>
+                    </div>
+                    <div class="featured-image"></div>
+                </div>
+            </div>
+
+            <div class="featured-testimonials">
+                <div class="featured-grid">
+                    <div class="featured-text">
+                        <h3>Bootstrapped Startup Closes First Deal</h3>
+                        <p style="color: #4b5563; font-size: 14px;">No budget for hiring. Athena gave them instant outbound capacity. First customer week 2. Now doing $18K MRR.</p>
+                        <div class="featured-quote">"Without Athena, we'd still be stuck with zero outbound. First deal in week 2 proved the business model."</div>
+                        <div class="featured-author">Founder, Pre-seed startup</div>
+                        <div class="featured-role">3-person team</div>
+                    </div>
+                    <div class="featured-image"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <div class="testimonial-carousel">
+                <div class="carousel-header">
+                    <h3>What Teams Are Saying</h3>
+                    <p>Real feedback from Athena users</p>
+                </div>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <span class="company-tag">Fintech • Series A</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"Made 1,000 calls week 1. 150 meetings. Like hiring 3 SDRs instantly."</div>
+                        <div class="context">Deployed across sales team to supplement human SDRs</div>
+                        <div class="author">Sarah Chen, VP Sales</div>
+                    </div>
+
+                    <div class="testimonial">
+                        <span class="company-tag">SaaS • Series B</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"Replaced 2 underperformers. Better results. No hiring drama."</div>
+                        <div class="context">Used Athena to replace inconsistent SDRs</div>
+                        <div class="author">Marcus Rodriguez, CEO</div>
+                    </div>
+
+                    <div class="testimonial">
+                        <span class="company-tag">Startup • Bootstrapped</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"First customer in week 2. Proved our model worked."</div>
+                        <div class="context">Couldn't afford hiring. Athena gave instant capacity</div>
+                        <div class="author">Lisa Park, Founder</div>
+                    </div>
+
+                    <div class="testimonial">
+                        <span class="company-tag">Insurance • Mid-Market</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"Consistently hits our monthly targets. Reliable."</div>
+                        <div class="context">Using Athena as core outbound engine for 2 years</div>
+                        <div class="author">Tom Williams, VP Sales</div>
+                    </div>
+
+                    <div class="testimonial">
+                        <span class="company-tag">B2B SaaS • Growth</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"Setup took 5 minutes. Started calling same day. No nonsense."</div>
+                        <div class="context">Testing Athena as alternative to hiring</div>
+                        <div class="author">Jennifer Park, Sales Manager</div>
+                    </div>
+
+                    <div class="testimonial">
+                        <span class="company-tag">Fintech • Enterprise</span>
+                        <div class="stars">★★★★★</div>
+                        <div class="quote">"The transparency is insane. We see every call. Every word."</div>
+                        <div class="context">Using Athena analytics to train human SDRs</div>
+                        <div class="author">David Chen, Sales Director</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <h2>Results By The Numbers</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-metric">150+</div>
+                    <div class="result-label">Avg Meetings/Month (Per User)</div>
+                    <div class="result-description">From 1,000 calls. Your average deal size determines revenue impact.</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-metric">$6</div>
+                    <div class="result-label">Avg Cost Per Meeting</div>
+                    <div class="result-description">Way cheaper than hiring ($260K for 2 SDRs = $4.3K per meeting). Way cheaper than other tools.</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-metric">3x</div>
+                    <div class="result-label">Better Qualification</div>
+                    <div class="result-description">Actual data from customers comparing Athena quality to human SDRs. More tire kickers filtered out.</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-metric">99%+</div>
+                    <div class="result-label">Uptime Guarantee</div>
+                    <div class="result-description">Athena never sleeps. Humans take vacation. Athena calls 24/7.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <div class="trust-signals">
+                <h3>Why Teams Trust Athena</h3>
+                <div class="signal-grid">
+                    <div class="signal">
+                        <div class="signal-icon">🏆</div>
+                        <h4>Industry Recognition</h4>
+                        <p>Featured in 50+ publications. Recommended by leading GTM experts.</p>
+                    </div>
+                    <div class="signal">
+                        <div class="signal-icon">🔒</div>
+                        <h4>Enterprise Security</h4>
+                        <p>SOC 2 Type II. GDPR compliant. Your data is protected.</p>
+                    </div>
+                    <div class="signal">
+                        <div class="signal-icon">📞</div>
+                        <h4>24/7 Support</h4>
+                        <p>Real people. Fast responses. Not a bot. Dedicated account manager for Enterprise.</p>
+                    </div>
+                    <div class="signal">
+                        <div class="signal-icon">💰</div>
+                        <h4>30-Day Guarantee</h4>
+                        <p>Not happy? Full refund. No questions. We're confident it works.</p>
+                    </div>
+                    <div class="signal">
+                        <div class="signal-icon">📈</div>
+                        <h4>Proven Results</h4>
+                        <p>1M+ calls. 100+ companies. 4.9★ rating. Numbers don't lie.</p>
+                    </div>
+                    <div class="signal">
+                        <div class="signal-icon">🚀</div>
+                        <h4>Rapid Deployment</h4>
+                        <p>5-minute setup. No integration hell. Live same day.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <div class="press">
+                <h3>As Seen In</h3>
+                <div class="press-items">
+                    <div class="press-item">
+                        <div class="press-logo">TechCrunch</div>
+                        <div class="press-title">"The AI SDR That Actually Works"</div>
+                    </div>
+                    <div class="press-item">
+                        <div class="press-logo">Forbes</div>
+                        <div class="press-title">"How AI Replaced Expensive Hiring"</div>
+                    </div>
+                    <div class="press-item">
+                        <div class="press-logo">SalesHacker</div>
+                        <div class="press-title">"Top 10 Sales Automation Tools"</div>
+                    </div>
+                    <div class="press-item">
+                        <div class="press-logo">G2</div>
+                        <div class="press-title">4.9★ Rating (100+ Reviews)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <div class="cta-final">
+                <h3>Join 100+ Winning Teams</h3>
+                <p>See why they chose Athena over hiring (or other tools)</p>
+                <a href="#" class="btn" style="background: white; color: #0d9488;">Start Your Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Athena AI</p>
+        <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">Trusted by leading sales teams worldwide</p>
+    </footer>
+</body>
+</html>

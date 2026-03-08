@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - Complete Comparison Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .cta { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        
+        .hero { padding: 80px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 52px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero p { font-size: 18px; margin-bottom: 30px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; background: #0d9488; color: white; }
+        
+        section { padding: 80px 20px; }
+        section h2 { font-size: 42px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        
+        .comparison-matrix { background: white; overflow-x: auto; margin: 40px 0; border-radius: 12px; border: 2px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 20px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f0fdfa; font-weight: 700; color: #0d9488; }
+        tr:hover { background: #f0fdfa; }
+        .check { color: #0d9488; font-weight: bold; font-size: 18px; }
+        .cross { color: #ef4444; font-weight: bold; font-size: 18px; }
+        
+        .cost-breakdown { background: #f0fdfa; padding: 50px 40px; border-radius: 12px; margin: 60px 0; }
+        .cost-breakdown h3 { font-size: 24px; margin-bottom: 30px; color: #0d9488; font-weight: 900; }
+        .cost-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 30px; }
+        .cost-card { background: white; padding: 30px; border-radius: 8px; text-align: center; }
+        .cost-card h4 { font-size: 16px; margin-bottom: 15px; }
+        .cost-amount { font-size: 32px; font-weight: 900; color: #0d9488; margin-bottom: 10px; }
+        .cost-desc { font-size: 13px; color: #4b5563; }
+        
+        .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 40px 0; }
+        .scenario { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .scenario h3 { font-size: 18px; margin-bottom: 15px; color: #0d9488; font-weight: 900; }
+        .scenario-subtitle { font-size: 13px; color: #4b5563; margin-bottom: 20px; }
+        .scenario-metrics { list-style: none; }
+        .scenario-metrics li { padding: 8px 0; padding-left: 25px; position: relative; font-size: 14px; }
+        .scenario-metrics li:before { content: '→'; position: absolute; left: 0; color: #0d9488; font-weight: bold; }
+        .scenario-outcome { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+        .outcome-label { font-size: 11px; color: #4b5563; text-transform: uppercase; font-weight: 700; }
+        .outcome-value { font-size: 20px; font-weight: 900; color: #0d9488; margin-top: 5px; }
+        
+        .decision-tree { background: white; padding: 50px 40px; border-radius: 12px; border: 2px solid #e2e8f0; margin: 40px 0; }
+        .decision-tree h3 { font-size: 24px; margin-bottom: 30px; color: #0f172a; font-weight: 900; }
+        .tree-item { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
+        .tree-item:last-child { border-bottom: none; }
+        .tree-question { font-weight: 700; color: #0d9488; margin-bottom: 10px; }
+        .tree-answer { color: #4b5563; }
+        
+        .testimonials { background: #f0fdfa; padding: 50px 40px; border-radius: 12px; margin: 60px 0; }
+        .testimonials h3 { font-size: 24px; margin-bottom: 30px; color: #0d9488; font-weight: 900; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 30px; border-radius: 8px; border-left: 4px solid #0d9488; }
+        .quote { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 10px; }
+        .context { font-size: 12px; color: #4b5563; margin-bottom: 10px; }
+        .author { font-weight: 700; color: #0f172a; font-size: 13px; }
+        
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .cost-grid { grid-template-columns: 1fr; }
+            table { font-size: 13px; }
+            th, td { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <a href="#" class="cta">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>The Complete Comparison: SDRs vs Athena vs Other Tools</h1>
+            <p>See exactly why Athena replaces expensive hiring. Side-by-side comparison. Real numbers. No BS.</p>
+            <div style="margin-top: 30px;">
+                <a href="#" class="btn">View Comparison</a>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <h2>Feature Comparison Matrix</h2>
+            <div class="comparison-matrix">
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Athena</th>
+                        <th>Hiring SDRs</th>
+                        <th>Other AI Tools</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost (annual)</strong></td>
+                        <td class="check">$3,588</td>
+                        <td class="cross">$130K+</td>
+                        <td class="cross">$8-24K</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ramp time</strong></td>
+                        <td class="check">5 minutes</td>
+                        <td class="cross">6 months</td>
+                        <td class="cross">2-4 weeks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Voice quality</strong></td>
+                        <td class="check">Human-grade</td>
+                        <td class="check">Human</td>
+                        <td class="cross">Robotic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Objection handling</strong></td>
+                        <td class="check">Intelligent</td>
+                        <td class="check">Variable</td>
+                        <td class="cross">Scripted only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Availability</strong></td>
+                        <td class="check">24/7/365</td>
+                        <td class="cross">9-5 + vacation</td>
+                        <td class="check">24/7</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consistency</strong></td>
+                        <td class="check">100%</td>
+                        <td class="cross">Variable</td>
+                        <td class="cross">Limited</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data transparency</strong></td>
+                        <td class="check">Full (every call)</td>
+                        <td class="cross">Manual reports</td>
+                        <td class="cross">Black box</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CRM integration</strong></td>
+                        <td class="check">Native (Salesforce)</td>
+                        <td class="cross">Manual entry</td>
+                        <td class="cross">Extra cost</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Turnover risk</strong></td>
+                        <td class="check">Zero</td>
+                        <td class="cross">High (40-50%)</td>
+                        <td class="check">Zero</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scales to 5,000+ calls/mo</strong></td>
+                        <td class="check">Yes</td>
+                        <td class="cross">Requires 5+ SDRs</td>
+                        <td class="check">Yes</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <div class="cost-breakdown">
+                <h3>Year 1 Cost Analysis</h3>
+                <div class="cost-grid">
+                    <div class="cost-card">
+                        <h4>Hire 2 SDRs</h4>
+                        <div class="cost-amount">$260K</div>
+                        <div class="cost-desc">Salary + benefits. Doesn't include training, tools, or replacement costs.</div>
+                    </div>
+                    <div class="cost-card">
+                        <h4>Other Tools</h4>
+                        <div class="cost-amount">$8-24K</div>
+                        <div class="cost-desc">Platform costs. Usually broken features + hidden add-ons.</div>
+                    </div>
+                    <div class="cost-card">
+                        <h4>Athena</h4>
+                        <div class="cost-amount">$3,588</div>
+                        <div class="cost-desc">Full platform. All features included. No surprises.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>Real Scenarios</h2>
+            <div class="scenario-grid">
+                <div class="scenario">
+                    <h3>Bootstrapped Startup</h3>
+                    <div class="scenario-subtitle">3-person team, $0 hiring budget</div>
+                    <ul class="scenario-metrics">
+                        <li>Founder doing all outreach (time killer)</li>
+                        <li>No SDR budget available</li>
+                        <li>Loses deals to better-resourced competitors</li>
+                    </ul>
+                    <div class="scenario-outcome">
+                        <div class="outcome-label">With Athena</div>
+                        <div class="outcome-value">Instant outbound capacity</div>
+                        <p style="margin-top: 10px; font-size: 13px; color: #4b5563;">Founder focuses on product. Athena calls 24/7. First deal week 1-2.</p>
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h3>Growth-Stage SaaS</h3>
+                    <div class="scenario-subtitle">$2M ARR, 25-person team</div>
+                    <ul class="scenario-metrics">
+                        <li>2 junior SDRs generating pipeline</li>
+                        <li>High turnover (both left in 18 months)</li>
+                        <li>Pipeline inconsistent</li>
+                    </ul>
+                    <div class="scenario-outcome">
+                        <div class="outcome-label">With Athena</div>
+                        <div class="outcome-value">$200K/year saved, better pipeline</div>
+                        <p style="margin-top: 10px; font-size: 13px; color: #4b5563;">Replaced 2 SDRs. Same results. More consistent. No hiring drama.</p>
+                    </div>
+                </div>
+
+                <div class="scenario">
+                    <h3>Enterprise Company</h3>
+                    <div class="scenario-subtitle">200+ employees, $50M+ ARR</div>
+                    <ul class="scenario-metrics">
+                        <li>8-10 SDRs across regions</li>
+                        <li>$1M+ annual salary costs</li>
+                        <li>Pipeline unpredictable</li>
+                    </ul>
+                    <div class="scenario-outcome">
+                        <div class="outcome-label">With Athena</div>
+                        <div class="outcome-value">Scale to 3x capacity without hiring</div>
+                        <p style="margin-top: 10px; font-size: 13px; color: #4b5563;">Deploy 15K calls/month across 3 markets. No new hires.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <div class="decision-tree">
+                <h3>Which Solution Is Right For You?</h3>
+                <div class="tree-item">
+                    <div class="tree-question">Q: Do you have budget to hire SDRs?</div>
+                    <div class="tree-answer">
+                        <strong>If YES (& 100K+):</strong> Hiring can work if you want people on your team and have product-market fit. But Athena is cheaper and more predictable.
+                        <br><strong>If NO:</strong> Athena is your only real option. You can't afford hiring.
+                    </div>
+                </div>
+                <div class="tree-item">
+                    <div class="tree-question">Q: Do you need instant results?</div>
+                    <div class="tree-answer">
+                        <strong>If YES:</strong> Athena (5 min setup). Hiring (6 months ramp). Decision made.
+                        <br><strong>If NO:</strong> Hiring might be acceptable if you have patience and budget.
+                    </div>
+                </div>
+                <div class="tree-item">
+                    <div class="tree-question">Q: Do you want to test before scaling?</div>
+                    <div class="tree-answer">
+                        <strong>If YES:</strong> Athena. Start with $299/month. See if it works. Scale if yes.
+                        <br><strong>If NO:</strong> Hiring commit is permanent (high fixed cost).
+                    </div>
+                </div>
+                <div class="tree-item">
+                    <div class="tree-question">Q: Do you need 24/7 calling?</div>
+                    <div class="tree-answer">
+                        <strong>If YES:</strong> Only Athena (and other AI tools). SDRs sleep. AI doesn't.
+                        <br><strong>If NO:</strong> Hiring is OK if you're 9-5 only.
+                    </div>
+                </div>
+                <div class="tree-item">
+                    <div class="tree-question">Q: Which other AI tools are best?</div>
+                    <div class="tree-answer">
+                        Good alternatives exist (Apollo, Outreach, Cadence) but most have limitations: robotic voices, poor objection handling, hidden fees, black-box results. Athena beats them on natural voice + transparency + price + features.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <div class="testimonials">
+                <h3>Why Customers Chose Athena Over Hiring</h3>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <div class="quote">"We compared hiring vs Athena for 2 weeks. Athena won on every metric."</div>
+                        <div class="context">Sales director, fintech. Team of 25.</div>
+                        <div class="author">Marcus R.</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="quote">"Hiring an SDR would've taken 3 months and cost $200K. Athena started calling day 1."</div>
+                        <div class="context">Founder, SaaS. Pre-seed fundraising phase.</div>
+                        <div class="author">Sarah C.</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="quote">"We had 2 SDRs. After Athena, we laid them off and reinvested that $200K in product."</div>
+                        <div class="context">CEO, B2B SaaS. $2M ARR.</div>
+                        <div class="author">David L.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Athena AI</p>
+        <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">The smarter alternative to hiring. 30-day free trial. No credit card required.</p>
+    </footer>
+</body>
+</html>

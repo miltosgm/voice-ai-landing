@@ -1632,6 +1632,11 @@ function setAgent(agentKey) {
   currentSystem = d.system;
   document.getElementById('custom-opener').value = currentOpener;
   document.getElementById('custom-system').value = currentSystem;
+  // Also update browser mode customize panel
+  if(document.getElementById('custom-opener-browser')) {
+    document.getElementById('custom-opener-browser').value = currentOpener;
+    document.getElementById('custom-system-browser').value = currentSystem;
+  }
   // Load saved custom prompts if available
   loadCustomPromptsFromStorage();
   updateOpenerPreview();

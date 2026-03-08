@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - AI Voice Agent</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .cta { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        
+        .hero { padding: 80px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 52px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero p { font-size: 18px; margin-bottom: 40px; color: #4b5563; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; background: #0d9488; color: white; }
+        
+        .use-cases-section { background: white; padding: 60px 20px; }
+        .use-cases-section h2 { font-size: 32px; margin-bottom: 40px; color: #0f172a; font-weight: 900; text-align: center; }
+        .use-cases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .use-case { background: #f0fdfa; padding: 30px 20px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .use-case:hover { border-color: #0d9488; background: white; }
+        .use-case-icon { font-size: 36px; margin-bottom: 12px; }
+        .use-case-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+        
+        .how-it-works { background: #f0fdfa; padding: 80px 20px; }
+        .how-it-works h2 { font-size: 32px; margin-bottom: 50px; color: #0f172a; font-weight: 900; text-align: center; }
+        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .step { text-align: center; }
+        .step-number { display: inline-block; width: 60px; height: 60px; background: #0d9488; color: white; border-radius: 50%; font-size: 24px; font-weight: 900; line-height: 60px; margin-bottom: 20px; }
+        .step h3 { font-size: 16px; margin-bottom: 10px; color: #0f172a; font-weight: 700; }
+        .step p { font-size: 14px; color: #4b5563; line-height: 1.6; }
+        
+        section { padding: 80px 20px; }
+        .feature-category { margin-bottom: 80px; }
+        .feature-category h2 { font-size: 32px; margin-bottom: 40px; color: #0f172a; font-weight: 900; }
+        .feature-category-subtitle { font-size: 16px; color: #4b5563; margin-bottom: 30px; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+        .feature { background: white; padding: 35px 25px; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s; }
+        .feature:hover { border-color: #0d9488; }
+        .feature-icon { font-size: 32px; margin-bottom: 15px; }
+        .feature h3 { font-size: 15px; font-weight: 900; color: #0f172a; margin-bottom: 8px; }
+        .feature p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+        
+        .trust-section { background: white; padding: 60px 20px; }
+        .trust-section h2 { font-size: 32px; margin-bottom: 40px; color: #0f172a; font-weight: 900; text-align: center; }
+        .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .trust-item { text-align: center; }
+        .trust-icon { font-size: 40px; margin-bottom: 12px; }
+        .trust-item h3 { font-size: 14px; font-weight: 900; color: #0f172a; margin-bottom: 8px; }
+        .trust-item p { font-size: 12px; color: #4b5563; }
+        
+        .success-section { background: #f0fdfa; padding: 80px 20px; }
+        .success-section h2 { font-size: 32px; margin-bottom: 50px; color: #0f172a; font-weight: 900; text-align: center; }
+        .success-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .success-card { background: white; padding: 40px; border-radius: 12px; border-left: 4px solid #0d9488; }
+        .success-metric { font-size: 32px; font-weight: 900; color: #0d9488; margin-bottom: 12px; }
+        .success-metric-label { font-size: 12px; color: #4b5563; text-transform: uppercase; margin-bottom: 20px; font-weight: 700; }
+        .success-name { font-weight: 700; color: #0f172a; font-size: 14px; }
+        .success-role { font-size: 12px; color: #4b5563; margin-bottom: 20px; }
+        .success-story { font-size: 13px; color: #4b5563; line-height: 1.8; }
+        
+        .faq-section { background: white; padding: 80px 20px; }
+        .faq-section h2 { font-size: 32px; margin-bottom: 50px; color: #0f172a; font-weight: 900; text-align: center; }
+        .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1000px; margin: 0 auto; }
+        .faq-item { }
+        .faq-q { font-weight: 900; color: #0f172a; margin-bottom: 12px; font-size: 14px; }
+        .faq-a { font-size: 13px; color: #4b5563; line-height: 1.7; }
+        
+        .cta-final { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color: white; padding: 60px 40px; border-radius: 12px; text-align: center; margin: 80px 20px; }
+        .cta-final h2 { font-size: 36px; margin-bottom: 15px; font-weight: 900; }
+        .cta-final p { font-size: 16px; margin-bottom: 25px; opacity: 0.95; }
+        
+        footer { background: #0f172a; color: white; padding: 40px 20px; text-align: center; font-size: 12px; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .use-cases-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .trust-grid { grid-template-columns: repeat(2, 1fr); }
+            .success-grid { grid-template-columns: 1fr; }
+            .faq-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <a href="#" class="cta">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Experience The Power Of Athena</h1>
+            <p>The AI voice agent that replaces expensive hiring. Works for startups to enterprises.</p>
+            <div style="margin-top: 30px;">
+                <a href="#" class="btn">Try Free Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases-section">
+        <div class="container">
+            <h2>How Teams Use Athena</h2>
+            <div class="use-cases-grid">
+                <div class="use-case">
+                    <div class="use-case-icon">📞</div>
+                    <div class="use-case-title">Sales Outreach</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">📋</div>
+                    <div class="use-case-title">Lead Qualification</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">📅</div>
+                    <div class="use-case-title">Appointment Booking</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">💰</div>
+                    <div class="use-case-title">Debt Collection</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🎯</div>
+                    <div class="use-case-title">Market Research</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">📊</div>
+                    <div class="use-case-title">Customer Surveys</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🌍</div>
+                    <div class="use-case-title">Multi-Language</div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🔄</div>
+                    <div class="use-case-title">Follow-Ups</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Upload Contacts</h3>
+                    <p>CSV, Salesforce, or API. Get your prospect list ready in seconds.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Configure Pitch</h3>
+                    <p>Set your opener, objection handlers, and closing message. No coding.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Deploy</h3>
+                    <p>Athena starts calling 24/7. Seamless, human-quality conversations.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h3>Monitor</h3>
+                    <p>Real-time analytics, transcripts, and qualified leads to your CRM.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <div class="feature-category">
+                <h2>Natural Conversations</h2>
+                <p class="feature-category-subtitle">AI that sounds human and handles real interactions</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">🎤</div>
+                        <h3>Human-Quality Voice</h3>
+                        <p>Premium voices with natural pacing, tone, and inflection. Prospects never suspect AI.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Smart Objection Handling</h3>
+                        <p>AI understands context and adapts responses. Real conversations, not scripts.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Multi-Language Support</h3>
+                        <p>Fluent in 15+ languages. Talk to global markets in their language.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Sub-200ms Latency</h3>
+                        <p>Instant responses. Conversations feel natural, not robotic.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-category">
+                <h2>Intelligent Qualification</h2>
+                <p class="feature-category-subtitle">Real qualification that filters tire kickers</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Smart Filtering</h3>
+                        <p>Define criteria. AI qualifies on budget, authority, timeline, pain points.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <h3>Lead Scoring</h3>
+                        <p>Predictive AI scores leads by deal probability. Hot leads first.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Real Intent Detection</h3>
+                        <p>Knows when someone really said yes vs just being polite.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📞</div>
+                        <h3>Human Escalation</h3>
+                        <p>Smoothly hands off to your team when needed. No awkward silence.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-category">
+                <h2>Seamless Integration</h2>
+                <p class="feature-category-subtitle">Works with your existing tools</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">🔗</div>
+                        <h3>Native CRM Sync</h3>
+                        <p>Auto-sync to Salesforce. Qualified leads, notes, transcripts included.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📧</div>
+                        <h3>Email Follow-Up</h3>
+                        <p>Automatic follow-up sequences. Call + email coordination.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">💬</div>
+                        <h3>Slack Notifications</h3>
+                        <p>Real-time alerts for qualified leads. Daily activity reports.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🔌</div>
+                        <h3>API Access</h3>
+                        <p>Build custom integrations. Webhook support. Full control.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-category">
+                <h2>Built To Scale</h2>
+                <p class="feature-category-subtitle">From startup to enterprise. We've got you covered.</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Security First</h3>
+                        <p>SOC 2 Certified. Enterprise-grade security. Your data is protected.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⏱️</div>
+                        <h3>Always Available</h3>
+                        <p>99.9% uptime. Athena calls 24/7/365 without interruption.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📋</div>
+                        <h3>Fully Compliant</h3>
+                        <p>GDPR, CCPA, HIPAA ready. Works globally.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎨</div>
+                        <h3>White-Label Ready</h3>
+                        <p>For agencies: resell as your own product. We handle support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-section">
+        <div class="container">
+            <h2>Trusted By Teams Of All Sizes</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon">📞</div>
+                    <h3>1M+ Calls</h3>
+                    <p>Completed and counting. Proven to work.</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🏢</div>
+                    <h3>100+ Companies</h3>
+                    <p>From 3-person startups to 200+ person teams.</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">⭐</div>
+                    <h3>4.9★ Rating</h3>
+                    <p>Based on 100+ verified reviews.</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">💰</div>
+                    <h3>$6 CPM</h3>
+                    <p>Affordable for everyone. No hidden fees.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="success-section">
+        <div class="container">
+            <h2>Success Stories From Our Customers</h2>
+            <div class="success-grid">
+                <div class="success-card">
+                    <div class="success-metric">150</div>
+                    <div class="success-metric-label">Qualified Meetings</div>
+                    <div class="success-name">Sarah Chen</div>
+                    <div class="success-role">VP Sales at NeuraSpec (Fintech)</div>
+                    <p class="success-story">"Made 1,000+ calls in week 1. Got 150 qualified meetings. It's like hiring 3 SDRs for $299/month. Athena is a game-changer."</p>
+                </div>
+                <div class="success-card">
+                    <div class="success-metric">$200K</div>
+                    <div class="success-metric-label">Salary Freed</div>
+                    <div class="success-name">Marcus Rodriguez</div>
+                    <div class="success-role">CEO at Speciora (SaaS)</div>
+                    <p class="success-story">"Replaced 2 underperforming SDRs. Same pipeline, better quality, no hiring drama. Freed $200K in annual salary."</p>
+                </div>
+                <div class="success-card">
+                    <div class="success-metric">Week 2</div>
+                    <div class="success-metric-label">First Customer</div>
+                    <div class="success-name">Lisa Park</div>
+                    <div class="success-role">Founder at AI TechFlow</div>
+                    <p class="success-story">"Had zero outbound capacity. Athena gave it to us instantly. First customer closed in 7 days. ROI is insane."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <h2>Questions & Answers</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-q">How do I create a campaign with Athena?</div>
+                    <div class="faq-a">Sign up for an account. Upload your contact list (CSV or Salesforce). Configure your pitch using our no-code builder. Deploy immediately. Athena starts calling within minutes.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What's included in the pricing?</div>
+                    <div class="faq-a">Starter: 1,000 calls, 1 agent, transcripts. Growth: 5,000 calls, 3 agents, CRM sync, analytics. Enterprise: unlimited calls, unlimited agents, API, white-label.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I change my pitch mid-campaign?</div>
+                    <div class="faq-a">Yes. Instantly. Changes take effect immediately. No waiting for support. This is one of our biggest advantages vs competitors.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Will prospects think it's a bot?</div>
+                    <div class="faq-a">No. Our voice quality is premium. Real pacing, tone, inflection. Most prospects never suspect. We get occasional "are you a bot?" but they don't hang up.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Do I need technical skills?</div>
+                    <div class="faq-a">No. Anyone can use Athena. No code required. Intuitive builder. Designed for sales teams, not engineers.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What if I'm not happy?</div>
+                    <div class="faq-a">30-day money-back guarantee. No questions. We're confident you'll see results, but if you don't, full refund.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="cta-final">
+                <h2>Ready to Scale Without Hiring?</h2>
+                <p>Join 100+ teams. Startups to enterprises. All growing faster.</p>
+                <a href="#" class="btn">Start Your Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Athena AI • 100+ teams growing faster • 30-day free trial • 100% money-back guarantee</p>
+    </footer>
+</body>
+</html>

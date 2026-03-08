@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - White + Teal Extended</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .nav-links { display: flex; gap: 30px; }
+        header a { text-decoration: none; color: #4b5563; font-size: 14px; }
+        header .cta-header { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        
+        /* Hero */
+        .hero { padding: 100px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 20px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #0d9488; color: white; }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2); }
+        .btn-secondary { background: white; color: #0d9488; border: 2px solid #0d9488; }
+        .btn-secondary:hover { background: #f0fdfa; }
+        
+        /* Section */
+        section { padding: 80px 20px; }
+        section h2 { font-size: 42px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        section h3 { font-size: 32px; margin-bottom: 30px; font-weight: 900; color: #0f172a; }
+        
+        /* How It Works */
+        .how-it-works { background: white; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .step { background: #f0fdfa; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; transition: all 0.3s; }
+        .step:hover { border-color: #0d9488; }
+        .step-number { display: inline-block; width: 50px; height: 50px; background: #0d9488; color: white; border-radius: 50%; line-height: 50px; font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+        .step h3 { font-size: 18px; margin-bottom: 10px; }
+        .step p { font-size: 14px; color: #4b5563; }
+        
+        /* Problem/Solution */
+        .problem { background: #f0fdfa; }
+        .solution { background: linear-gradient(135deg, white 0%, #f0fdfa 100%); }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .two-col h3 { font-size: 32px; margin-bottom: 30px; }
+        .two-col ul { list-style: none; }
+        .two-col li { padding: 12px 0; font-size: 16px; padding-left: 30px; position: relative; }
+        .two-col li:before { content: '→'; position: absolute; left: 0; color: #0d9488; font-weight: bold; font-size: 18px; }
+        .col-img { background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); height: 400px; border-radius: 12px; border: 2px solid #0d9488; }
+        
+        /* Features */
+        .features { background: white; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .feature-card { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s; }
+        .feature-card:hover { border-color: #0d9488; background: #f0fdfa; }
+        .feature-icon { font-size: 48px; margin-bottom: 15px; }
+        .feature-card h3 { font-size: 18px; margin-bottom: 10px; }
+        .feature-card p { font-size: 14px; color: #4b5563; }
+        
+        /* Comparison */
+        .comparison { background: #f8fafc; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        .comparison-table th, .comparison-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .comparison-table th { background: #f0fdfa; font-weight: 700; color: #0d9488; }
+        .comparison-table tr:hover { background: #f0fdfa; }
+        .check { color: #0d9488; font-weight: bold; }
+        .cross { color: #ef4444; }
+        
+        /* Testimonials */
+        .testimonials { background: #f8fafc; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 40px; border-radius: 12px; border-left: 4px solid #0d9488; box-shadow: 0 2px 8px rgba(13, 148, 136, 0.05); }
+        .stars { color: #f59e0b; margin-bottom: 15px; }
+        .testimonial p { margin-bottom: 15px; color: #4b5563; }
+        .testimonial-author { font-weight: 700; color: #0f172a; }
+        
+        /* Pricing */
+        .pricing { background: white; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 40px auto; }
+        .pricing-card { background: white; padding: 45px 35px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; transition: all 0.3s; }
+        .pricing-card:hover { border-color: #0d9488; }
+        .pricing-card.popular { border: 2px solid #0d9488; background: #f0fdfa; transform: scale(1.05); box-shadow: 0 10px 30px rgba(13, 148, 136, 0.15); }
+        .price { font-size: 40px; font-weight: 900; margin: 15px 0; color: #0d9488; }
+        .features-list { text-align: left; list-style: none; margin-bottom: 30px; }
+        .features-list li { padding: 10px 0; border-bottom: 1px solid #f0fdfa; }
+        .features-list li:before { content: '✓ '; color: #0d9488; font-weight: bold; margin-right: 8px; }
+        
+        /* FAQ */
+        .faq { background: white; }
+        .faq-items { max-width: 800px; margin: 0 auto; }
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .faq-question { background: #f0fdfa; padding: 20px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #0d9488; display: flex; justify-content: space-between; }
+        .faq-question:hover { background: #d1fae5; }
+        .faq-answer { display: none; padding: 20px 0; color: #4b5563; line-height: 1.8; }
+        .faq-item.active .faq-answer { display: block; }
+        .faq-toggle { font-size: 20px; }
+        
+        /* Footer */
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .two-col { grid-template-columns: 1fr; }
+            section h2 { font-size: 32px; }
+            .pricing-card.popular { transform: scale(1); }
+            header .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <div class="nav-links">
+                    <a href="#how">How It Works</a>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <a href="#pricing" class="cta-header">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Book Qualified Meetings While You Sleep</h1>
+            <p class="subtitle">Athena is an AI Voice Agent that makes intelligent calls, qualifies leads, and books meetings 24/7. No hiring. No training.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Try Live Dialer</a>
+                <a href="#pricing" class="btn btn-secondary">View Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="container">
+            <h2>How Athena Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Contacts</h3>
+                    <p>CSV, Salesforce, or direct import. Athena learns your list in seconds.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Configure Your Pitch</h3>
+                    <p>Set your opener, objection handlers, and closing pitch. Takes 5 minutes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Athena Calls 24/7</h3>
+                    <p>AI makes calls. Sounds human. Handles objections. Qualifies leads.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>CRM Sync</h3>
+                    <p>Qualified leads auto-push to Salesforce. Your team just closes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="problem">
+        <div class="container">
+            <h2>The Problem You Face</h2>
+            <div class="two-col">
+                <div>
+                    <h3>Hiring SDRs Doesn't Scale</h3>
+                    <ul>
+                        <li>$130K/year salary per person</li>
+                        <li>6 months to ramp up</li>
+                        <li>High turnover & burnout</li>
+                        <li>Inconsistent pitch quality</li>
+                        <li>Can't scale affordably</li>
+                        <li>Pipeline dies when they leave</li>
+                    </ul>
+                </div>
+                <div class="col-img"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="solution">
+        <div class="container">
+            <h2>The Athena Solution</h2>
+            <div class="two-col">
+                <div class="col-img"></div>
+                <div>
+                    <h3>Replace Expensive Hiring</h3>
+                    <ul>
+                        <li>$299/month flat pricing</li>
+                        <li>Live in just 5 minutes</li>
+                        <li>100% consistent quality</li>
+                        <li>Perfect pitch every single time</li>
+                        <li>Scale to 5,000+ calls instantly</li>
+                        <li>Auto CRM sync included</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Why Teams Choose Athena</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎤</div>
+                    <h3>Sounds Completely Human</h3>
+                    <p>Premium voices with natural pacing, tone, and inflection. Prospects have no idea they're talking to AI.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Understands Context</h3>
+                    <p>Handles objections intelligently. Adapts to conversation flow. Not a script.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Full Transparency</h3>
+                    <p>Every call recorded. Every word transcribed. You see exactly what Athena says.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real Qualifications</h3>
+                    <p>Books real meetings only. Filters tire kickers. Quality over quantity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Salesforce Sync</h3>
+                    <p>Qualified leads auto-push. Call notes and transcripts included. Zero manual entry.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>A/B Test Messaging</h3>
+                    <p>Run 3 agents with 3 different pitches. See which angle closes most deals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="container">
+            <h2>Athena vs Competitors</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Athena</th>
+                    <th>Other Tools</th>
+                </tr>
+                <tr>
+                    <td>Natural voice quality</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>Handles objections</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>Full transparency</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>CRM sync included</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>One transparent price</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>A/B test messaging</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Real Users Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"Made 1,000+ calls in week 1. Got 150 qualified meetings. It's like hiring 3 SDRs for $299/month. This is a game-changer."</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">VP Sales, Fintech Startup</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"Replaced 2 SDRs with Athena. Freed up $200K in annual salary. The AI actually qualifies better than our humans were."</p>
+                    <div class="testimonial-author">Marcus Rodriguez</div>
+                    <div class="testimonial-role">CEO, B2B SaaS Company</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"5-minute setup. Started calling same day. First qualified deal closed in 7 days. ROI is insane."</p>
+                    <div class="testimonial-author">Lisa Park</div>
+                    <div class="testimonial-role">Founder, Growth-focused Startup</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Simple Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$299<span style="font-size: 18px;">/mo</span></div>
+                    <ul class="features-list">
+                        <li>1,000 calls/month</li>
+                        <li>1 AI agent</li>
+                        <li>Full transcripts & recordings</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Growth</h3>
+                    <div class="price">$899<span style="font-size: 18px;">/mo</span></div>
+                    <ul class="features-list">
+                        <li>5,000 calls/month</li>
+                        <li>3 AI agents</li>
+                        <li>Salesforce CRM sync</li>
+                        <li>Advanced analytics</li>
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$1,999<span style="font-size: 18px;">+/mo</span></div>
+                    <ul class="features-list">
+                        <li>10,000+ calls/month</li>
+                        <li>Unlimited agents</li>
+                        <li>All integrations</li>
+                        <li>White-label option</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule Demo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-items">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Will prospects think they're talking to a bot?</span>
+                        <span class="faq-toggle">−</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. Athena uses premium human-quality voices with natural pacing and inflection. Most prospects never realize it's AI. Our voice quality is significantly better than competitors.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How accurate are the call transcripts?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        99%+ accurate. We use enterprise-grade transcription. Every call is word-perfect so you can optimize your pitch based on real data.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I change my pitch mid-campaign?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. Changes take effect immediately. No waiting for support. Update your opener, objection handlers, or closing pitch anytime. This is a huge advantage vs competitors.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How long does setup take?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        5 minutes. Upload your prospect list (CSV or Salesforce API). Configure your pitch. Athena starts calling immediately.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you integrate with Salesforce?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. Growth and Enterprise plans include automatic Salesforce sync. Qualified leads are pushed to your CRM in real-time with full transcripts and call notes.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What if I'm not happy with results?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        30-day money-back guarantee. No questions asked. We're confident you'll see results, but if you don't, we refund your entire subscription.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Athena AI. Building in public.</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">30-day free trial. No credit card required.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+                this.querySelector('.faq-toggle').textContent = 
+                    this.parentElement.classList.contains('active') ? '−' : '+';
+            });
+        });
+    </script>
+</body>
+</html>

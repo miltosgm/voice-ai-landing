@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - White + Teal Sales Focus</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .cta-header { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        
+        /* Hero */
+        .hero { padding: 80px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 20px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #0d9488; color: white; }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-2px); }
+        .btn-secondary { background: white; color: #0d9488; border: 2px solid #0d9488; }
+        .btn-secondary:hover { background: #f0fdfa; }
+        
+        /* Section */
+        section { padding: 80px 20px; }
+        section h2 { font-size: 42px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        
+        /* Trust Signals */
+        .trust { background: #f0fdfa; padding: 40px; border-radius: 12px; margin-bottom: 60px; }
+        .trust-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .trust-item h3 { font-size: 24px; font-weight: 900; color: #0d9488; margin-bottom: 10px; }
+        .trust-item p { font-size: 14px; color: #4b5563; }
+        
+        /* ROI Calculator */
+        .roi { background: #f0fdfa; }
+        .roi-container { max-width: 600px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; border: 2px solid #0d9488; }
+        .roi-input { margin-bottom: 20px; }
+        .roi-input label { display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a; }
+        .roi-input input { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 16px; }
+        .roi-result { margin-top: 30px; padding: 30px; background: #0d9488; color: white; border-radius: 8px; text-align: center; }
+        .roi-result h3 { font-size: 36px; margin: 10px 0; }
+        
+        /* Case Studies */
+        .case-studies { background: white; }
+        .case-study { background: white; padding: 40px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 30px; transition: all 0.3s; }
+        .case-study:hover { border-color: #0d9488; background: #f0fdfa; }
+        .case-study-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
+        .case-study-company { font-weight: 700; color: #0d9488; }
+        .case-study-metric { background: #0d9488; color: white; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 14px; }
+        .case-study p { margin-bottom: 15px; color: #4b5563; line-height: 1.8; }
+        .case-study ul { list-style: none; padding-left: 20px; }
+        .case-study li { padding: 8px 0; }
+        .case-study li:before { content: '✓ '; color: #0d9488; font-weight: bold; margin-right: 8px; }
+        
+        /* Testimonials */
+        .testimonials { background: #f8fafc; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 40px; border-radius: 12px; border-left: 4px solid #0d9488; }
+        .stars { color: #f59e0b; margin-bottom: 15px; }
+        .testimonial p { margin-bottom: 15px; color: #4b5563; }
+        .testimonial-author { font-weight: 700; color: #0f172a; }
+        
+        /* Pricing */
+        .pricing { background: white; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 40px auto; }
+        .pricing-card { background: white; padding: 45px 35px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; }
+        .pricing-card.popular { border: 2px solid #0d9488; background: #f0fdfa; transform: scale(1.05); }
+        .price { font-size: 40px; font-weight: 900; margin: 15px 0; color: #0d9488; }
+        .features-list { text-align: left; list-style: none; margin-bottom: 30px; }
+        .features-list li { padding: 10px 0; border-bottom: 1px solid #f0fdfa; }
+        .features-list li:before { content: '✓ '; color: #0d9488; font-weight: bold; margin-right: 8px; }
+        
+        /* CTA */
+        .final-cta { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color: white; text-align: center; }
+        .final-cta h2 { color: white; }
+        .final-cta p { color: rgba(255,255,255,0.9); margin: 15px 0; }
+        
+        /* Footer */
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            section h2 { font-size: 32px; }
+            .case-study-header { flex-direction: column; }
+            .pricing-card.popular { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <a href="#pricing" class="cta-header">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Hiring. Start Closing.</h1>
+            <p class="subtitle">Athena is the AI Voice Agent that replaces expensive SDRs. $299/month. Same results. 24/7 calling.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Try Live Demo</a>
+                <a href="#roi" class="btn btn-secondary">Calculate Your ROI</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Signals -->
+    <section>
+        <div class="container">
+            <div class="trust">
+                <div class="trust-items">
+                    <div class="trust-item">
+                        <h3>1M+</h3>
+                        <p>Calls Completed</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>100+</h3>
+                        <p>Companies Trust Us</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>4.9★</h3>
+                        <p>Customer Rating</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>$6</h3>
+                        <p>Cost Per Meeting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section class="roi" id="roi">
+        <div class="container">
+            <h2>Calculate Your Payback Period</h2>
+            <div class="roi-container">
+                <div class="roi-input">
+                    <label>How many deals do you close per month?</label>
+                    <input type="number" id="deals" value="2" min="1">
+                </div>
+                <div class="roi-input">
+                    <label>What's your average deal size?</label>
+                    <input type="number" id="dealsize" value="50000" min="1000" step="1000">
+                </div>
+                <div class="roi-result">
+                    <p>If Athena helps you close just 1 more deal...</p>
+                    <h3 id="roi-value">$50,000</h3>
+                    <p>That's your monthly revenue from AI calling</p>
+                    <p style="font-size: 14px; margin-top: 15px;">Athena pays for itself in <strong id="payback">minutes</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section class="case-studies">
+        <div class="container">
+            <h2>Real Results From Real Companies</h2>
+            
+            <div class="case-study">
+                <div class="case-study-header">
+                    <div>
+                        <div class="case-study-company">Growth-Stage Fintech</div>
+                        <p style="font-size: 13px; color: #4b5563; margin-top: 5px;">Series A-funded team, 12 people</p>
+                    </div>
+                    <div class="case-study-metric">3x more pipeline</div>
+                </div>
+                <p><strong>Challenge:</strong> VP Sales had 1 junior SDR handling inbound. Pipeline was inconsistent. Couldn't afford to hire 2 more SDRs ($260K/year).</p>
+                <p><strong>Solution:</strong> Deployed Athena Growth plan. Ran 3 different pitches A/B test style. Let Athena handle outbound while SDR focused on inbound follow-up.</p>
+                <p><strong>Results (Month 1):</strong></p>
+                <ul>
+                    <li>1,200 calls completed</li>
+                    <li>156 qualified meetings booked</li>
+                    <li>Cost per meeting: $5.75</li>
+                    <li>Pipeline increased 3x with no new hires</li>
+                </ul>
+            </div>
+
+            <div class="case-study">
+                <div class="case-study-header">
+                    <div>
+                        <div class="case-study-company">B2B SaaS Company</div>
+                        <p style="font-size: 13px; color: #4b5563; margin-top: 5px;">25-person team, $2M ARR</p>
+                    </div>
+                    <div class="case-study-metric">Freed $200K/year</div>
+                </div>
+                <p><strong>Challenge:</strong> 2 SDRs were cost centers. High turnover. New hires took 3-4 months to be productive. CEO wanted better ROI on sales team.</p>
+                <p><strong>Solution:</strong> Replaced 2 SDRs with Athena Enterprise plan. Trained remaining team member as AE instead. Athena handles all outbound.</p>
+                <p><strong>Results (Year 1):</strong></p>
+                <ul>
+                    <li>Same pipeline as before (or better)</li>
+                    <li>Saved $200K in annual salary + benefits</li>
+                    <li>No onboarding or training needed</li>
+                    <li>AI qualifies better than humans (less BS meetings)</li>
+                </ul>
+            </div>
+
+            <div class="case-study">
+                <div class="case-study-header">
+                    <div>
+                        <div class="case-study-company">Bootstrapped Startup</div>
+                        <p style="font-size: 13px; color: #4b5563; margin-top: 5px;">3-person founding team</p>
+                    </div>
+                    <div class="case-study-metric">First deal in 7 days</div>
+                </div>
+                <p><strong>Challenge:</strong> Founders couldn't afford SDRs. No outbound pipeline. Competing against funded competitors.</p>
+                <p><strong>Solution:</strong> Started with Athena Starter plan ($299/mo). Simple pitch. Clean list of 500 prospects.</p>
+                <p><strong>Results (Month 1):</strong></p>
+                <ul>
+                    <li>312 calls completed</li>
+                    <li>41 qualified meetings</li>
+                    <li>First customer closed: $18K ARR</li>
+                    <li>ROI: 60x (18,000 in revenue vs $299 cost)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Direct User Feedback</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"Our VP Sales said: 'This is like hiring 3 SDRs overnight.' Week 1 results: 150 qualified meetings from 1,000+ calls. We're implementing across all markets."</p>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">VP Sales, Fintech</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"Took the plunge and replaced 2 underperforming SDRs. Best decision ever. Pipeline is more consistent, cost is 99% lower, and AI actually qualifies better."</p>
+                    <div class="testimonial-author">Marcus Rodriguez</div>
+                    <div class="testimonial-role">CEO, SaaS</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"As a 3-person founder team, SDRs were impossible. Athena gave us outbound capacity instantly. First customer closed 7 days after launching. Game-changer."</p>
+                    <div class="testimonial-author">Lisa Park</div>
+                    <div class="testimonial-role">Founder, Startup</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$299<span style="font-size: 18px;">/mo</span></div>
+                    <p style="color: #4b5563; margin-bottom: 20px;">For testing</p>
+                    <ul class="features-list">
+                        <li>1,000 calls/month</li>
+                        <li>1 AI agent</li>
+                        <li>Full transcripts</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Growth</h3>
+                    <div class="price">$899<span style="font-size: 18px;">/mo</span></div>
+                    <p style="margin-bottom: 20px;">Most popular</p>
+                    <ul class="features-list">
+                        <li>5,000 calls/month</li>
+                        <li>3 AI agents (A/B test)</li>
+                        <li>Salesforce sync</li>
+                        <li>Advanced analytics</li>
+                        <li>24/7 support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$1,999<span style="font-size: 18px;">+/mo</span></div>
+                    <p style="color: #4b5563; margin-bottom: 20px;">Custom scale</p>
+                    <ul class="features-list">
+                        <li>10,000+ calls/month</li>
+                        <li>Unlimited agents</li>
+                        <li>All integrations</li>
+                        <li>White-label</li>
+                        <li>Dedicated manager</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule Demo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Replace Your SDR Budget?</h2>
+            <p>Start with a free trial. No credit card required. See results in your first week.</p>
+            <div style="margin-top: 30px;">
+                <a href="#" class="btn btn-primary">Get Started Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Athena AI</p>
+        <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">30-day free trial. No credit card. Money-back guarantee.</p>
+    </footer>
+
+    <script>
+        function updateROI() {
+            const deals = parseFloat(document.getElementById('deals').value) || 2;
+            const size = parseFloat(document.getElementById('dealsize').value) || 50000;
+            const roi = size * (deals + 1);
+            const minutes = Math.round((899 / roi) * 60);
+            
+            document.getElementById('roi-value').textContent = '$' + roi.toLocaleString();
+            
+            if (minutes < 1) {
+                document.getElementById('payback').textContent = 'seconds';
+            } else if (minutes < 60) {
+                document.getElementById('payback').textContent = minutes + ' minutes';
+            } else {
+                const hours = (minutes / 60).toFixed(1);
+                document.getElementById('payback').textContent = hours + ' hours';
+            }
+        }
+        
+        document.getElementById('deals').addEventListener('change', updateROI);
+        document.getElementById('dealsize').addEventListener('change', updateROI);
+        updateROI();
+    </script>
+</body>
+</html>

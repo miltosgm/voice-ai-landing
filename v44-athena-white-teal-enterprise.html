@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - Enterprise Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 2px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 26px; font-weight: bold; color: #0d9488; letter-spacing: 1px; }
+        header .nav-links { display: flex; gap: 40px; font-size: 14px; }
+        header a { text-decoration: none; color: #4b5563; font-weight: 500; }
+        header .cta-header { background: #0d9488; color: white; padding: 12px 28px; border-radius: 6px; font-weight: 600; }
+        
+        .hero { padding: 100px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 18px; margin-bottom: 40px; color: #4b5563; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+        .btn-primary { background: #0d9488; color: white; }
+        .btn-secondary { background: white; color: #0d9488; border: 2px solid #0d9488; }
+        
+        section { padding: 80px 20px; }
+        section h2 { font-size: 44px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        section h3 { font-size: 24px; margin-bottom: 20px; color: #0f172a; font-weight: 900; }
+        
+        .business-case { background: #f0fdfa; padding: 50px 40px; border-radius: 12px; border: 2px solid #0d9488; margin: 40px 0; }
+        .business-case h3 { color: #0d9488; }
+        .bc-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; margin-top: 30px; }
+        .bc-metric { text-align: center; }
+        .bc-metric-value { font-size: 28px; font-weight: 900; color: #0d9488; }
+        .bc-metric-label { font-size: 13px; color: #4b5563; text-transform: uppercase; margin-top: 5px; }
+        
+        .comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .comp-card { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .comp-card h3 { font-size: 20px; margin-bottom: 20px; color: #0d9488; }
+        .comp-list { list-style: none; }
+        .comp-list li { padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        .comp-list li:before { content: '✓ '; color: #0d9488; font-weight: bold; margin-right: 8px; }
+        
+        .integration-section { background: white; }
+        .integration-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; }
+        .integration-item { text-align: center; padding: 25px; border: 2px solid #e2e8f0; border-radius: 8px; }
+        .integration-icon { font-size: 40px; margin-bottom: 10px; }
+        .integration-item h3 { font-size: 14px; color: #0f172a; font-weight: 700; }
+        
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 40px; border-radius: 12px; border-left: 4px solid #0d9488; }
+        .company-tag { display: inline-block; background: #f0fdfa; color: #0d9488; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 15px; }
+        .quote { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 15px; }
+        .author { font-weight: 700; color: #0f172a; }
+        .role { font-size: 13px; color: #4b5563; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1100px; margin: 40px auto; }
+        .pricing-card { background: white; padding: 50px 40px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; }
+        .pricing-card.popular { border: 2px solid #0d9488; background: #f0fdfa; }
+        .price { font-size: 44px; font-weight: 900; color: #0d9488; margin: 15px 0; }
+        .features-list { text-align: left; list-style: none; margin-bottom: 30px; }
+        .features-list li { padding: 12px 0; border-bottom: 1px solid #f0fdfa; font-size: 14px; }
+        .features-list li:before { content: '✓ '; color: #0d9488; margin-right: 8px; font-weight: bold; }
+        
+        .faq-items { max-width: 900px; margin: 40px auto; }
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .faq-question { background: #f0fdfa; padding: 20px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #0d9488; display: flex; justify-content: space-between; }
+        .faq-answer { display: none; padding: 20px 0; color: #4b5563; }
+        .faq-item.active .faq-answer { display: block; }
+        
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            section h2 { font-size: 32px; }
+            header .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">ATHENA</div>
+                <div class="nav-links">
+                    <a href="#use-cases">Use Cases</a>
+                    <a href="#integrations">Integrations</a>
+                    <a href="#enterprise">Enterprise</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <a href="#pricing" class="cta-header">Schedule Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Enterprise AI Voice Agent Platform</h1>
+            <p class="subtitle">Scale your outbound operation to 10,000+ qualified calls per month. Enterprise security, integrations, and support included.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Schedule Demo</a>
+                <a href="#" class="btn btn-secondary">View Security &amp; Compliance</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="use-cases" style="background: #f0fdfa;">
+        <div class="container">
+            <h2>Enterprise Use Cases</h2>
+            
+            <div class="business-case">
+                <h3>Use Case: Multi-Market B2B SaaS Expansion</h3>
+                <p style="color: #4b5563; margin-bottom: 30px;">Large SaaS company needed to enter 3 new markets simultaneously without hiring 6 new SDRs across regions.</p>
+                <div class="bc-metrics">
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">$390K</div>
+                        <div class="bc-metric-label">Hiring Cost Avoided</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">15,000</div>
+                        <div class="bc-metric-label">Calls/Month</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">1,800</div>
+                        <div class="bc-metric-label">Qualified Meetings</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">$6.50</div>
+                        <div class="bc-metric-label">Cost Per Meeting</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="business-case">
+                <h3>Use Case: Sales Team Efficiency Improvement</h3>
+                <p style="color: #4b5563; margin-bottom: 30px;">Mid-market company replaced underperforming SDRs with Athena to improve pipeline quality and AE productivity.</p>
+                <div class="bc-metrics">
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">$200K</div>
+                        <div class="bc-metric-label">Annual Savings</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">3x</div>
+                        <div class="bc-metric-label">Better Qualification</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">+40%</div>
+                        <div class="bc-metric-label">AE Close Rate</div>
+                    </div>
+                    <div class="bc-metric">
+                        <div class="bc-metric-value">2.5x</div>
+                        <div class="bc-metric-label">Pipeline Growth</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="integrations" style="background: white;">
+        <div class="container">
+            <h2>Enterprise Integrations</h2>
+            <div class="integration-grid">
+                <div class="integration-item">
+                    <div class="integration-icon">🔵</div>
+                    <h3>Salesforce</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">📊</div>
+                    <h3>HubSpot</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">🔗</div>
+                    <h3>Pipedrive</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">📈</div>
+                    <h3>Marketo</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">💬</div>
+                    <h3>Slack</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">🔔</div>
+                    <h3>Webhook API</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">📧</div>
+                    <h3>Outbound Email</h3>
+                </div>
+                <div class="integration-item">
+                    <div class="integration-icon">📱</div>
+                    <h3>SMS/Twilio</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <h2>What Enterprise Teams Get</h2>
+            <div class="comparison-grid">
+                <div class="comp-card">
+                    <h3>Operational Excellence</h3>
+                    <ul class="comp-list">
+                        <li>99.9% uptime SLA</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom onboarding</li>
+                        <li>Priority support 24/7</li>
+                        <li>Quarterly business reviews</li>
+                    </ul>
+                </div>
+                <div class="comp-card">
+                    <h3>Security &amp; Compliance</h3>
+                    <ul class="comp-list">
+                        <li>SOC 2 Type II certified</li>
+                        <li>GDPR compliant</li>
+                        <li>CCPA ready</li>
+                        <li>Encrypted data at rest</li>
+                        <li>Annual security audits</li>
+                    </ul>
+                </div>
+                <div class="comp-card">
+                    <h3>Advanced Features</h3>
+                    <ul class="comp-list">
+                        <li>Unlimited AI agents</li>
+                        <li>Advanced analytics</li>
+                        <li>A/B testing tools</li>
+                        <li>API access</li>
+                        <li>White-label option</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <h2>Enterprise Customers</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <span class="company-tag">SaaS - Series B</span>
+                    <div class="quote">"Scaled our sales team without tripling our operating costs"</div>
+                    <p style="color: #4b5563; margin-bottom: 15px;">Deployed across 3 regions. Replaced 6 SDR headcount with Athena Enterprise. Same pipeline. Better quality. $390K annual savings.</p>
+                    <div class="author">VP Sales</div>
+                    <div class="role">50-person company</div>
+                </div>
+                <div class="testimonial">
+                    <span class="company-tag">FinTech - Funded</span>
+                    <div class="quote">"Athena keeps our pipeline predictable"</div>
+                    <p style="color: #4b5563; margin-bottom: 15px;">We depend on 15,000 calls/month. Athena is our core outbound engine. Consistent, reliable, scalable. Exactly what enterprise needs.</p>
+                    <div class="author">Chief Revenue Officer</div>
+                    <div class="role">80-person company</div>
+                </div>
+                <div class="testimonial">
+                    <span class="company-tag">Insurance - 200+ employees</span>
+                    <div class="quote">"Best sales ops decision we've made"</div>
+                    <p style="color: #4b5563; margin-bottom: 15px;">Replaced 4 separate tools and 2 SDRs. Single platform, better results. CRM sync is native. Support is responsive.</p>
+                    <div class="author">VP Operations</div>
+                    <div class="role">200+ person company</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" style="background: white;">
+        <div class="container">
+            <h2>Enterprise Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Professional</h3>
+                    <div class="price">$899<span style="font-size: 18px;">/mo</span></div>
+                    <p style="color: #4b5563; margin-bottom: 30px;">Growth stage teams</p>
+                    <ul class="features-list">
+                        <li>5,000 calls/month</li>
+                        <li>3 AI agents</li>
+                        <li>Salesforce sync</li>
+                        <li>Advanced analytics</li>
+                        <li>24/7 email support</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule Demo</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Enterprise</h3>
+                    <div class="price">$2,499<span style="font-size: 18px;">+/mo</span></div>
+                    <p style="margin-bottom: 30px;">Large scaling teams</p>
+                    <ul class="features-list">
+                        <li>10,000+ calls/month</li>
+                        <li>Unlimited agents</li>
+                        <li>All integrations</li>
+                        <li>Advanced analytics</li>
+                        <li>Dedicated account manager</li>
+                        <li>SLA guarantee (99.9%)</li>
+                        <li>Priority support 24/7</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule Demo</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Custom</h3>
+                    <div class="price">Let's Talk</div>
+                    <p style="color: #4b5563; margin-bottom: 30px;">For complex requirements</p>
+                    <ul class="features-list">
+                        <li>Custom call volumes</li>
+                        <li>White-label option</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated infrastructure</li>
+                        <li>Legal/compliance review</li>
+                        <li>Executive support</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule Demo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="enterprise" style="background: #f0fdfa;">
+        <div class="container">
+            <h2>Enterprise Security &amp; Compliance</h2>
+            <div style="max-width: 900px; margin: 40px auto;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <h3 style="color: #0d9488; margin-bottom: 20px;">Certifications</h3>
+                        <ul style="list-style: none;">
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ SOC 2 Type II</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ GDPR Compliant</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ CCPA Ready</li>
+                            <li style="padding: 10px 0;">✓ ISO 27001 (pending)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="color: #0d9488; margin-bottom: 20px;">Data Protection</h3>
+                        <ul style="list-style: none;">
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ Encryption at rest &amp; in transit</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ Role-based access control</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #d1fae5;">✓ Annual security audits</li>
+                            <li style="padding: 10px 0;">✓ 99.9% uptime guarantee</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" style="background: white;">
+        <div class="container">
+            <h2>Enterprise FAQ</h2>
+            <div class="faq-items">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>What's your SLA for enterprise customers?</span>
+                        <span>−</span>
+                    </div>
+                    <div class="faq-answer">
+                        We guarantee 99.9% uptime. 24/7 priority support. If we go down, you get service credits. Enterprise plans include dedicated account manager for escalations.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can you integrate with our custom CRM?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. We support Salesforce natively. For other CRMs, we have webhook API access and can build custom integrations. Your dedicated account manager handles setup.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do you handle GDPR/data residency?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We're GDPR compliant. Data can be stored in US or EU per your requirements. We conduct annual security audits. Full documentation available.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer white-label options?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, on Enterprise and Custom plans. You can brand Athena as your own platform. Support and infrastructure remain ours.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What's your implementation timeline?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Typically 2-4 weeks for full deployment. Includes dedicated onboarding, training, and initial optimization. Faster if using standard integrations.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>ATHENA ENTERPRISE</strong></p>
+        <p>AI Voice Agent Platform for Large Teams</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">© 2024 Athena. SOC 2 Type II Certified. GDPR Compliant.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+                this.querySelector('span:last-child').textContent = 
+                    this.parentElement.classList.contains('active') ? '−' : '+';
+            });
+        });
+    </script>
+</body>
+</html>

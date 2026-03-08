@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - Startup Founder Edition</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .nav-links { display: flex; gap: 30px; }
+        header a { text-decoration: none; color: #4b5563; font-size: 14px; }
+        header .cta-header { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; font-weight: 600; }
+        
+        .hero { padding: 100px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 20px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #0d9488; color: white; }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-2px); }
+        .btn-secondary { background: white; color: #0d9488; border: 2px solid #0d9488; }
+        
+        section { padding: 80px 20px; }
+        section h2 { font-size: 42px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        section h3 { font-size: 24px; margin-bottom: 20px; color: #0f172a; font-weight: 900; }
+        
+        .founder-note { background: #f0fdfa; border-left: 4px solid #0d9488; padding: 25px; border-radius: 8px; margin: 30px 0; font-style: italic; color: #4b5563; }
+        
+        .growth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .growth-card { background: #f0fdfa; padding: 35px 30px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; }
+        .growth-card h3 { font-size: 18px; margin-bottom: 10px; }
+        .growth-card p { font-size: 14px; color: #4b5563; }
+        .growth-metric { font-size: 28px; font-weight: 900; color: #0d9488; margin: 15px 0; }
+        
+        .timeline { background: white; margin: 40px 0; }
+        .timeline-item { padding: 25px; border-left: 3px solid #0d9488; margin-bottom: 20px; }
+        .timeline-item h3 { color: #0d9488; margin-bottom: 10px; }
+        .timeline-item p { color: #4b5563; }
+        
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .testimonial { background: white; padding: 35px; border-radius: 12px; border: 2px solid #e2e8f0; border-left: 4px solid #0d9488; }
+        .stars { color: #f59e0b; margin-bottom: 10px; }
+        .quote { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 15px; }
+        .context { font-size: 13px; color: #4b5563; margin-bottom: 10px; }
+        .author { font-weight: 700; color: #0f172a; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 40px auto; }
+        .pricing-card { background: white; padding: 45px 35px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; }
+        .pricing-card.popular { border: 2px solid #0d9488; background: #f0fdfa; transform: scale(1.05); }
+        .price { font-size: 40px; font-weight: 900; color: #0d9488; margin: 15px 0; }
+        .features-list { text-align: left; list-style: none; margin-bottom: 30px; }
+        .features-list li { padding: 10px 0; border-bottom: 1px solid #f0fdfa; font-size: 14px; }
+        .features-list li:before { content: '✓ '; color: #0d9488; font-weight: bold; margin-right: 8px; }
+        
+        .faq-items { max-width: 800px; margin: 40px auto; }
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
+        .faq-question { background: #f0fdfa; padding: 20px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #0d9488; display: flex; justify-content: space-between; }
+        .faq-answer { display: none; padding: 20px 0; color: #4b5563; }
+        .faq-item.active .faq-answer { display: block; }
+        
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            section h2 { font-size: 32px; }
+            .pricing-card.popular { transform: scale(1); }
+            header .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🎙️ Athena</div>
+                <div class="nav-links">
+                    <a href="#why">Why Founders Love It</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <a href="#pricing" class="cta-header">Start Free</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Build Your Outbound Pipeline Without Hiring</h1>
+            <p class="subtitle">You can't afford an SDR. Athena can. $299/month gets you 1,000 qualified calls per month.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Try Free Demo</a>
+                <a href="#pricing" class="btn btn-secondary">See Plans</a>
+            </div>
+            <div class="founder-note">
+                "Three of us. No money for hiring. Athena gave us outbound capacity instantly. First deal closed in week 2." — Lisa P., Founder
+            </div>
+        </div>
+    </section>
+
+    <section id="why">
+        <div class="container">
+            <h2>Why Founders Choose Athena</h2>
+            <div class="growth-grid">
+                <div class="growth-card">
+                    <h3>💰 Bootstrapper Friendly</h3>
+                    <p>$299/month is manageable on a shoestring. SDRs cost 130K. Choose wisely.</p>
+                    <div class="growth-metric">$299</div>
+                </div>
+                <div class="growth-card">
+                    <h3>⚡ Go Live in 5 Min</h3>
+                    <p>No hiring. No training. No waiting. Start calling today.</p>
+                    <div class="growth-metric">5 min</div>
+                </div>
+                <div class="growth-card">
+                    <h3>📈 Scale Without Hiring</h3>
+                    <p>Need more calls? Upgrade. Don't need more headcount drama.</p>
+                    <div class="growth-metric">Instant</div>
+                </div>
+                <div class="growth-card">
+                    <h3>🔗 CRM Sync Included</h3>
+                    <p>Qualified leads auto-sync to Salesforce. Your team closes.</p>
+                    <div class="growth-metric">Real-time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f0fdfa;">
+        <div class="container">
+            <h2>The Founder Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Week 1: Setup</h3>
+                    <p>Upload 500 contacts. Write your pitch. Athena makes first calls same day. You're nervous. It's working.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Week 2: First Meetings</h3>
+                    <p>30-40 qualified calls booked. You start taking meetings. Some are real. Some aren't. But the pipeline exists now.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Week 3: First Deal</h3>
+                    <p>First customer from Athena closes. You realize: this actually works. You're not paying $130K for this.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Month 2+: Scaling</h3>
+                    <p>Expand to new list. Test new pitch. Keep what works. Athena keeps calling. Pipeline keeps flowing. You hire your first salesperson (not SDR). They close the leads Athena books.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: white;">
+        <div class="container">
+            <h2>Real Founder Results</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="quote">"From zero pipeline to $18K first customer"</div>
+                    <div class="context">3-person bootstrapped startup, 0 sales experience</div>
+                    <p>We had a product but no way to reach people. Hired Athena instead of SDRs (we couldn't afford them anyway). First qualified meeting came day 3. First customer week 2. We're profitable now.</p>
+                    <div class="author">Lisa Park, Founder</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="quote">"Freed me to actually build the product"</div>
+                    <div class="context">Founder-led sales, spent 80% on outreach before</div>
+                    <p>I was doing all the outreach myself. Killing the product roadmap. Athena took over calling. Suddenly I had time to build. Team tripled. Revenue quadrupled.</p>
+                    <div class="author">Marcus D., Founder</div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <div class="quote">"Proved product market fit before VC"</div>
+                    <div class="context">Pre-seed team, wanted data for fundraising</div>
+                    <p>Athena helped us prove early traction. $50K MRR in 3 months from AI calling. Used that to raise seed. VCs love the unit economics.</p>
+                    <div class="author">Sarah Chen, Co-founder</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" style="background: white;">
+        <div class="container">
+            <h2>Plans For Every Stage</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$299<span style="font-size: 18px;">/mo</span></div>
+                    <p style="color: #4b5563; margin-bottom: 20px;">MVP founders</p>
+                    <ul class="features-list">
+                        <li>1,000 calls/month</li>
+                        <li>1 AI agent</li>
+                        <li>Full transcripts</li>
+                        <li>Basic email support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Growth</h3>
+                    <div class="price">$899<span style="font-size: 18px;">/mo</span></div>
+                    <p style="margin-bottom: 20px;">Scaling founders</p>
+                    <ul class="features-list">
+                        <li>5,000 calls/month</li>
+                        <li>3 AI agents (test angles)</li>
+                        <li>Salesforce sync</li>
+                        <li>24/7 support</li>
+                    </ul>
+                    <button class="btn btn-primary">Start Free</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$1,999<span style="font-size: 18px;">+/mo</span></div>
+                    <p style="color: #4b5563; margin-bottom: 20px;">Teams</p>
+                    <ul class="features-list">
+                        <li>10,000+ calls/month</li>
+                        <li>Unlimited agents</li>
+                        <li>All integrations</li>
+                        <li>Dedicated manager</li>
+                    </ul>
+                    <button class="btn btn-primary">Schedule</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" style="background: #f0fdfa;">
+        <div class="container">
+            <h2>Founder FAQs</h2>
+            <div class="faq-items">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Will prospects think it's a bot?</span>
+                        <span>−</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. The voice is genuinely human-like. We get occasional "are you a bot?" but prospects don't hang up or get offended. Most don't suspect anything.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I change the pitch after launch?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. Immediately. No waiting for support. Find what works, iterate, deploy. This is huge vs competitors who take days/weeks.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How many leads do I need to start?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Any amount. 100 contacts is enough to test. Many founders start with 300-500 and expand after seeing results.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What if I'm not happy?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        30-day money-back guarantee. Seriously. We're confident it works, but if you get zero results, full refund. No questions.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do I need credit card for free trial?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        No credit card. No trick. Just sign up and start calling.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>ATHENA</strong></p>
+        <p>Outbound pipeline for founders who can't afford hiring</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">© 2024. Building in public.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+                this.querySelector('span:last-child').textContent = 
+                    this.parentElement.classList.contains('active') ? '−' : '+';
+            });
+        });
+    </script>
+</body>
+</html>

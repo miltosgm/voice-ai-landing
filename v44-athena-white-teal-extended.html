@@ -18,9 +18,13 @@
         header .cta-header { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; }
         
         /* Hero */
-        .hero { padding: 100px 20px; text-align: center; background: linear-gradient(180deg, white 0%, #f0fdfa 100%); position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
-        .hero::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(13, 148, 136, 0.05) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+        .hero { padding: 100px 20px; text-align: center; background: white; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: 
+            linear-gradient(90deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px),
+            linear-gradient(0deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none; opacity: 0.5; }
+        .hero::after { content: ''; position: absolute; top: -300px; right: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
         .hero .container { position: relative; z-index: 1; }
         .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
         .hero .subtitle { font-size: 20px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
@@ -57,6 +61,7 @@
         
         /* SVG Icons */
         .icon-svg { display: inline-block; width: 48px; height: 48px; }
+        .feature-icon { width: 64px; height: 64px; margin-bottom: 10px; }
         
         /* Avatar styles */
         .avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; color: white; margin-bottom: 15px; }
@@ -69,7 +74,6 @@
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .feature-card { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s; }
         .feature-card:hover { border-color: #0d9488; background: #f0fdfa; }
-        .feature-icon { font-size: 48px; margin-bottom: 15px; }
         .feature-card h3 { font-size: 18px; margin-bottom: 10px; }
         .feature-card p { font-size: 14px; color: #4b5563; }
         
@@ -206,43 +210,93 @@
                     </ul>
                 </div>
                 <div class="col-img">
-                    <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; max-width: 400px;">
-                        <!-- Desk -->
-                        <rect x="50" y="200" width="300" height="120" fill="#d1d5db" rx="4"/>
-                        <rect x="40" y="220" width="20" height="100" fill="#8b7355"/>
-                        <rect x="340" y="220" width="20" height="100" fill="#8b7355"/>
+                    <svg viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; max-width: 500px;">
+                        <!-- Background -->
+                        <rect width="500" height="300" fill="white"/>
                         
-                        <!-- Person -->
-                        <circle cx="200" cy="100" r="30" fill="#f4a460"/>
-                        <rect x="170" y="130" width="60" height="70" fill="#3b82f6" rx="8"/>
-                        <rect x="150" y="140" width="20" height="50" fill="#f4a460"/>
-                        <rect x="230" y="140" width="20" height="50" fill="#f4a460"/>
+                        <!-- Desks -->
+                        <rect x="30" y="180" width="130" height="80" fill="#e5e7eb" rx="6"/>
+                        <rect x="185" y="180" width="130" height="80" fill="#e5e7eb" rx="6"/>
+                        <rect x="340" y="180" width="130" height="80" fill="#e5e7eb" rx="6"/>
                         
+                        <!-- Desk legs -->
+                        <rect x="40" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        <rect x="152" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        <rect x="195" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        <rect x="307" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        <rect x="350" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        <rect x="462" y="260" width="8" height="40" fill="#9ca3af" rx="2"/>
+                        
+                        <!-- Stressed SDR 1 (Left) -->
+                        <!-- Head -->
+                        <circle cx="95" cy="80" r="22" fill="#d4a574"/>
+                        <!-- Body -->
+                        <rect x="75" y="105" width="40" height="55" fill="#6b7280" rx="8"/>
+                        <!-- Arms -->
+                        <rect x="50" y="110" width="25" height="12" fill="#d4a574" rx="6"/>
+                        <rect x="125" y="110" width="25" height="12" fill="#d4a574" rx="6"/>
+                        <!-- Head stress indicator -->
+                        <path d="M80 75 Q75 70 78 65" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M110 75 Q115 70 112 65" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <!-- Stressed expression -->
+                        <circle cx="88" cy="78" r="2.5" fill="#1f2937"/>
+                        <circle cx="102" cy="78" r="2.5" fill="#1f2937"/>
+                        <path d="M88 88 Q95 92 102 88" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round"/>
+                        
+                        <!-- Dollar sign with X (lost revenue) -->
+                        <text x="115" y="125" font-size="32" font-weight="bold" fill="#10b981" opacity="0.6">$</text>
+                        <line x1="110" y1="100" x2="140" y2="135" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <!-- Stressed SDR 2 (Center) -->
+                        <!-- Head -->
+                        <circle cx="250" cy="85" r="22" fill="#d4a574"/>
+                        <!-- Body -->
+                        <rect x="230" y="110" width="40" height="55" fill="#3b82f6" rx="8"/>
+                        <!-- Arms up (stressed) -->
+                        <rect x="205" y="115" width="25" height="12" fill="#d4a574" rx="6" transform="rotate(-25 217.5 121)"/>
+                        <rect x="270" y="115" width="25" height="12" fill="#d4a574" rx="6" transform="rotate(25 282.5 121)"/>
                         <!-- Stressed face -->
-                        <circle cx="190" cy="95" r="4" fill="black"/>
-                        <circle cx="210" cy="95" r="4" fill="black"/>
-                        <path d="M190 110 Q200 115 210 110" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                        
+                        <circle cx="243" cy="82" r="2.5" fill="#1f2937"/>
+                        <circle cx="257" cy="82" r="2.5" fill="#1f2937"/>
+                        <path d="M245 92 Q250 88 255 92" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2,2"/>
                         <!-- Sweat drops -->
-                        <circle cx="180" cy="85" r="3" fill="#0d9488" opacity="0.6"/>
-                        <circle cx="220" cy="90" r="2.5" fill="#0d9488" opacity="0.6"/>
+                        <circle cx="235" cy="60" r="2" fill="#0d9488" opacity="0.7"/>
+                        <circle cx="265" cy="65" r="1.5" fill="#0d9488" opacity="0.7"/>
                         
-                        <!-- Money flying away -->
-                        <g opacity="0.7">
-                            <text x="280" y="120" font-size="24" fill="#10b981">$</text>
-                            <text x="320" y="90" font-size="20" fill="#10b981">$</text>
-                            <text x="250" y="70" font-size="18" fill="#10b981">$</text>
-                            <text x="290" y="50" font-size="22" fill="#10b981">$</text>
-                        </g>
+                        <!-- Clock showing 24/7 grind -->
+                        <circle cx="175" cy="95" r="20" fill="none" stroke="#ef4444" stroke-width="2"/>
+                        <line x1="175" y1="80" x2="175" y2="70" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="175" y1="95" x2="185" y2="95" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="175" cy="95" r="2" fill="#ef4444"/>
+                        <text x="165" y="130" font-size="12" font-weight="bold" fill="#ef4444">24/7</text>
                         
-                        <!-- Stress lines (motion lines) -->
-                        <line x1="60" y1="80" x2="80" y2="75" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                        <line x1="65" y1="100" x2="85" y2="100" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                        <line x1="330" y1="85" x2="310" y2="92" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                        <!-- Stressed SDR 3 (Right) -->
+                        <!-- Head -->
+                        <circle cx="405" cy="80" r="22" fill="#d4a574"/>
+                        <!-- Body -->
+                        <rect x="385" y="105" width="40" height="55" fill="#8b5cf6" rx="8"/>
+                        <!-- Arms -->
+                        <rect x="360" y="110" width="25" height="12" fill="#d4a574" rx="6"/>
+                        <rect x="435" y="110" width="25" height="12" fill="#d4a574" rx="6"/>
+                        <!-- Stressed expression -->
+                        <circle cx="398" cy="78" r="2.5" fill="#1f2937"/>
+                        <circle cx="412" cy="78" r="2.5" fill="#1f2937"/>
+                        <path d="M398 88 Q405 84 412 88" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round"/>
                         
-                        <!-- Phone -->
-                        <rect x="120" y="210" width="35" height="60" fill="#1f2937" rx="3"/>
-                        <rect x="127" y="218" width="21" height="40" fill="#0d9488" opacity="0.5"/>
+                        <!-- Declining metrics arrow -->
+                        <path d="M305 75 L335 105" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M335 105 L325 95" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M335 105 L330 110" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                        
+                        <!-- Phones on desks -->
+                        <rect x="70" y="190" width="20" height="35" fill="#1f2937" rx="3"/>
+                        <rect x="77" y="197" width="6" height="20" fill="#6b7280" rx="1"/>
+                        
+                        <rect x="225" y="190" width="20" height="35" fill="#1f2937" rx="3"/>
+                        <rect x="232" y="197" width="6" height="20" fill="#6b7280" rx="1"/>
+                        
+                        <rect x="380" y="190" width="20" height="35" fill="#1f2937" rx="3"/>
+                        <rect x="387" y="197" width="6" height="20" fill="#6b7280" rx="1"/>
                     </svg>
                 </div>
             </div>
@@ -255,55 +309,82 @@
             <h2>The Athena Solution</h2>
             <div class="two-col">
                 <div class="col-img">
-                    <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; max-width: 400px;">
-                        <!-- AI Robot Head -->
-                        <rect x="140" y="60" width="120" height="130" fill="#0d9488" rx="12"/>
+                    <svg viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; max-width: 500px;">
+                        <!-- Background -->
+                        <rect width="500" height="300" fill="white"/>
                         
+                        <!-- AI Agent/Bot with Headset (Center) -->
+                        <!-- Head -->
+                        <circle cx="250" cy="80" r="28" fill="#0d9488"/>
                         <!-- Eyes -->
-                        <circle cx="170" cy="100" r="12" fill="white"/>
-                        <circle cx="230" cy="100" r="12" fill="white"/>
-                        <circle cx="173" cy="100" r="6" fill="#0d9488"/>
-                        <circle cx="233" cy="100" r="6" fill="#0d9488"/>
+                        <circle cx="235" cy="75" r="5" fill="white"/>
+                        <circle cx="265" cy="75" r="5" fill="white"/>
+                        <circle cx="236" cy="75" r="2.5" fill="#0d9488"/>
+                        <circle cx="266" cy="75" r="2.5" fill="#0d9488"/>
+                        <!-- Smile (happy/confident) -->
+                        <path d="M235 85 Q250 92 265 85" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
                         
-                        <!-- Smile -->
-                        <path d="M170 130 Q200 145 230 130" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                        
-                        <!-- Antenna -->
-                        <line x1="200" y1="50" x2="200" y2="20" stroke="#0d9488" stroke-width="3"/>
-                        <circle cx="200" cy="15" r="5" fill="#0d9488"/>
-                        
-                        <!-- Body/Headset -->
-                        <rect x="160" y="185" width="80" height="60" fill="#14b8a6" rx="8"/>
-                        <circle cx="180" cy="185" r="12" fill="#0d9488"/>
-                        <circle cx="220" cy="185" r="12" fill="#0d9488"/>
-                        
+                        <!-- Headset band -->
+                        <path d="M225 65 Q250 50 275 65" stroke="#0d9488" stroke-width="6" fill="none" stroke-linecap="round"/>
+                        <!-- Headset ears -->
+                        <circle cx="225" cy="65" r="8" fill="#0d9488" stroke="white" stroke-width="2"/>
+                        <circle cx="275" cy="65" r="8" fill="#0d9488" stroke="white" stroke-width="2"/>
                         <!-- Microphone arm -->
-                        <line x1="160" y1="200" x2="130" y2="200" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/>
-                        <circle cx="125" cy="200" r="5" fill="#0d9488"/>
+                        <path d="M220 68 L190 85" stroke="#0d9488" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="185" cy="88" r="5" fill="#0d9488"/>
                         
-                        <!-- Productivity indicators - happy people -->
-                        <!-- Person 1 (happy customer) -->
-                        <circle cx="70" cy="280" r="15" fill="#10b981"/>
-                        <circle cx="70" cy="265" r="8" fill="#f4a460"/>
-                        <path d="M65 265 L75 265 M65 270 Q70 272 75 270" stroke="#1f2937" stroke-width="1.5" fill="none"/>
-                        <text x="50" y="320" font-size="12" fill="#10b981" font-weight="bold">+$2K</text>
+                        <!-- Body -->
+                        <rect x="225" y="110" width="50" height="60" fill="#14b8a6" rx="10"/>
                         
-                        <!-- Person 2 (happy customer) -->
-                        <circle cx="330" cy="280" r="15" fill="#10b981"/>
-                        <circle cx="330" cy="265" r="8" fill="#f4a460"/>
-                        <path d="M325 265 L335 265 M325 270 Q330 272 335 270" stroke="#1f2937" stroke-width="1.5" fill="none"/>
-                        <text x="315" y="320" font-size="12" fill="#10b981" font-weight="bold">Deal</text>
+                        <!-- Success Indicators - Left Side -->
+                        <!-- Upward Arrow -->
+                        <g transform="translate(80, 120)">
+                            <path d="M0 40 L0 0" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M0 0 L-6 12" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M0 0 L6 12" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/>
+                            <text x="-12" y="60" font-size="14" font-weight="bold" fill="#0d9488">+150%</text>
+                        </g>
                         
-                        <!-- Person 3 (happy customer) -->
-                        <circle cx="200" cy="310" r="15" fill="#10b981"/>
-                        <circle cx="200" cy="295" r="8" fill="#f4a460"/>
-                        <path d="M195 295 L205 295 M195 300 Q200 302 205 300" stroke="#1f2937" stroke-width="1.5" fill="none"/>
-                        <text x="190" y="360" font-size="12" fill="#10b981" font-weight="bold">Qualified</text>
+                        <!-- Checkmark -->
+                        <g transform="translate(80, 220)">
+                            <circle cx="0" cy="0" r="18" fill="#10b981"/>
+                            <path d="M-8 0 L-2 6 L8 -6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
                         
-                        <!-- Connection lines -->
-                        <line x1="200" y1="245" x2="70" y2="280" stroke="#0d9488" stroke-width="2" opacity="0.4" stroke-dasharray="5,5"/>
-                        <line x1="200" y1="245" x2="330" y2="280" stroke="#0d9488" stroke-width="2" opacity="0.4" stroke-dasharray="5,5"/>
-                        <line x1="200" y1="245" x2="200" y2="310" stroke="#0d9488" stroke-width="2" opacity="0.4" stroke-dasharray="5,5"/>
+                        <!-- Phone with Green Indicator - Right Side -->
+                        <g transform="translate(400, 110)">
+                            <rect x="-15" y="-20" width="30" height="50" fill="#1f2937" rx="4" stroke="#0d9488" stroke-width="1.5"/>
+                            <rect x="-12" y="-15" width="24" height="35" fill="#e5e7eb" rx="2"/>
+                            <circle cx="0" cy="-25" r="4" fill="#10b981"/>
+                            <text x="-8" y="35" font-size="12" font-weight="bold" fill="#0d9488">Calls</text>
+                        </g>
+                        
+                        <!-- Happy Face Indicator - Right Side -->
+                        <g transform="translate(400, 220)">
+                            <circle cx="0" cy="0" r="16" fill="none" stroke="#0d9488" stroke-width="2"/>
+                            <circle cx="-5" cy="-3" r="2" fill="#0d9488"/>
+                            <circle cx="5" cy="-3" r="2" fill="#0d9488"/>
+                            <path d="M-6 2 Q0 6 6 2" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+                        </g>
+                        
+                        <!-- Growth Chart - Bottom Center -->
+                        <g transform="translate(250, 200)">
+                            <!-- Grid lines -->
+                            <line x1="-50" y1="20" x2="50" y2="20" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="-50" y1="0" x2="50" y2="0" stroke="#e5e7eb" stroke-width="1"/>
+                            <line x1="-50" y1="-20" x2="50" y2="-20" stroke="#e5e7eb" stroke-width="1"/>
+                            <!-- Chart bars (growth) -->
+                            <rect x="-40" y="10" width="15" height="10" fill="#0d9488" opacity="0.5" rx="2"/>
+                            <rect x="-20" y="0" width="15" height="20" fill="#0d9488" opacity="0.7" rx="2"/>
+                            <rect x="0" y="-8" width="15" height="28" fill="#0d9488" rx="2"/>
+                            <rect x="20" y="-15" width="15" height="35" fill="#14b8a6" rx="2"/>
+                            <!-- Upward trend line -->
+                            <path d="M-32 10 L-12 0 L7 -8 L27 -15" stroke="#0d9488" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        
+                        <!-- Connection lines from AI to success indicators -->
+                        <path d="M220 140 L120 140" stroke="#0d9488" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,4"/>
+                        <path d="M280 140 L380 140" stroke="#0d9488" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,4"/>
                     </svg>
                 </div>
                 <div>
@@ -327,55 +408,85 @@
             <h2>Why Teams Choose Athena</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="12" y="16" width="24" height="28" fill="none" stroke="#0d9488" stroke-width="2" rx="4"/>
-                        <circle cx="24" cy="12" r="6" fill="#0d9488"/>
-                        <path d="M24 20v8M19 24h10" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Waveform/Voice -->
+                        <path d="M16 32C16 24 18 18 22 18C26 18 28 24 28 32C28 40 26 46 22 46C18 46 16 40 16 32" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M32 26C32 20 33 16 36 16C39 16 40 20 40 26C40 32 39 38 36 42C33 46 32 50 32 32" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M48 28C48 22 49 18 52 18C55 18 56 22 56 28C56 34 55 40 52 44C49 48 48 52 48 32" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Speaker outline -->
+                        <path d="M8 28 L8 36 L12 36 L18 40 L18 24 L12 28 Z" fill="none" stroke="#0d9488" stroke-width="2" stroke-linejoin="round"/>
                     </svg>
                     <h3>Sounds Completely Human</h3>
                     <p>Premium voices with natural pacing, tone, and inflection. Prospects have no idea they're talking to AI.</p>
                 </div>
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M24 8C13.5 8 6 15.5 6 26c0 8 4 14 8 16h24c4-2 8-8 8-16 0-10.5-7.5-18-22-18Z" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
-                        <circle cx="16" cy="26" r="2" fill="#0d9488"/>
-                        <circle cx="32" cy="26" r="2" fill="#0d9488"/>
-                        <path d="M20 32h8" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Brain -->
+                        <path d="M32 12C26 12 22 16 22 22C22 24 23 26 24 27C22 28 20 30 20 33C20 36 22 38 24 39C23 40 22 42 22 44C22 50 26 54 32 54C38 54 42 50 42 44C42 42 41 40 40 39C42 38 44 36 44 33C44 30 42 28 40 27C41 26 42 24 42 22C42 16 38 12 32 12Z" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Connection dots -->
+                        <circle cx="32" cy="28" r="2" fill="#0d9488"/>
+                        <circle cx="28" cy="34" r="2" fill="#0d9488"/>
+                        <circle cx="36" cy="34" r="2" fill="#0d9488"/>
+                        <circle cx="32" cy="42" r="2" fill="#0d9488"/>
                     </svg>
                     <h3>Understands Context</h3>
                     <p>Handles objections intelligently. Adapts to conversation flow. Not a script.</p>
                 </div>
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="6" width="32" height="36" fill="none" stroke="#0d9488" stroke-width="2" rx="4"/>
-                        <line x1="8" y1="14" x2="40" y2="14" stroke="#0d9488" stroke-width="2"/>
-                        <path d="M14 22h20M14 28h20M14 34h12" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Document/Video frame -->
+                        <rect x="12" y="10" width="40" height="44" fill="none" stroke="#0d9488" stroke-width="2.5" rx="3"/>
+                        <!-- Play button -->
+                        <path d="M28 28 L28 36 L38 32 Z" fill="#0d9488"/>
+                        <!-- Recording indicator -->
+                        <circle cx="52" cy="18" r="3" fill="#ef4444"/>
+                        <!-- Transcript lines -->
+                        <line x1="16" y1="48" x2="48" y2="48" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="16" y1="52" x2="40" y2="52" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                     <h3>Full Transparency</h3>
                     <p>Every call recorded. Every word transcribed. You see exactly what Athena says.</p>
                 </div>
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="24" r="16" fill="none" stroke="#0d9488" stroke-width="2"/>
-                        <path d="M24 8v32M24 24l12-8M24 24l-12-8" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="24" cy="24" r="3" fill="#0d9488"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Checkmark circle (quality) -->
+                        <circle cx="32" cy="32" r="20" fill="none" stroke="#0d9488" stroke-width="2.5"/>
+                        <path d="M24 32 L30 38 L42 26" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Star (qualification) -->
+                        <path d="M52 16 L55 24 L63 25 L56 31 L58 39 L50 35 L42 39 L44 31 L37 25 L45 24 Z" fill="none" stroke="#0d9488" stroke-width="2" stroke-linejoin="round"/>
                     </svg>
                     <h3>Real Qualifications</h3>
                     <p>Books real meetings only. Filters tire kickers. Quality over quantity.</p>
                 </div>
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="24" r="16" fill="none" stroke="#0d9488" stroke-width="2"/>
-                        <path d="M16 24h16M24 16v16" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M24 8c8.8 0 16 7.2 16 16s-7.2 16-16 16" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,4"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Cloud/Integration -->
+                        <path d="M18 40C14 38 12 34 12 30C12 24 16 20 22 20C23 14 28 10 34 10C42 10 48 16 48 24C52 25 55 28 55 32C55 36 52 40 48 41" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Salesforce icon (simplified) -->
+                        <circle cx="30" cy="35" r="3" fill="#0d9488"/>
+                        <circle cx="38" cy="35" r="3" fill="#0d9488"/>
+                        <circle cx="34" cy="42" r="3" fill="#0d9488"/>
+                        <!-- Connecting lines -->
+                        <line x1="30" y1="35" x2="34" y2="42" stroke="#0d9488" stroke-width="1.5"/>
+                        <line x1="38" y1="35" x2="34" y2="42" stroke="#0d9488" stroke-width="1.5"/>
                     </svg>
                     <h3>Salesforce Sync</h3>
                     <p>Qualified leads auto-push. Call notes and transcripts included. Zero manual entry.</p>
                 </div>
                 <div class="feature-card">
-                    <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="10" width="32" height="28" fill="none" stroke="#0d9488" stroke-width="2" rx="4"/>
-                        <path d="M12 18h7v14h-7M21 20h7v12h-7M30 16h7v16h-7" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+                    <svg class="feature-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- A/B Test boxes -->
+                        <rect x="10" y="18" width="20" height="28" fill="none" stroke="#0d9488" stroke-width="2.5" rx="2"/>
+                        <rect x="34" y="18" width="20" height="28" fill="none" stroke="#0d9488" stroke-width="2.5" rx="2"/>
+                        <!-- A label -->
+                        <text x="18" y="32" font-size="12" font-weight="bold" fill="#0d9488" text-anchor="middle">A</text>
+                        <!-- B label -->
+                        <text x="44" y="32" font-size="12" font-weight="bold" fill="#0d9488" text-anchor="middle">B</text>
+                        <!-- Bars showing comparison -->
+                        <rect x="13" y="42" width="8" height="12" fill="#0d9488" opacity="0.6" rx="1"/>
+                        <rect x="37" y="42" width="10" height="14" fill="#0d9488" rx="1"/>
+                        <!-- VS -->
+                        <text x="32" y="36" font-size="10" font-weight="bold" fill="#0d9488" text-anchor="middle">vs</text>
                     </svg>
                     <h3>A/B Test Messaging</h3>
                     <p>Run 3 agents with 3 different pitches. See which angle closes most deals.</p>

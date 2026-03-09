@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Close More Deals Now</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #1a1a1a; line-height: 1.6; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #ffffff; border-bottom: 1px solid #eee; }
+    .logo { font-size: 24px; font-weight: 900; color: #e74c3c; }
+    .nav-btn { background: #e74c3c; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; }
+    .nav-btn:hover { background: #c0392b; }
+    
+    .banner { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 16px 20px; text-align: center; font-weight: 600; font-size: 14px; }
+    
+    .hero { text-align: center; padding: 60px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 52px; font-weight: 900; margin-bottom: 20px; color: #1a1a1a; line-height: 1.2; }
+    .hero h1 .red { color: #e74c3c; }
+    .hero p { font-size: 22px; color: #555; margin-bottom: 40px; font-weight: 500; }
+    
+    .guarantee-box { background: #fffacd; border: 3px solid #e74c3c; border-radius: 12px; padding: 20px; margin-bottom: 50px; font-weight: 700; font-size: 16px; color: #1a1a1a; }
+    
+    .cta-button { background: #e74c3c; color: white; border: none; padding: 18px 50px; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 40px; display: inline-block; box-shadow: 0 8px 24px rgba(231, 76, 60, 0.3); }
+    .cta-button:hover { background: #c0392b; transform: translateY(-2px); }
+    
+    .stat-row { display: flex; justify-content: space-around; gap: 20px; margin-bottom: 80px; flex-wrap: wrap; padding: 40px 0; border-top: 2px solid #eee; border-bottom: 2px solid #eee; }
+    .stat { text-align: center; }
+    .stat-number { font-size: 42px; font-weight: 900; color: #e74c3c; }
+    .stat-label { font-size: 13px; color: #777; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .pricing-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; background: #f9f9f9; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 48px; font-weight: 900; margin-bottom: 12px; color: #1a1a1a; }
+    .pricing-header p { font-size: 20px; color: #666; }
+    
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+    .price-card { background: #ffffff; border: 2px solid #ddd; border-radius: 12px; padding: 40px; transition: all 0.3s; }
+    .price-card:hover { border-color: #e74c3c; box-shadow: 0 12px 40px rgba(231, 76, 60, 0.15); transform: translateY(-8px); }
+    .price-card.featured { border: 3px solid #e74c3c; box-shadow: 0 12px 40px rgba(231, 76, 60, 0.25); }
+    
+    .price-badge { display: inline-block; background: #e74c3c; color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+    
+    .price-card h3 { font-size: 28px; font-weight: 900; margin-bottom: 12px; color: #1a1a1a; }
+    .price-amount { font-size: 56px; font-weight: 900; color: #e74c3c; margin-bottom: 8px; }
+    .price-amount small { font-size: 18px; color: #666; font-weight: 400; }
+    
+    .price-calls { background: rgba(231, 76, 60, 0.08); padding: 16px; border-left: 4px solid #e74c3c; margin-bottom: 32px; font-weight: 600; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #eee; font-size: 14px; display: flex; gap: 10px; }
+    .features-list li::before { content: '✓'; color: #27ae60; font-weight: 900; font-size: 16px; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; }
+    
+    .fomo { background: #fff5f5; border-left: 4px solid #e74c3c; padding: 24px; border-radius: 8px; margin-top: 60px; font-size: 16px; font-weight: 600; color: #1a1a1a; }
+    
+    footer { text-align: center; padding: 40px 20px; color: #999; font-size: 12px; border-top: 1px solid #eee; }
+    
+    @media (max-width: 768px) { .hero h1 { font-size: 36px; } .price-card.featured { transform: scale(1); } }
+  </style>
+</head>
+<body>
+
+<div class="banner">⏰ LIMITED TIME: Try Sofia free for 14 days. No credit card. Cancel anytime.</div>
+
+<header>
+  <div class="logo">SOFIA</div>
+  <button class="nav-btn">Start Free Trial</button>
+</header>
+
+<section class="hero">
+  <h1>Your Competitors Are Already Using <span class="red">AI To Close Deals</span></h1>
+  <p>While you're still manually dialing, Sofia books qualified meetings on autopilot.</p>
+  
+  <div class="guarantee-box">
+    ✓ 14-day free trial • ✓ No credit card required • ✓ 100% money-back guarantee if you're not satisfied
+  </div>
+  
+  <button class="cta-button">Claim Your Free Trial →</button>
+  
+  <div class="stat-row">
+    <div class="stat"><div class="stat-number">1M+</div><div class="stat-label">Calls Completed</div></div>
+    <div class="stat"><div class="stat-number">38%</div><div class="stat-label">Booking Rate</div></div>
+    <div class="stat"><div class="stat-number">$8</div><div class="stat-label">Per Call ROI</div></div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Join the Teams Closing More Deals</h2>
+    <p>Start at just $299/month. Scale as you grow.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-badge">FOR TESTING</div>
+      <h3>Starter</h3>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>1 custom AI agent</li>
+        <li>Auto-qualification</li>
+        <li>Call transcripts</li>
+        <li>Email integration</li>
+      </ul>
+      <button class="cta-button">Start Free Trial</button>
+    </div>
+    
+    <div class="price-card featured">
+      <div class="price-badge" style="background: #27ae60;">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 AI agents</li>
+        <li>CRM auto-sync</li>
+        <li>Real-time analytics</li>
+        <li>24/7 priority support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Start Free Trial</button>
+    </div>
+    
+    <div class="price-card">
+      <div class="price-badge">FOR SCALE</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+<small>/month</small></div>
+      <div class="price-calls">📞 10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All CRM integrations</li>
+        <li>White-label option</li>
+        <li>Dedicated manager</li>
+        <li>API + webhooks</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+  
+  <div class="fomo">
+    ⚠️ <strong>URGENT:</strong> Teams are already saving $50K+/year in SDR costs with Sofia. The longer you wait, the more deals your competitors close. Try it free today.
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Sofia. All rights reserved. | Privacy | Terms</p>
+</footer>
+
+</body>
+</html>

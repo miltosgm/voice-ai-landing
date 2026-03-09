@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — AI Outbound Calling for B2B Sales</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #6c47ff;
+      --primary-light: #9b7fff;
+      --bg: #f5f5fa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --gray: #6b7280;
+      --gray-light: #e5e7eb;
+      --green: #059669;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    /* HEADER / NAV */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    
+    .nav-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: opacity 0.2s;
+    }
+    
+    .nav-btn:hover { opacity: 0.9; }
+    
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: 20px;
+      color: var(--gray);
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 80px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-around;
+      gap: 40px;
+      margin-bottom: 80px;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+    
+    /* PRICING SECTION */
+    .pricing-section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .pricing-header h2 {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    
+    .pricing-header p {
+      font-size: 18px;
+      color: var(--gray);
+    }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+    
+    .price-card {
+      background: var(--surface);
+      border: 2px solid var(--gray-light);
+      border-radius: 16px;
+      padding: 40px 32px;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .price-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 16px 48px rgba(108, 71, 255, 0.12);
+      transform: translateY(-4px);
+    }
+    
+    .price-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 16px 48px rgba(108, 71, 255, 0.12);
+      transform: scale(1.05);
+    }
+    
+    .price-badge {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--green);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .price-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      margin-top: 12px;
+    }
+    
+    .price-card .description {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+    
+    .price-amount {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .price-amount small {
+      font-size: 16px;
+      color: var(--gray);
+      font-weight: 400;
+    }
+    
+    .price-calls {
+      background: rgba(108, 71, 255, 0.05);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 32px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .features-list {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    
+    .features-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .features-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .features-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 800;
+      font-size: 18px;
+    }
+    
+    .price-card .btn-primary {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    
+    .price-card .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--gray);
+      border-color: var(--gray-light);
+    }
+    
+    /* BENEFITS */
+    .benefits-section {
+      background: var(--surface);
+      padding: 80px 20px;
+      margin-top: 80px;
+    }
+    
+    .benefits-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .benefits-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .benefits-header h2 {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+    }
+    
+    .benefit {
+      text-align: center;
+    }
+    
+    .benefit-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .benefit h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .benefit p {
+      color: var(--gray);
+      font-size: 15px;
+    }
+    
+    /* CTA SECTION */
+    .cta-final {
+      text-align: center;
+      padding: 80px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .cta-final h2 {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    
+    .cta-final p {
+      font-size: 18px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    
+    /* FOOTER */
+    footer {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--gray);
+      font-size: 14px;
+      border-top: 1px solid var(--gray-light);
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 16px; }
+      .price-card.featured { transform: scale(1); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .stat-row { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Sofia</div>
+  <button class="nav-btn">Book Demo</button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>AI Calls That Actually Close Deals</h1>
+  <p>Sofia qualifies 1,000 B2B leads every month while you sleep. No scripts, no training, just results.</p>
+  
+  <div class="cta-buttons">
+    <button class="btn-primary">Start Free Trial</button>
+    <button class="btn-secondary">See Demo</button>
+  </div>
+  
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-number">1M+</div>
+      <div class="stat-label">Calls Made</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">38%</div>
+      <div class="stat-label">Avg Booking Rate</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Always Calling</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Simple, Transparent Pricing</h2>
+    <p>Pay only for what you use. Scale up anytime.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <!-- STARTER -->
+    <div class="price-card">
+      <h3>Starter</h3>
+      <p class="description">For small teams testing outbound</p>
+      <div class="price-amount">$299<small>/month</small></div>
+      <div class="price-calls">📞 1,000 calls/month</div>
+      <ul class="features-list">
+        <li>1 AI agent (customizable)</li>
+        <li>Email + SMS integration</li>
+        <li>Basic analytics</li>
+        <li>Email support</li>
+      </ul>
+      <button class="btn-primary">Start Now</button>
+      <button class="btn-secondary">View Details</button>
+    </div>
+    
+    <!-- GROWTH (FEATURED) -->
+    <div class="price-card featured">
+      <div class="price-badge">Most Popular</div>
+      <h3>Growth</h3>
+      <p class="description">For scaling sales teams</p>
+      <div class="price-amount">$899<small>/month</small></div>
+      <div class="price-calls">📞 5,000 calls/month</div>
+      <ul class="features-list">
+        <li>Up to 3 AI agents</li>
+        <li>CRM integrations (HubSpot, Salesforce)</li>
+        <li>Advanced analytics & reports</li>
+        <li>Priority email + chat support</li>
+        <li>Custom voicemail drops</li>
+      </ul>
+      <button class="btn-primary">Start Now</button>
+      <button class="btn-secondary">View Details</button>
+    </div>
+    
+    <!-- SCALE -->
+    <div class="price-card">
+      <h3>Scale</h3>
+      <p class="description">For enterprise operations</p>
+      <div class="price-amount">$1,999<small>/month</small></div>
+      <div class="price-calls">📞 10,000 calls/month</div>
+      <ul class="features-list">
+        <li>Unlimited AI agents</li>
+        <li>All CRM integrations</li>
+        <li>Real-time dashboards</li>
+        <li>Dedicated account manager</li>
+        <li>API access + webhooks</li>
+      </ul>
+      <button class="btn-primary">Start Now</button>
+      <button class="btn-secondary">View Details</button>
+    </div>
+  </div>
+  
+  <div style="text-align: center; padding: 40px 0; border-top: 1px solid var(--gray-light);">
+    <p style="font-size: 16px; margin-bottom: 16px;"><strong>Need more?</strong></p>
+    <button class="btn-secondary" style="width: auto; background: var(--primary); color: white; border: none;">Custom Enterprise Plans</button>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section">
+  <div class="benefits-container">
+    <div class="benefits-header">
+      <h2>Why Teams Choose Sofia</h2>
+    </div>
+    
+    <div class="benefits-grid">
+      <div class="benefit">
+        <div class="benefit-icon">🚀</div>
+        <h3>Setup in Minutes</h3>
+        <p>No coding. No training. Sofia goes live in 5 minutes.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">💰</div>
+        <h3>ROI in Weeks</h3>
+        <p>Average $8 revenue per call dialed. 3–4 calls to close a deal.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">🎯</div>
+        <h3>Always Improving</h3>
+        <p>AI learns from every call. Conversion rate improves 2–3% monthly.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">🔒</div>
+        <h3>Fully Compliant</h3>
+        <p>TCPA compliant. Do Not Call list integrated. Legal out of the box.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">📊</div>
+        <h3>Real-Time Insights</h3>
+        <p>See exactly what happens on every call. Transcripts. Sentiment. Outcomes.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon">🌍</div>
+        <h3>Works Globally</h3>
+        <p>Sofia calls in 15+ languages. Multi-timezone, 24/7 dialing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final">
+  <h2>Ready to 10x Your Outbound?</h2>
+  <p>Join 100+ companies already using Sofia to qualify leads at scale.</p>
+  <div class="cta-buttons">
+    <button class="btn-primary">Start Your Free Trial</button>
+    <button class="btn-secondary">Schedule a Demo</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2025 Sofia. All rights reserved. | Privacy | Terms | Security</p>
+</footer>
+
+</body>
+</html>

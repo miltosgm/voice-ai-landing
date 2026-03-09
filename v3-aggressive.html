@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sofia — Stop Losing Deals</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #d84315;
+      --accent: #00d084;
+      --bg: #0a0a0a;
+      --surface: #1a1a1a;
+      --text: #ffffff;
+    }
+    
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .logo { font-size: 32px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+    .nav-btn { background: var(--primary); color: var(--bg); border: none; padding: 14px 28px; border-radius: 4px; font-weight: 700; cursor: pointer; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .nav-btn:hover { background: var(--primary-dark); }
+    
+    .hero { text-align: center; padding: 60px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 64px; font-weight: 900; margin-bottom: 20px; color: var(--primary); text-transform: uppercase; line-height: 1.1; }
+    .hero h1 .highlight { color: var(--accent); }
+    .hero p { font-size: 24px; color: #ccc; margin-bottom: 40px; font-weight: 500; }
+    .hero .subtext { font-size: 16px; color: #888; margin-bottom: 50px; }
+    
+    .cta-button { background: var(--primary); color: var(--bg); border: 3px solid var(--primary); padding: 18px 50px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 60px; display: inline-block; }
+    .cta-button:hover { background: transparent; color: var(--primary); }
+    
+    .guarantee { background: var(--surface); border: 2px solid var(--accent); padding: 24px; border-radius: 8px; margin-bottom: 80px; font-weight: 600; }
+    
+    .stat-row { display: flex; justify-content: space-around; gap: 20px; margin-bottom: 100px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-number { font-size: 44px; font-weight: 900; color: var(--accent); }
+    .stat-label { font-size: 14px; color: #999; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .pricing-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 53, 0.05) 100%); }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header h2 { font-size: 48px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; }
+    .pricing-header p { font-size: 20px; color: #999; }
+    
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .price-card { background: var(--surface); border: 3px solid #333; border-radius: 8px; padding: 40px; transition: all 0.2s; }
+    .price-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+    .price-card.featured { border-color: var(--primary); box-shadow: 0 0 30px rgba(255, 107, 53, 0.3); transform: scale(1.05); }
+    
+    .price-card h3 { font-size: 28px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; }
+    .price-amount { font-size: 52px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
+    .price-calls { background: rgba(255, 107, 53, 0.1); padding: 16px; border-left: 4px solid var(--primary); margin-bottom: 32px; font-weight: 700; }
+    
+    .features-list { list-style: none; margin-bottom: 32px; }
+    .features-list li { padding: 12px 0; border-bottom: 1px solid #333; font-size: 14px; display: flex; gap: 10px; }
+    .features-list li::before { content: '▸'; color: var(--accent); font-weight: 900; font-size: 16px; }
+    .features-list li:last-child { border: none; }
+    
+    .price-card .cta-button { width: 100%; }
+    
+    @media (max-width: 768px) { .hero h1 { font-size: 40px; } .price-card.featured { transform: scale(1); } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SOFIA</div>
+  <button class="nav-btn">Book Call</button>
+</header>
+
+<section class="hero">
+  <h1>Your Sales Team Is <span class="highlight">Underperforming</span></h1>
+  <p>Sofia books more qualified meetings in 1 month than your SDRs do in a quarter.</p>
+  <p class="subtext">No hiring. No training. No excuses.</p>
+  <button class="cta-button">Start Free Trial Now →</button>
+  <div class="guarantee">✓ 14-day free trial. No credit card. Cancel anytime.</div>
+  
+  <div class="stat-row">
+    <div class="stat"><div class="stat-number">1M+</div><div class="stat-label">Calls Made</div></div>
+    <div class="stat"><div class="stat-number">38%</div><div class="stat-label">Close Rate</div></div>
+    <div class="stat"><div class="stat-number">3x</div><div class="stat-label">ROI</div></div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-header">
+    <h2>Stop Wasting Money. Start Making It.</h2>
+    <p>Simple pricing. Maximum results.</p>
+  </div>
+  
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Starter</h3>
+      <div class="price-amount">$299</div>
+      <div class="price-calls">1,000 calls • 1 agent</div>
+      <ul class="features-list">
+        <li>1 AI sales rep</li>
+        <li>Auto-qualification</li>
+        <li>Call transcripts</li>
+        <li>Email support</li>
+      </ul>
+      <button class="cta-button">Get Started</button>
+    </div>
+    
+    <div class="price-card featured">
+      <h3>Growth ⚡ BEST</h3>
+      <div class="price-amount">$899</div>
+      <div class="price-calls">5,000 calls • 3 agents</div>
+      <ul class="features-list">
+        <li>3 AI sales reps</li>
+        <li>CRM auto-sync</li>
+        <li>Real-time analytics</li>
+        <li>Priority 24/7 support</li>
+        <li>Voicemail drops</li>
+      </ul>
+      <button class="cta-button">Get Started</button>
+    </div>
+    
+    <div class="price-card">
+      <h3>Enterprise</h3>
+      <div class="price-amount">$1,999+</div>
+      <div class="price-calls">10,000+ calls • unlimited</div>
+      <ul class="features-list">
+        <li>Unlimited agents</li>
+        <li>All integrations</li>
+        <li>Custom domain</li>
+        <li>Dedicated team</li>
+        <li>API + webhooks</li>
+      </ul>
+      <button class="cta-button">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

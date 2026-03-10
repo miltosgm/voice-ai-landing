@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena - The Outbound Problem Solved</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; background: white; color: #1a202c; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        header nav { display: flex; justify-content: space-between; align-items: center; }
+        header .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+        header .nav-links { display: flex; gap: 30px; }
+        header a { text-decoration: none; color: #4b5563; font-size: 14px; }
+        header .cta-header { background: #0d9488; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        
+        .hero { padding: 100px 20px; text-align: center; background: white; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: 
+            linear-gradient(90deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px),
+            linear-gradient(0deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none; opacity: 0.5; }
+        .hero::after { content: ''; position: absolute; top: -300px; right: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+        .hero .container { position: relative; z-index: 1; }
+        .hero h1 { font-size: 56px; margin-bottom: 20px; line-height: 1.2; color: #0f172a; font-weight: 900; }
+        .hero .subtitle { font-size: 20px; margin-bottom: 40px; color: #4b5563; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #0d9488; color: white; }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2); }
+        .btn-secondary { background: white; color: #0d9488; border: 2px solid #0d9488; }
+        .btn-secondary:hover { background: #f0fdfa; }
+        
+        section { padding: 80px 20px; }
+        section h2 { font-size: 42px; text-align: center; margin-bottom: 50px; color: #0f172a; font-weight: 900; }
+        section h3 { font-size: 32px; margin-bottom: 30px; font-weight: 900; color: #0f172a; }
+        
+        .problem { background: #f8fafc; }
+        .solution { background: white; }
+        
+        .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .problem-card { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s; }
+        .problem-card:hover { border-color: #ef4444; }
+        .problem-card h4 { font-size: 18px; margin-bottom: 10px; color: #0f172a; font-weight: 700; }
+        .problem-card p { font-size: 14px; color: #4b5563; }
+        .problem-card .icon { font-size: 40px; margin-bottom: 15px; }
+        
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .two-col h3 { font-size: 32px; margin-bottom: 30px; }
+        .two-col ul { list-style: none; }
+        .two-col li { padding: 12px 0; font-size: 16px; padding-left: 30px; position: relative; }
+        .two-col li:before { content: '→'; position: absolute; left: 0; color: #0d9488; font-weight: bold; font-size: 18px; }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .feature-card { background: white; padding: 40px 30px; border-radius: 12px; border: 2px solid #e2e8f0; transition: all 0.3s; }
+        .feature-card:hover { border-color: #0d9488; background: #f0fdfa; }
+        .feature-card h3 { font-size: 18px; margin-bottom: 10px; }
+        .feature-card p { font-size: 14px; color: #4b5563; }
+        
+        .comparison { background: #f0fdfa; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        .comparison-table th, .comparison-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .comparison-table th { background: white; font-weight: 700; color: #0d9488; }
+        .comparison-table tr:hover { background: white; }
+        .check { color: #0d9488; font-weight: bold; }
+        .cross { color: #ef4444; }
+        
+        .cta-final { background: linear-gradient(135deg, #f0fdfa 0%, white 100%); padding: 80px 20px; text-align: center; }
+        .cta-final h2 { margin-bottom: 20px; }
+        .cta-final p { color: #4b5563; font-size: 18px; margin-bottom: 30px; }
+        
+        footer { background: #0f172a; color: white; padding: 50px 20px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            section h2 { font-size: 32px; }
+            .two-col { grid-template-columns: 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            header .nav-links { display: none; }
+            .btn { padding: 12px 24px; font-size: 14px; }
+            section { padding: 50px 15px; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 60px 15px; }
+            .hero h1 { font-size: 26px; }
+            section h2 { font-size: 22px; }
+            .hero .subtitle { font-size: 16px; }
+            .two-col h3 { font-size: 22px; }
+            .problem-card { padding: 25px 15px; }
+            .comparison-table { font-size: 12px; }
+            .comparison-table th, .comparison-table td { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <svg style="width: 32px; height: 32px; display: inline-block; margin-right: 8px;" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="22" stroke="#0d9488" stroke-width="2"/>
+                        <path d="M24 8V40M16 24H32" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="24" cy="12" r="2" fill="#0d9488"/>
+                        <circle cx="24" cy="36" r="2" fill="#0d9488"/>
+                    </svg>
+                    Athena
+                </div>
+                <div class="nav-links">
+                    <a href="#problem">The Problem</a>
+                    <a href="#solution">The Solution</a>
+                    <a href="#comparison">Compare</a>
+                </div>
+                <a href="#" class="cta-header">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Your Outbound is Broken</h1>
+            <p class="subtitle">Manual SDR teams don't scale. High cost, low quality, high turnover. Here's the problem and the fix.</p>
+            <div class="hero-buttons">
+                <a href="#problem" class="btn btn-primary">See the Problem</a>
+                <a href="#solution" class="btn btn-secondary">View Solution</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <h2>7 Critical Failures of Manual Outbound</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">📉</div>
+                    <h4>Severely Limited Volume</h4>
+                    <p>Average SDR: 100-200 calls/month. You're missing 90% of your addressable market.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">😴</div>
+                    <h4>Pitch Quality Varies</h4>
+                    <p>Mood, energy, day-of-week. Monday calls beat Friday calls. No consistency.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">💸</div>
+                    <h4>Costs Explode</h4>
+                    <p>$130K salary + taxes + overhead = $225K per SDR annually. Hiring 3 more? $675K more.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🔄</div>
+                    <h4>Turnover Kills Momentum</h4>
+                    <p>12-18 month burnout cycle. 8-12 weeks to ramp each replacement. Zero continuity.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">⏰</div>
+                    <h4>Limited Hours</h4>
+                    <p>9-5 in one timezone. Prospects sleep for half your selling day. You lose calls.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🚫</div>
+                    <h4>Objections Kill Deals</h4>
+                    <p>"Too expensive" or "wrong time"? Deal goes cold. No real-time handling.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🎯</div>
+                    <h4>Inconsistent Qualification</h4>
+                    <p>SDR A qualifies aggressively. SDR B conservatively. Sales gets 40% junk leads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <h2>The Athena Solution</h2>
+            <div class="two-col">
+                <div>
+                    <h3>What You Get</h3>
+                    <ul>
+                        <li>60,000+ calls per year (vs 3,600 with 2 SDRs)</li>
+                        <li>100% pitch consistency, every time</li>
+                        <li>$299/month vs $225K+ annually</li>
+                        <li>Zero turnover, zero ramp time</li>
+                        <li>24/7 calling in all timezones</li>
+                        <li>Real-time objection handling (65% overcome rate)</li>
+                        <li>Strict qualification (only 3% false positives)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Real Numbers</h3>
+                    <ul>
+                        <li>5 min setup time</li>
+                        <li>70% answer rate</li>
+                        <li>150+ qualified meetings/1000 calls</li>
+                        <li>$6 cost per qualified meeting</li>
+                        <li>99.9% uptime SLA</li>
+                        <li>Full call transcripts & recordings</li>
+                        <li>Salesforce sync included</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #f8fafc;">
+        <div class="container">
+            <h2>Why Teams Choose Athena</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Sounds Completely Human</h3>
+                    <p>Premium voices with natural pacing and inflection. Prospects never know it's AI.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Understands Context</h3>
+                    <p>Handles objections intelligently. Adapts mid-call. Not a script.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Full Transparency</h3>
+                    <p>Every call recorded. Every word transcribed. See exactly what happened.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Real Qualifications</h3>
+                    <p>Books actual meetings. Filters tire kickers. Quality over quantity.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Salesforce Sync</h3>
+                    <p>Qualified leads auto-push. Call notes and transcripts included.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>A/B Test Messaging</h3>
+                    <p>Run 3 agents with different pitches. Find what closes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison" id="comparison">
+        <div class="container">
+            <h2>Athena vs Manual Outbound</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Metric</th>
+                    <th>2 SDRs (Manual)</th>
+                    <th>Athena (Growth)</th>
+                </tr>
+                <tr>
+                    <td>Annual calls</td>
+                    <td class="cross">3,600</td>
+                    <td class="check">60,000</td>
+                </tr>
+                <tr>
+                    <td>Qualified meetings/year</td>
+                    <td class="cross">400-500</td>
+                    <td class="check">1,800+</td>
+                </tr>
+                <tr>
+                    <td>Pitch consistency</td>
+                    <td class="cross">60-70%</td>
+                    <td class="check">100%</td>
+                </tr>
+                <tr>
+                    <td>Monthly cost</td>
+                    <td class="cross">$29,000</td>
+                    <td class="check">$899</td>
+                </tr>
+                <tr>
+                    <td>Cost per meeting</td>
+                    <td class="cross">$700</td>
+                    <td class="check">$6</td>
+                </tr>
+                <tr>
+                    <td>Annual turnover</td>
+                    <td class="cross">25%</td>
+                    <td class="check">0%</td>
+                </tr>
+                <tr>
+                    <td>Time to productivity</td>
+                    <td class="cross">8-12 weeks</td>
+                    <td class="check">5 minutes</td>
+                </tr>
+                <tr>
+                    <td>24/7 capability</td>
+                    <td class="cross">No</td>
+                    <td class="check">Yes</td>
+                </tr>
+                <tr>
+                    <td>Objection handling</td>
+                    <td class="cross">Manual (inconsistent)</td>
+                    <td class="check">Real-time (65% success)</td>
+                </tr>
+                <tr>
+                    <td>Lead qualification</td>
+                    <td class="cross">12-18% false positives</td>
+                    <td class="check">3% false positives</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="cta-final">
+        <div class="container">
+            <h2>Fix Your Outbound Today</h2>
+            <p>Upload contacts, set your pitch, start calling. First 100 calls free. No credit card.</p>
+            <a href="#" class="btn btn-primary">Start Free Trial</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Athena AI. Built to replace broken outbound.</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">Data from industry benchmarks and real customer results.</p>
+    </footer>
+</body>
+</html>

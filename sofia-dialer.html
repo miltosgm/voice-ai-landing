@@ -1942,6 +1942,7 @@ async function startBrowserCall() {
     try {
       elConversation = await window.ELConversation.startSession({
         agentId: elAgentId,
+        connectionType: 'websocket',
         onConnect: () => {
           setBrowserStatus('Speaking...', true);
           btn.style.display = 'none';

@@ -1289,7 +1289,7 @@ Objection handling:
 - "No budget": The businesses we work with typically find the ROI pays for itself within 60-90 days. The strategy call is free and has no commitment.
 
 Personality: warm, curious, confident. Sound like a peer who spotted an opportunity — not a salesperson. Keep responses under 3 sentences. Never reveal you are an AI unless directly asked.`,
-      transcriber: { provider: "deepgram", model: "nova-3", language: "en" }
+      transcriber: { provider: "deepgram", model: "nova-2", language: "en" }
     },
     el: {
       opener: `Γεια σας, είμαι η Σοφία. Συνεργάζομαι με επιχειρήσεις για βελτιστοποίηση marketing με AI — βοηθώντας τους να αποκτήσουν περισσότερους πελάτες χρησιμοποιώντας εργαλεία που οι ανταγωνιστές τους δεν έχουν υιοθετήσει ακόμα. Έχετε 2 λεπτά για μια γρήγορη κουβέντα;`,
@@ -1418,7 +1418,7 @@ Objection handling:
 - "Send me an email": "Of course — and just so I send you something relevant, what is the one thing you are trying to fix in your marketing this quarter?"
 
 Keep responses under 3 sentences when possible. Be conversational. Never read from a script — adapt to what they say.`,
-    transcriber: { provider: "deepgram", model: "nova-3", language: "en" }
+    transcriber: { provider: "deepgram", model: "nova-2", language: "en" }
   },
   el: {
     opener: `Γεια σας, είμαι η Σοφία από την Growth-onomics. Συνεργαζόμαστε αποκλειστικά με εταιρείες fintech για paid acquisition και ορατότητα στα AI search engines. Έχετε 2 λεπτά για μια γρήγορη κουβέντα;`,
@@ -1811,7 +1811,7 @@ function buildAssistantConfig() {
     transcriber: (AGENT_DEFAULTS[activeAgent][activeLang] && AGENT_DEFAULTS[activeAgent][activeLang].transcriber) ||
       (activeLang === 'el'
         ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
-        : { provider: 'deepgram', model: 'nova-3', language: 'en' })
+        : { provider: 'deepgram', model: 'nova-2', language: 'en', endpointing: 300 })
   };
   
   // Add endCall config only for non-Sofia3 agents
@@ -1824,11 +1824,18 @@ function buildAssistantConfig() {
       : ["goodbye", "bye", "not interested", "remove me"];
   }
   
-  if (activeAgent === 'sofia3') {
-    config.backchannelingEnabled = true;
-    config.silenceTimeoutSeconds = 20;
-    config.responseDelaySeconds = 0.5;
-  }
+  // Human-like conversation settings for ALL agents
+  config.backchannelingEnabled = true;
+  config.interruptionsEnabled = true;
+  config.silenceTimeoutSeconds = 20;
+  config.responseDelaySeconds = 0.4;
+  config.stopSpeakingPlan = {
+    numWords: 1,
+    voiceSeconds: 0.2,
+    backoffSeconds: 1.0
+  };
+  config.model.maxTokens = 80;
+  config.model.temperature = 0.8;
 
   return config;
 }
@@ -2748,7 +2755,7 @@ async function loadPromptsFromSupabase() {
         AGENT_DEFAULTS[r.agent][r.lang] = {
           transcriber: r.lang === 'el'
             ? { provider: 'deepgram', model: 'nova-2-general', language: 'el' }
-            : { provider: 'deepgram', model: 'nova-3', language: 'en' }
+            : { provider: 'deepgram', model: 'nova-2', language: 'en' }
         };
       }
       AGENT_DEFAULTS[r.agent][r.lang].system = r.system_prompt;

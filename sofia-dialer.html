@@ -2025,7 +2025,29 @@ function endBrowserCall() {
 }
 
 // ── VAPI PHONE API ────────────────────────────────────
+const EL_PHONE_NUMBER_ID = 'phnum_6201kkrnarm6e5tv2z29fchdnszb';
+
 async function makePhoneCall(number) {
+  // Use ElevenLabs for Maria and Sofia2/3, fall back to VAPI if no EL agent
+  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elAgentId = EL_AGENT_IDS[elKey];
+
+  if (elAgentId) {
+    const res = await fetch('https://api.elevenlabs.io/v1/convai/twilio/outbound-call', {
+      method: 'POST',
+      headers: { 'xi-api-key': EL_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: elAgentId,
+        agent_phone_number_id: EL_PHONE_NUMBER_ID,
+        to_number: number
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail?.message || data.message || 'Call failed');
+    return data;
+  }
+
+  // Fallback to VAPI
   const res = await fetch('https://api.vapi.ai/call/phone', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${PRIVATE_KEY}`, 'Content-Type': 'application/json' },

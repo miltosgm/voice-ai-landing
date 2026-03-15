@@ -1938,26 +1938,7 @@ async function startBrowserCall() {
       setBrowserStatus(activeLang === 'el' ? 'Διαθέσιμη' : 'Available now');
     });
 
-    // Use assistantId so server-side interruption/stopSpeakingPlan config is preserved
-    const assistantKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
-    const assistantId = ASSISTANT_IDS[assistantKey];
-    const cfg = buildAssistantConfig();
-    if (assistantId) {
-      await vapiWeb.start({
-        assistantId: assistantId,
-        assistantOverrides: {
-          firstMessage: cfg.firstMessage,
-          voice: cfg.voice,
-          model: cfg.model,
-          transcriber: cfg.transcriber,
-          backchannelingEnabled: true,
-          interruptionsEnabled: true,
-          stopSpeakingPlan: { numWords: 1, voiceSeconds: 0.2, backoffSeconds: 1.0 }
-        }
-      });
-    } else {
-      await vapiWeb.start(cfg);
-    }
+    await vapiWeb.start(buildAssistantConfig());
 
   } catch(e) {
     showToast(e.message || 'Failed to start call', 'error');

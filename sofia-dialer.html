@@ -1226,8 +1226,10 @@ const ASSISTANT_IDS = {
 
 // ElevenLabs Conversational AI Agent IDs (real browser interruptions)
 const EL_AGENT_IDS = {
-  sofia:     'agent_0801kkr5k65debqbe6snxq6wcqaz',  // Maria - Growth-onomics BizDev
-  sofia2:    'agent_1301kkr6kexse9hva0w83e9r9fjx',  // Sofia2 - AI Marketing
+  sofia_en:  'agent_0801kkr5k65debqbe6snxq6wcqaz',  // Maria - Growth-onomics BizDev EN
+  sofia_el:  'agent_6201kkrnvtfzfb98549re2f3g898',  // Maria - Growth-onomics BizDev EL
+  sofia2_en: 'agent_1301kkr6kexse9hva0w83e9r9fjx',  // Sofia2 - AI Marketing EN
+  sofia2_el: 'agent_5901kkrnvvkse33argbfk52pjf8c',  // Sofia2 - AI Marketing EL
   sofia3_en: 'agent_6701kkr6kg1ffex87g5yjf002558',  // Sofia3 - ΜΙΑ Collection EN
   sofia3_el: 'agent_3101kkr6kyemfptraqqavyj721cg'   // Sofia3 - ΜΙΑ Collection EL
 };
@@ -1770,7 +1772,7 @@ function savePrompt() {
   showToast('Saving to agent...', 'info');
 
   // Push to ElevenLabs agent
-  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elKey = `${activeAgent}_${activeLang}`;
   const elAgentId = EL_AGENT_IDS[elKey];
   if (elAgentId) {
     fetch(`https://api.elevenlabs.io/v1/convai/agents/${elAgentId}`, {
@@ -1934,7 +1936,7 @@ async function startBrowserCall() {
   }
 
   // Use ElevenLabs Conversational AI (real interruptions for all agents)
-  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elKey = `${activeAgent}_${activeLang}`;
   const elAgentId = EL_AGENT_IDS[elKey];
   if (elAgentId && window.ELConversation) {
     try {
@@ -2053,7 +2055,7 @@ const EL_PHONE_NUMBER_ID = 'phnum_6201kkrnarm6e5tv2z29fchdnszb';
 
 async function makePhoneCall(number) {
   // Use ElevenLabs for Maria and Sofia2/3, fall back to VAPI if no EL agent
-  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elKey = `${activeAgent}_${activeLang}`;
   const elAgentId = EL_AGENT_IDS[elKey];
 
   if (elAgentId) {

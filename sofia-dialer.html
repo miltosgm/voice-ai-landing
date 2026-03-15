@@ -1226,7 +1226,10 @@ const ASSISTANT_IDS = {
 
 // ElevenLabs Conversational AI Agent IDs (real browser interruptions)
 const EL_AGENT_IDS = {
-  sofia: 'agent_0801kkr5k65debqbe6snxq6wcqaz'  // Maria - Growth-onomics BizDev
+  sofia:     'agent_0801kkr5k65debqbe6snxq6wcqaz',  // Maria - Growth-onomics BizDev
+  sofia2:    'agent_1301kkr6kexse9hva0w83e9r9fjx',  // Sofia2 - AI Marketing
+  sofia3_en: 'agent_6701kkr6kg1ffex87g5yjf002558',  // Sofia3 - ΜΙΑ Collection EN
+  sofia3_el: 'agent_3101kkr6kyemfptraqqavyj721cg'   // Sofia3 - ΜΙΑ Collection EL
 };
 
 // ElevenLabs conversation session handle
@@ -1906,8 +1909,9 @@ async function startBrowserCall() {
     if (!window.Vapi) return;
   }
 
-  // Use ElevenLabs Conversational AI for Maria (real interruptions)
-  const elAgentId = EL_AGENT_IDS[activeAgent];
+  // Use ElevenLabs Conversational AI (real interruptions for all agents)
+  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elAgentId = EL_AGENT_IDS[elKey];
   if (elAgentId && window.ELConversation) {
     try {
       elConversation = await window.ELConversation.startSession({

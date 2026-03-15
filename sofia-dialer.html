@@ -1213,6 +1213,14 @@ async function sbDelete(table, id) {
 }
 const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 
+// VAPI Assistant IDs — used for assistantId mode (preserves server-side interruption config)
+const ASSISTANT_IDS = {
+  sofia:  'bfe6b385-81a4-410f-ade5-e803f434a41e',  // Maria - Growth-onomics BizDev
+  sofia2: 'f0892ccc-4e31-4665-98f5-7be985011329',  // Sofia2 - AI Marketing
+  sofia3_en: '67e4039c-a857-4509-948f-f734f974649b', // Sofia3 - ΜΙΑ English
+  sofia3_el: '9ca3b127-82a9-42ac-b83a-f1c7b34d8efd'  // Sofia3 - ΜΙΑ Greek
+};
+
 // ── AGENTS ────────────────────────────────────────────
 
 const AGENTS = {
@@ -1930,7 +1938,26 @@ async function startBrowserCall() {
       setBrowserStatus(activeLang === 'el' ? 'Διαθέσιμη' : 'Available now');
     });
 
-    await vapiWeb.start(buildAssistantConfig());
+    // Use assistantId so server-side interruption/stopSpeakingPlan config is preserved
+    const assistantKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+    const assistantId = ASSISTANT_IDS[assistantKey];
+    const cfg = buildAssistantConfig();
+    if (assistantId) {
+      await vapiWeb.start({
+        assistantId: assistantId,
+        assistantOverrides: {
+          firstMessage: cfg.firstMessage,
+          voice: cfg.voice,
+          model: cfg.model,
+          transcriber: cfg.transcriber,
+          backchannelingEnabled: true,
+          interruptionsEnabled: true,
+          stopSpeakingPlan: { numWords: 1, voiceSeconds: 0.2, backoffSeconds: 1.0 }
+        }
+      });
+    } else {
+      await vapiWeb.start(cfg);
+    }
 
   } catch(e) {
     showToast(e.message || 'Failed to start call', 'error');

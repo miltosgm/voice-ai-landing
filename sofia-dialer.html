@@ -1185,6 +1185,9 @@
 <script type="module">
   import Vapi from 'https://esm.sh/@vapi-ai/web';
   window.Vapi = Vapi;
+  // ElevenLabs Conversational AI SDK (real interruptions in browser)
+  import { Conversation } from 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@0.15.1/dist/lib.module.js';
+  window.ELConversation = Conversation;
   document.dispatchEvent(new Event('vapi-sdk-ready'));</script>
 
 <script>
@@ -1213,13 +1216,21 @@ async function sbDelete(table, id) {
 }
 const PHONE_NUMBER_ID = 'f83ae558-ab06-4353-9de2-c292570d4501';
 
-// VAPI Assistant IDs — used for assistantId mode (preserves server-side interruption config)
+// VAPI Assistant IDs
 const ASSISTANT_IDS = {
-  sofia:  'bfe6b385-81a4-410f-ade5-e803f434a41e',  // Maria - Growth-onomics BizDev
-  sofia2: 'f0892ccc-4e31-4665-98f5-7be985011329',  // Sofia2 - AI Marketing
-  sofia3_en: '67e4039c-a857-4509-948f-f734f974649b', // Sofia3 - ΜΙΑ English
-  sofia3_el: '9ca3b127-82a9-42ac-b83a-f1c7b34d8efd'  // Sofia3 - ΜΙΑ Greek
+  sofia:  'bfe6b385-81a4-410f-ade5-e803f434a41e',
+  sofia2: 'f0892ccc-4e31-4665-98f5-7be985011329',
+  sofia3_en: '67e4039c-a857-4509-948f-f734f974649b',
+  sofia3_el: '9ca3b127-82a9-42ac-b83a-f1c7b34d8efd'
 };
+
+// ElevenLabs Conversational AI Agent IDs (real browser interruptions)
+const EL_AGENT_IDS = {
+  sofia: 'agent_0801kkr5k65debqbe6snxq6wcqaz'  // Maria - Growth-onomics BizDev
+};
+
+// ElevenLabs conversation session handle
+let elConversation = null;
 
 // ── AGENTS ────────────────────────────────────────────
 
@@ -1895,6 +1906,63 @@ async function startBrowserCall() {
     if (!window.Vapi) return;
   }
 
+  // Use ElevenLabs Conversational AI for Maria (real interruptions)
+  const elAgentId = EL_AGENT_IDS[activeAgent];
+  if (elAgentId && window.ELConversation) {
+    try {
+      elConversation = await window.ELConversation.startSession({
+        agentId: elAgentId,
+        onConnect: () => {
+          setBrowserStatus('Speaking...', true);
+          btn.style.display = 'none';
+          document.getElementById('btn-end-call').classList.add('show');
+          document.getElementById('dot').className = 'online-dot busy';
+          document.getElementById('avatar').classList.add('speaking');
+          setWave(true);
+          startCallTimer();
+          addLog('Browser call started (ElevenLabs)', 'var(--accent2)');
+        },
+        onDisconnect: () => {
+          stopCallTimer();
+          setWave(false);
+          document.getElementById('avatar').classList.remove('speaking');
+          document.getElementById('btn-end-call').classList.remove('show');
+          btn.style.display = 'flex';
+          btn.disabled = false;
+          btn.innerHTML = '🔄 &nbsp;Call Again';
+          document.getElementById('dot').className = 'online-dot';
+          setBrowserStatus('Call ended');
+          setTimeout(() => setBrowserStatus('Available now'), 3000);
+          addLog('Browser call ended', 'var(--gray)');
+          showOutcomeModal('Browser call', null);
+          elConversation = null;
+        },
+        onModeChange: ({ mode }) => {
+          if (mode === 'speaking') {
+            setBrowserStatus('Speaking...', true);
+            setWave(true);
+            document.getElementById('avatar').classList.add('speaking');
+          } else {
+            setBrowserStatus('Listening...', true);
+            setWave(false);
+            document.getElementById('avatar').classList.remove('speaking');
+          }
+        },
+        onError: (msg) => {
+          showToast(msg || 'Something went wrong', 'error');
+          btn.disabled = false;
+          setBrowserStatus('Available now');
+        }
+      });
+    } catch(e) {
+      showToast(e.message || 'Failed to start call', 'error');
+      btn.disabled = false;
+      setBrowserStatus('Available now');
+    }
+    return;
+  }
+
+  // Fallback to VAPI for other agents (sofia2, sofia3)
   try {
     vapiWeb = new window.Vapi(PUBLIC_KEY);
 
@@ -1948,6 +2016,7 @@ async function startBrowserCall() {
 }
 
 function endBrowserCall() {
+  if (elConversation) { elConversation.endSession(); elConversation = null; }
   if (vapiWeb) vapiWeb.stop();
 }
 

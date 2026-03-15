@@ -1785,25 +1785,26 @@ function buildAssistantConfig() {
     },
     voice: (() => {
       const voiceMap = {
-        sofia_en: "21m00Tcm4TlvDq8ikWAM",
-        sofia_el: "21m00Tcm4TlvDq8ikWAM",
-        sofia2_en: "21m00Tcm4TlvDq8ikWAM",
-        sofia2_el: "21m00Tcm4TlvDq8ikWAM",
-        sofia3_en: "21m00Tcm4TlvDq8ikWAM",  // Same as Sofia 1 - proven natural voice
-        sofia3_el: "21m00Tcm4TlvDq8ikWAM"   // Same as Sofia 1 - same voice for Greek (EL11labs supports multilingual)
+        sofia_en: "cgSgspJ2msm6clMCkdW9",   // Jessica - Conversational, Warm (best for sales)
+        sofia_el: "cgSgspJ2msm6clMCkdW9",   // Jessica - multilingual capable
+        sofia2_en: "cgSgspJ2msm6clMCkdW9",  // Jessica
+        sofia2_el: "cgSgspJ2msm6clMCkdW9",  // Jessica
+        sofia3_en: "cgSgspJ2msm6clMCkdW9",  // Jessica
+        sofia3_el: "bIHbv24MWmeRgasZH58o"   // Greek Sofia 3 keeps original Greek voice
       };
       const key = `${activeAgent}_${activeLang}`;
       const isSofia3 = activeAgent === 'sofia3';
       const baseVoice = {
         provider: "11labs",
-        voiceId: voiceMap[key] || "21m00Tcm4TlvDq8ikWAM",
-        model: "eleven_turbo_v2_5",
-        stability: 0.65,
-        similarityBoost: 0.75
+        voiceId: voiceMap[key] || "cgSgspJ2msm6clMCkdW9",
+        model: "eleven_v3",
+        stability: 0.35,
+        similarityBoost: 0.7,
+        optimizeStreamingLatency: 4
       };
       if (isSofia3) {
         baseVoice.stability = 0.35;
-        baseVoice.similarityBoost = 0.75;
+        baseVoice.similarityBoost = 0.7;
       }
       return baseVoice;
     })(),
@@ -2167,7 +2168,7 @@ function speakAgentElevenLabs(text) {
   return new Promise(function(resolve) {
     if (simMuted) return resolve();
     var cfg = buildAssistantConfig();
-    var voiceId = '21m00Tcm4TlvDq8ikWAM'; // default Sofia 3
+    var voiceId = 'cgSgspJ2msm6clMCkdW9'; // default Jessica - conversational
     var stability = 0.55;
     var speed = 0.7;
     if (cfg.voice && cfg.voice.voiceId) voiceId = cfg.voice.voiceId;

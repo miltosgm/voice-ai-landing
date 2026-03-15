@@ -1952,7 +1952,9 @@ async function startBrowserCall() {
           startCallTimer();
           addLog('Browser call started (ElevenLabs)', 'var(--accent2)');
         },
-        onDisconnect: () => {
+        onDisconnect: (details) => {
+          console.log('EL disconnected:', JSON.stringify(details));
+          addLog('Disconnected: ' + (details?.reason || 'unknown') + (details?.message ? ' — ' + details.message : ''), 'var(--error)');
           stopCallTimer();
           setWave(false);
           document.getElementById('avatar').classList.remove('speaking');

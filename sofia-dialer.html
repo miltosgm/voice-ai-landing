@@ -1767,7 +1767,31 @@ function savePrompt() {
   updateOpenerPreview();
   checkModified();
   toggleCustomize();
-  showToast('Agent updated ✓', 'success');
+  showToast('Saving to agent...', 'info');
+
+  // Push to ElevenLabs agent
+  const elKey = activeAgent === 'sofia3' ? `sofia3_${activeLang}` : activeAgent;
+  const elAgentId = EL_AGENT_IDS[elKey];
+  if (elAgentId) {
+    fetch(`https://api.elevenlabs.io/v1/convai/agents/${elAgentId}`, {
+      method: 'PATCH',
+      headers: { 'xi-api-key': EL_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        conversation_config: {
+          agent: {
+            first_message: currentOpener,
+            prompt: { prompt: currentSystem }
+          }
+        }
+      })
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (d.agent_id) showToast('Agent updated ✓', 'success');
+      else showToast('Save failed: ' + JSON.stringify(d).slice(0,80), 'error');
+    })
+    .catch(e => showToast('Save error: ' + e.message, 'error'));
+  }
 }
 function resetDefaults() {
   const d = AGENT_DEFAULTS[activeAgent][activeLang];
